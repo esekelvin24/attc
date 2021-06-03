@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #333;
+        fill-rule: evenodd;
+      }
+    </style>
+  </defs>
+  <path id="Side_Nav" data-name="Side Nav" class="cls-1" d="M1369,91h12v2h-12V91Zm0,5h14v2h-14V96Zm0,5h16v2h-16v-2Z" transform="translate(-1369 -91)"/>
+</svg>

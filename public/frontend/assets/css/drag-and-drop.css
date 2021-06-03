@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+.drag-drop-body{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40vh;
+  /*min-height: 100vh;*/
+  background: #ecedf1;
+}
+.drag-area{
+  border: 2px dashed#002147;
+  padding: 0px 70px;
+  /*height: 500px;
+  width: 700px;*/
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.drag-area.active{
+  border: 2px solid #fff;
+}
+.drag-area .icon{
+  font-size: 20px;
+  color: #fff;
+}
+.drag-area header{
+  font-size: 10px;
+  font-weight: 500;
+  color:#002147;
+}
+.drag-area span{
+  /*font-size: 25px;*/
+  font-weight: 500;
+  color: #002147;
+  margin: 10px 0 15px 0;
+}
+.drag-area button{
+  padding: 5px 20px;
+  font-size: 10px;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  background: #fff;
+  color: #5256ad;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.drag-area img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+
+
+
+
+
+.drag-area_exp{
+  border: 2px dashed#002147;
+  padding: 0px 70px;
+  /*height: 500px;
+  width: 700px;*/
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.drag-area_exp.active{
+  border: 2px solid #fff;
+}
+.drag-area_exp .icon{
+  font-size: 20px;
+  color: #fff;
+}
+.drag-area_exp header{
+  font-size: 10px;
+  font-weight: 500;
+  color:#002147;
+}
+.drag-area_exp span{
+  /*font-size: 25px;*/
+  font-weight: 500;
+  color: #002147;
+  margin: 10px 0 15px 0;
+}
+.drag-area_exp button{
+  padding: 5px 20px;
+  font-size: 10px;
+  font-weight: 500;
+  border: none;
+  outline: none;
+  background: #fff;
+  color: #5256ad;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.drag-area_exp img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+
