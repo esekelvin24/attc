@@ -9,7 +9,7 @@
 	<div class="content-box">
 		<div class="element-wrapper">
 			<h6 class="element-header">
-				All Student Application (@if( $all_application_collection->isEmpty() ) 0 @else{{$all_application_collection->count()}}@endif)
+				All My Application (@if( $all_application_collection->isEmpty() ) 0 @else{{$all_application_collection->count()}}@endif)
 			</h6>
 			<div class="element-box">
 				<div class="table-responsive">
@@ -34,9 +34,9 @@
                                     <tr>
                                         <th style="width:10px">S/N</th>
                                         <th>STATUS</th>
-                                        <th>APPLICANT</th>
+                                        
                                         <th>PROGRAMME</th>
-                                          <th>AMOUNT</th>
+                                        <th>AMOUNT</th>
                                         <th>APPLIED ON</th>
                                     </tr>
                                     </thead>
@@ -44,9 +44,9 @@
                                     <tr>
                                         <th style="width:10px">S/N</th>
                                         <th>STATUS</th>
-                                        <th>APPLICANT</th>
+                                       
                                         <th>PROGRAMME</th>
-                                          <th>AMOUNT</th>
+                                         <th>AMOUNT</th>
                                         <th>APPLIED ON</th>
                                     </tr>
                                     </tfoot>
@@ -57,9 +57,9 @@
                                             <td>
                                                 @if($val->action_1_status==0) <strong class="text-info"><i class="fa fa-spinner"></i> Pending </strong>@elseif($val->action_1_status==1) <strong class="text-success"><i class="fa fa-check"></i> Approved </strong>  @elseif($val->action_1_status==2)<strong class="text-danger"><i class="fa fa-times"></i> Rejected </strong>  @endif
                                             </td>
-                                            <td><strong>{{$val->firstname.' '.$val->lastname}}</strong></td>
+                                           
                                             <td>{{$val->programme_name}}</td>
-                                             <td>₦{{number_format($val->programme_total_amt,2)}}</td>
+                                            <td>₦{{number_format($val->programme_total_amt,2)}}</td>
                                             <td>{{date('d-m-y h:m A',strtotime($val->created_at))}}</td>
                                         </tr>
                                     @endforeach

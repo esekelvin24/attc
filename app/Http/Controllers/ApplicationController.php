@@ -16,13 +16,31 @@ class ApplicationController extends Controller
 {
     //
 
-    public function student_application()
+    public function student_application(Request $request)
     {
-        $all_application_collection = DB::table('tbl_applications')
-        ->join('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
-        ->join('users','users.id','tbl_applications.user_id')->get();
+        $all_application_collection = Application::join('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
+        ->selectRaw('*,SUM(ac.application_course_price) as programme_total_amt')
+        ->join('users','users.id','tbl_applications.user_id')
+        ->join('tbl_application_courses as ac','ac.application_id','tbl_applications.application_id')
+        ->groupBy('tbl_applications.application_id')
+        ->orderBy('tbl_applications.created_at','desc')
+        ->get();
 
         return view('applications.student_application', compact('all_application_collection'));
+    }
+
+    public function my_application()
+    {
+        $all_application_collection = Application::join('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
+        ->selectRaw('*,SUM(ac.application_course_price) as programme_total_amt')
+        ->join('users','users.id','tbl_applications.user_id')
+        ->join('tbl_application_courses as ac','ac.application_id','tbl_applications.application_id')
+        ->where('tbl_applications.user_id',Auth::user()->id)
+        ->groupBy('tbl_applications.application_id')
+        ->orderBy('tbl_applications.created_at','desc')
+        ->get();
+
+        return view('applications.my_application', compact('all_application_collection'));
     }
 
     

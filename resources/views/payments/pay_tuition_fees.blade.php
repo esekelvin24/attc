@@ -9,7 +9,7 @@
 	<div class="content-box">
 		<div class="element-wrapper">
 			<h6 class="element-header">
-				All Bank Transfer (@if( $bank_transfer_collections->isEmpty() ) 0 @else{{$bank_transfer_collections->count()}}@endif)
+				All Tuition Fees Payment (@if( $tuition_fees_collection->isEmpty() ) 0 @else{{$tuition_fees_collection->count()}}@endif)
 			</h6>
 			<div class="element-box">
 				<div class="table-responsive">
@@ -34,29 +34,37 @@
                                     <tr>
                                         
                                        <th style="width:10px">S/N</th>
-                                        <th>STUDENT NAME</th>
-                                        <th>APPLICANTION ID</th>
+                                         <th>APPLICANTION ID</th>
+                                        <th>PROGRAMME NAME</th>
+                                        <th>AMOUNT</th>
                                         <th>CREATED AT</th>
-                                         <th>ACTION</th>
+                                        <th>STATUS</th>
+                                        <th>ACTION</th>
                                     </tr>
                                     </thead>
                                     <tfoot>
                                     <tr>
                                         <th style="width:10px">S/N</th>
-                                        <th>STUDENT NAME</th>
+                                        
                                         <th>APPLICANTION ID</th>
+                                        <th>PROGRAMME NAME</th>
+                                        <th>AMOUNT</th>
                                         <th>CREATED AT</th>
+                                        <th>STATUS</th>
                                         <th>ACTION</th>
                                     </tr>
                                     </tfoot>
                                     <tbody>
-                                    @foreach($bank_transfer_collections as $k=>$val)
+                                    @foreach($tuition_fees_collection as $k=>$val)
                                         <tr>
                                             <td style="width:10px">{{$k+1}}</td>
-                                            <td><strong>{{$val->firstname.' '.$val->lastname}}</strong></td>
+                                           
                                             <td>{{'ATTC-'.str_pad($val->batch_id, 4, "0", STR_PAD_LEFT).'-'.$val->application_id}}</td>
-                                            <td>{{$val->creation_date}}</td>
-                                            <td><button onclick="process_bank_transfer('1','{{encrypt($val->application_id)}}')" class="btn btn-success btn-sm"><i class="fa fa-check"></i> Confirm</button> | <button onclick="process_bank_transfer('2','{{encrypt($val->application_id)}}')" class="btn btn-danger btn-sm"><i class="fa fa-times"></i> Reject</button> </td>
+                                             <td>{{$val->programme_name}}</td>
+                                            <td>₦{{number_format($val->course_price,2)}}</td>
+                                            <td>{{$val->created_at}}</td>
+                                            <td>@if($val->payment_status == 3) <font class="text-warning"><i class="fa fa-loading"></i> On Hold</font>@elseif($val->payment_status == 0) <font class="text-info"><i class="fa fa-loading"></i> Pending</font>@elseif($val->payment_status == 1) <font class="text-success"><i class="fa fa-check"></i> Paid</font>@elseif($val->payment_status == 2) <font class="text-danger"><i class="fa fa-times"></i> Cancelled</font>@endif</td>
+                                            <td>@if($val->payment_status == 0)<button onclick="pay_now('{{route("payment",["type"=> encrypt(1), "id" =>encrypt($val->application_id)])}}','N{{number_format($val->course_price,2)}}','{{encrypt($val->application_id)}}','{{'ATTC-'.str_pad($val->batch_id, 4, "0", STR_PAD_LEFT).'-'.$val->application_id}}')" class="btn btn-success btn-sm"><i class="fa fa-check"></i> Pay Now</button> @endif</td>
                                         </tr>
                                     @endforeach
                                     </tbody>
@@ -115,75 +123,30 @@
 
 @section('additional_js')
     <script>
+
+    function pay_now(data_href,course_price, application_id, complete_app_id)
+    {
        
-           function process_bank_transfer(action, application_id)
-           {
+        $("#fees_modal_amt").html(course_price);   //set the modal form price
 
-               var action_message = "";
+        @if(Auth::user()->can('pay-with-debit-card'))
+            $("#pay_with_card").attr("data-href",data_href); //Set The link of pay with card
+        @endif
 
-               if(action == 1)
-               {
-                   action_message = "Confirmed";
-               }else
-               {
-                   action_message = "Rejected";
-               }
+        @if(Auth::user()->can('pay-with-bank-transfer'))
+              $("#banK_transfer_app_id").val(application_id);//input field
+              $("#complete_app_id").html(complete_app_id); //set the bank transfer application ID
+        @endif
 
-Swal.fire({
-  title: "Once "+action_message+", you will not be able to undo the process",
-  //showDenyButton: true,
-  icon: 'warning',
-  showCancelButton: true,
-  confirmButtonText: `Yes Proceed`,
-  denyButtonText: `No`,
-  customClass: {
-    cancelButton: 'order-1 right-gap',
-    confirmButton: 'order-2',
-    denyButton: 'order-3',
-  }
-}).then((result) => {
-  if (result.isConfirmed) {
-   
-       var toks='{{Session::token()}}';
-             $.ajax(
-					{
-						type:"POST",
-						data:{ _token:toks, action:action, application_id:application_id },
-						url:"{{ route('save_confirm_bank_transfer') }}",
-						beforeSend:function()
-						{
-							$('table').block({ message: "Please wait.." });
-						},
-						success: function(r)
-						{
-                            $('table').unblock();
-                            if (r == 1)
-                            {
-                              Swal.fire('Success','Payment confirmation was successful','success');
-                            }else if (r == 2)
-                            {
-                               Swal.fire('Success','Payment has been rejected','success');
-                            }else if (r == 4)
-                            {
-                               Swal.fire('Error!','No Record Found','error');
-                            }
-                            else
-                            {
-                                Swal.fire('Error!','An error occured','error');
-                            }
+        $(".pay_acceptance_fee").modal
+            (
+                {
+                    backdrop:'static',
+                    keyboard:false
+                }
+            );
 
-							setTimeout(function(){
-                                            window.location.reload();
-                                        },3000);
-						}
-					}
-			);
-    
-  } 
-})
-
-     
-           }
+    }
 
         $('body').on('click','tr[data-id]',function(e)
             {
@@ -210,13 +173,12 @@ Swal.fire({
                     }
                 );
             });
-/*
-            if ($('#dataTable').length) {
+
+           /* if ($('#dataTable').length) {
                 $('#dataTable').DataTable({
                     "scrollX": true
                 });
-            }
-*/
+            }*/
             //SOLVE BOOTSTRAP INPUT ISSUE
             $('.general_modal').on('shown.bs.modal', function() {
                 $(document).off('focusin.modal');

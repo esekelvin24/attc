@@ -8,13 +8,26 @@ use DB;
 use PDF;
 use Mail;
 use App\Models\Payments;
+use App\Models\Application;
 
 class FeesController extends Controller
 {
     //
     public function pay_tution_fees()
     {
-        $tuition_fees_collection = DB::table('tbl_');
+        $tuition_fees_collection = DB::table('tbl_applications as a')
+        ->selectRaw('a.application_id, a.batch_id, SUM(ac.application_course_price) as course_price,programme_name, payment_status, a.created_at')
+        ->where('user_id', Auth::user()->id)
+        ->where('a.status',1)
+        ->where('a.action_1_status',1)
+        ->where('a.accept_offer',1)
+        ->join('tbl_application_courses as ac','ac.application_id','a.application_id')
+        ->join('tbl_programmes as p', 'p.programme_id','a.programme_id')
+        ->groupBy('application_id')
+        ->get();
+
+        return view('payments.pay_tuition_fees',compact('tuition_fees_collection'));
+
     }
 
     public function confirm_bank_transfer()
@@ -63,13 +76,19 @@ class FeesController extends Controller
                 }else if($transfer_details[0]->paystack_status == "99" && $request->action == 2)//if payment is pending and the action is to cancel transaction
                 {
                     $Payments->paystack_status = "";
-                    $update_application = true; //set this to true because no update was made
+                    $update_application = DB::table('tbl_applications')->where('application_id',$application_id)->update(["payment_status" =>0]);
+                
                 }
                 $Payments->bank_trans_confirmed_by = Auth::user()->id;
                 $Payments->bank_trans_confirmed_date =  NOW();
                 $Payments->save();
 
-                if($Payments && $update_application)
+                //change the user role
+                $role = DB::table('users_roles')->where('user_id', $Payments->user_id)->update(["role_id"=> 6]); // 6 -> Student
+        
+
+
+                if($Payments && $update_application && $role)
                 {
                     $application_collection = DB::table('tbl_applications')
                             ->join('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
@@ -148,7 +167,7 @@ class FeesController extends Controller
 
                 }else
                 {
-                    DB::Rollback();
+                    DB::rollback();
                     return 3; //an error occured
                 }
             }else
@@ -180,7 +199,12 @@ class FeesController extends Controller
            if ($application_details[0]->accept_offer == 1 && $application_details[0]->payment_status != 1 && count($payment_check) < 1)//if the user has accepted the offer and a successful payment has not been made && a pending bank transfer is not made
            {
               $total_fee = DB::table('tbl_application_courses')->selectRaw('SUM(application_course_price) as total_amt')->where('application_id',$application_id)->first()->total_amt;
-
+              
+              DB::beginTransaction();
+              $application = Application::find($application_id);
+              $application->payment_status = 3; //place this application on hold pending when bank transfer is completed
+              $application->save();
+              
               $payments = new Payments;
               $payments->user_id = Auth::user()->id;
               $payments->amount= $total_fee ;
@@ -189,10 +213,18 @@ class FeesController extends Controller
               $payments->paystack_status = "99";
               $payments->creation_date = NOW();
               $payments->save();
+
+              if($application && $payments)
+              {
+                 DB::commit();
+              }else
+              {
+                 DB::rollback();
+              }
            }
         }
 
-       return redirect('/dashboard');
+        return redirect()->back();
 
         //check if course exist and payment has not been made
     }
@@ -427,8 +459,11 @@ class FeesController extends Controller
                 ->join('tbl_courses','tbl_courses.course_id','tbl_application_courses.course_id')
                 ->where('application_id',$application_id)->get();
 
+                //change the user role
+                $role = DB::table('users_roles')->where('user_id', $id)->update(["role_id"=> 6]); // 6 -> Student
+        
 
-                   if ($update_app && $payments)
+                   if ($update_app && $payments && $role)
                      {   
                         DB::commit(); 
                         //generate pdf here

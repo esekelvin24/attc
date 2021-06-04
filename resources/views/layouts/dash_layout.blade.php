@@ -181,6 +181,48 @@ header("Location:".url('/').'/404');
 exit();
 }
 
+
+
+ 
+        $fees_amount = 0;
+        $application_id = "";
+        $accept_offer_upload = true;
+
+        //checking for active application that has been approved 
+        $application_details = DB::table('tbl_applications')
+        ->where('user_id',Auth::user()->id)->where('status',1)
+        ->where('action_1_status', 1)
+        ->whereIn('payment_status',['3','0'])->get();
+
+        
+        if(count($application_details) > 0)
+        {
+             $application_id = $application_details[0]->application_id;
+             
+            if ($application_details[0]->accept_offer == 0)//if the user have not accepted the offer
+            {
+                $accept_offer_upload = false;
+
+            }else
+            {
+               
+                //checking if there are any application with a pending fees payment
+                $fees_amount =  DB::table('tbl_application_courses')
+                ->selectRaw('SUM(application_course_price) as total_amt')
+                ->where('application_id',$application_id)
+                ->first()->total_amt;
+    
+                
+                //check if successful payment has been made for this application
+                $payment_check = DB::table('tbl_payments')->where('application_id',$application_id)->where('paystack_status','success')->get();
+                
+                if(count($payment_check) > 0)
+                {
+                    $fees_amount = 0; //assign fees to zero because the application has been paid for
+                }
+            }
+        }
+
 ?>
 
 
@@ -412,8 +454,8 @@ exit();
                 <div class="widget widget-primary widget-padding-sm">
                     <div class="widget-big-int plugin-clock">00:00</div>
                     <div class="widget-subtitle plugin-date">Loading...</div>
-                    @if(isset($session_name) && $session_name!="")
-                        <span class="badge badge-warning" style="font-size:12px"> <span class="icon-hourglass"></span> Current Session : {{$session_name}} </span>
+                    @if(Auth::user()->can('view-student-id'))
+                        <span class="badge badge-warning" style="font-size:12px"> <span class="icon-hourglass"></span> Student ID : SID{{str_pad(Auth::user()->id, 4, "0", STR_PAD_LEFT)}} </span>
                     @endif
                 </div>
                 <!-- END WIDGET CLOCK -->
@@ -1115,6 +1157,200 @@ exit();
 </div>
 
 
+    @if($accept_offer_upload == false )
+        <!-- Modal Change First Password -->
+        <div class="modal fade horizontal upload_offer_letter"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-lg" >
+                <div class="modal-content">
+                    <button onclick="document.getElementById('logout-form').submit();" class="btn-danger"><i class="fa fa-sign-out"></i>LOGOUT</button>
+                    <div class="modal-header" style="flex-direction: column !important; align-items: center !important; ">
+                        <img src="{{asset('img/offer_letter.gif')}}" /><br/>
+                        <h3 class="modal-title text-primary" id="myModalLabel" style="text-align: center">Congratulations!</h3><br/>
+                        <p style="text-align: center">Your have successfully gain a provisional offer with us!<br/>
+                           You must however upload your signed acceptance letter which was sent to your email to proceed.
+                        </p>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="upload_offer" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row">
+                                <div align="center" class="col-md-12">
+                                Application ID: <strong>{{'ATTC-'.str_pad($application_details[0]->batch_id, 4, "0", STR_PAD_LEFT).'-'.$application_details[0]->application_id}}</strong>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>
+                                            Signed Acceptance Letter <span class="symbol required"></span>
+                                        </label>
+                                        <input autocomplete="off" name="completed_offer_letter" class="form-control" type="file">
+                                        <span class="text-danger error-message"></span>
+                                    </div>
+                                    <button type="submit" class="btn btn-o btn-primary save_offer_letter">
+                                        Upload Document
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    
+    @if($fees_amount != 0)
+        <!-- Modal Change First Password -->
+        <div class="modal fade horizontal pay_acceptance_fee"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-lg" >
+                <div class="modal-content">
+                   
+                    <div class="modal-header" style="flex-direction: column !important; align-items: center !important; ">
+                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <img style="width:50px; height:50px" src="{{asset('img/logo.png')}}" /><br/>
+                        {{-- <h3 class="modal-title text-primary" id="myModalLabel" style="text-align: center">Congratulations!</h3><br/> --}}
+                       
+                                <h4 style="text-align: center; "> You have an outstanding tuition fees payment of </h4>
+                                <strong style="text-align: center; "><h2 id="fees_modal_amt">N{{number_format($fees_amount,2)}}</h2></strong>
+                         
+                       
+                    </div>
+
+                    <div class="modal-body">
+                    
+                       @php
+                        $payment_check = DB::table('tbl_payments')->where('application_id',$application_details[0]->application_id)->where('paystack_status','99')->get();
+                       @endphp
+                       @if(count($payment_check) > 0)
+
+                       <div align="center">
+                             <img width="100" height="100" src="{{asset('img/barred.png')}}" >
+                            <p>Your request has been sent and it is awaiting confirmation from admin, when the confirmation is done you will be able to gain full access to your course materials </p>
+                       </div>
+                        
+
+                       @else
+                        <p class="payment_options" style="text-align: center; font-size:17px"> Kindly Select a payment options </p></p>
+                        <div class="row payment_options"> 
+                                @if(Auth::user()->can('pay-with-debit-card'))
+                                    <div align="center" class="col-md-4">       
+                                        <a id="pay_with_card" href="#" data-href="{{route("payment",["type"=> encrypt(1), "id" =>encrypt($application_id)])}}" class="  pay_acceptance_fee_btn" style="margin: 0 auto;">
+                                                <img height="120" width="160" src="{{asset('frontend/assets/img/debit_card.png')}}" ><br/>
+                                                <h5> Pay with Debit Card</h5>
+                                        </a>  
+                                    </div> 
+                                @endif
+                               <div align="center" class="col-md-4">
+                                    &nbsp;&nbsp;
+                               </div>
+                             @if(Auth::user()->can('pay-with-bank-transfer'))
+                                <div align="center" class="col-md-4">
+                                    <a href="javascript:pay_with_bank_transfer()">
+                                    <img height="120" width="160" src="{{asset('frontend/assets/img/bank_transfer-512.png')}}" >
+                                    <h5> Bank Transfer</h5>
+                                    </a>
+                                </div>
+                             @endif
+                        </div>
+
+                    @if(Auth::user()->can('pay-with-bank-transfer'))
+                       <div class="bank_transfer_interface" style="display:none">
+                        <form id="bank_transfer" method="post" action="{{route('bank_transfer_completed')}}">
+                           @csrf
+                          <input type="hidden" id="banK_transfer_app_id" name="banK_transfer_app_id" value="{{encrypt($application_details[0]->application_id)}}">
+                        </form>
+
+                        <a href="javascript:show_payment_options()" class="btn btn-sm btn-danger text-white "><i class="fa fa-times"></i> Cancel</a><br/><br/>
+                        <p>Kindly make a bank transfer into our company's account number below and click the <strong>"I have made the transfer"</strong> button to complete transaction</p>
+                        </div>
+
+                        <div style="display:none" class="row bank_transfer_interface">
+                           <div style="border-color: rgba(201, 76, 76, 0.3); border-style: solid;" align="center" class="col-md-12">
+                             <p><strong>Bank Name</strong>: GT Bank</p>
+                             <p><strong>Account Name</strong>: African Technical Training center</p>
+                             <p><strong>Account No.</strong>: 0000000000</p>
+                           </div>
+                           <div>
+                           <hr>
+                           <div align="center">
+                               <p> <font style="color:red; font-weight:bold">Note:</font> Kindly enter your Application ID (<strong id="complete_app_id">{{'ATTC-'.str_pad($application_details[0]->batch_id, 4, "0", STR_PAD_LEFT).'-'.$application_details[0]->application_id}}</strong>) on the transaction description, failure to do so will cause a delay in confirming your payment</p>
+                               <button onclick="$('form#bank_transfer').submit()" class="btn btn-success"><i class="fa fa-check"></i> I have made the transfer</button>
+                           </div>
+                           
+                        </div>
+                       </div>
+                        @endif {{-- End of if can pay with bank transfer--}}
+
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    @endif
+
+
+    @if(isset($psw))
+        <!-- Modal Change First Password -->
+        <div class="modal fade horizontal edit_area"  tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog modal-lg" >
+                <div class="modal-content">
+                    <div class="modal-header" style="flex-direction: column !important; align-items: center !important; ">
+                        <img src="{{asset('img/p1.gif')}}" /><br/>
+                        <h3 class="modal-title text-primary" id="myModalLabel" style="text-align: center">Compulsory Password Change!</h3><br/>
+                        <p style="text-align: justify">You are using the default password assigned during staff creation. Kindly enter your new password.<br/>
+                            Ensure that your passwords are unique and are at least 6 characters long.
+                        </p>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="new_pass" action="" method="post">
+                            {{  csrf_field()  }}
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label>
+                                            Password <span class="symbol required"></span>
+                                        </label>
+                                        <input name="password1" class="form-control" placeholder="Enter Password" type="password">
+                                        <span class="text-danger error-message"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            Repeat Password <span class="symbol required"></span>
+                                        </label>
+                                        <input name="password2" placeholder="Confirm Password" class="form-control check" type="password">
+                                        <span class="text-danger error-message"></span>
+                                    </div>
+                                    <button type="submit" class="btn btn-o btn-primary save">
+                                        Save Changes
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+
+                    </div>
+                    <div class="modal-footer">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+
 
 
 <div style=" display:none" id="loader">
@@ -1349,6 +1585,374 @@ window.onclick = function(event) {
  });*/
 </script>
 
+ @if($fees_amount != 0) 
+        <script src="https://js.paystack.co/v1/inline.js"></script>
+        <script id="paystack"></script>
+   @endif
+
+  
+
+
+    <script>
+
+    
+
+       @if($fees_amount != 0) 
+
+
+
+
+       function pay_with_bank_transfer()
+        {
+            $(".bank_transfer_interface").show('fast');
+            $(".payment_options").hide('fast');
+        }
+
+        function show_payment_options()
+        {
+            $(".bank_transfer_interface").hide('fast');
+            $(".payment_options").show('fast');
+        }
+
+            $(".pay_acceptance_fee").modal
+            (
+                {
+                    backdrop:'static',
+                    keyboard:false
+                }
+            );
+
+            $('body').on('click','a.pay_acceptance_fee_btn',function(e){
+                e.preventDefault();
+                var route = $(this).data("href");
+                $.ajax(
+                            {
+                                type:"GET",
+                                cache:false,
+                                contentType:false,
+                                processData:false,
+                                url:route,
+                                beforeSend:function()
+                                {
+                                    $('body').block();
+                                },
+                                error: function(r)
+                                {
+                                    $('body').unblock(); 
+                                },
+                                success: function(r)
+                                {
+                                    $('body').unblock();
+                                    $('.pay_acceptance_fee').modal('hide');
+                                    $('#paystack').html(r);
+                                    payWithPaystack();
+                                }
+                            }
+
+                        );
+            });
+        @endif
+
+        jQuery(document).ready(function() {
+            vex.defaultOptions.className = 'vex-theme-flat-attack';
+            $('body').on('click','button[data-action]',function(e)
+            {
+                e.preventDefault();
+                var no=$(this).data("id");
+                var action=$(this).data("action");
+                var the_route="{{route('application_level_approval')}}";
+                if(action==2) {
+                    vex.dialog.confirm({
+                        unsafeMessage: `Irreversible process detected! <br/>Are you want to ${action == 2 ? 'APPROVE' : 'REJECT'} this application?`,
+                        callback: function (value) {
+                            if (value) {
+                                $.ajax(
+                                    {
+                                        type: "GET",
+                                        url: `${the_route}/${no}/${action}`,
+                                        beforeSend: function () {
+                                            $('div.modal-content').block();
+                                        },
+                                        success: function (r) {
+                                            $('div.modal-content').unblock();
+                                            vex.dialog.alert({
+                                                unsafeMessage: `
+                                  <div style="text-align: center">
+                                    <img src="img/success.png" style="width:100px;height:100px; display: block; margin:0 auto; text-align:center" />
+                                    Application has been approved!
+                                    </div>
+                                    `,
+                                                className:'vex-theme-default'
+                                            });
+
+                                            setTimeout(function(){
+                                                window.location.reload()
+                                            },3000);
+                                        }
+                                    }
+                                );
+                            }
+                        }
+                    })
+                }
+                else{
+                    vex.dialog.prompt({
+                        message: 'Kindly enter specific reason for rejecting student:',
+                        className:'vex-theme-flat-attack',
+                        placeholder: 'enter reason',
+                        callback: function (value) {
+                            if (value) {
+                                $.ajax(
+                                    {
+                                        type: "GET",
+                                        data:{
+                                            reason: value
+                                        },
+                                        url: `${the_route}/${no}/${action}`,
+                                        beforeSend: function () {
+                                            $('div.modal-content').block();
+                                        },
+                                        success: function (r) {
+                                            $('div.modal-content').unblock();
+                                            vex.dialog.alert({
+                                                unsafeMessage: `
+                                <div style="text-align: center">
+                                    <img src="img/success.png" style="width:100px;height:100px; display: block; margin:0 auto; text-align:center" />
+                                    Application has been rejected and applicant has been notified!
+                                </div>
+                                    `,
+                                                className:'vex-theme-default'
+                                            });
+
+                                            setTimeout(function(){
+                                                window.location.reload()
+                                            },3000);
+                                        }
+                                    }
+                                );
+                            }
+                            else{
+                                vex.dialog.alert({
+                                    unsafeMessage: `
+                                    <div style="text-align: center">
+                                    <img src="img/barred.png" style="width:100px;height:100px; display: block; margin:0 auto; text-align:center" />
+                                    You must specify a reason for rejecting application
+                                    </div>
+                                    `,
+                                    className:'vex-theme-default'
+                                })
+                            }
+                        }
+                    });
+                }
+            });
+
+            @if($accept_offer_upload == false)
+            $('body').on('click','button.save_offer_letter',function(e){
+                e.preventDefault();
+                var allowExt=['jpg','jpeg','pdf','png'];
+                var filename= $("input[name='completed_offer_letter']").val();
+                if(filename==""){
+                    vex.dialog.alert({
+                        unsafeMessage: `<div style="text-align: center"><img src="img/barred.png" style="width:100px;height:100px; display: block; margin:0 auto; text-align:center" />
+                                    File is required</div>`,
+                    });
+                }
+                else if(!allowExt.includes(filename.split('.')[1])){
+                    vex.dialog.alert({
+                        unsafeMessage: `<div style="text-align: center"><img src="img/barred.png" style="width:100px;height:100px; display: block; margin:0 auto; text-align:center" />
+                                    The file doesn't meet file upload type requirements. Only pdfs and image formats are allowed</div>`,
+                    });
+                }
+                else{
+                    var formData = new FormData($('form#upload_offer')[0]);
+                    $.ajax(
+                        {
+                            type:"POST",
+                            data:formData,
+                            url:"{{route('submit_offer_letter')}}",
+                            cache:false,
+                            contentType:false,
+                            processData:false,
+                            beforeSend:function()
+                            {
+                                $('form#upload_offer').block({ message: null });
+                            },
+                            error: function(r)
+                            {
+                                $('form#upload_offer').unblock();
+                                vex.dialog.alert({
+                                    unsafeMessage: `<div style="text-align: center"><img src="img/barred.png" style="width:100px;height:100px; display: block; margin:0 auto; text-align:center" />
+                                    There were errors, please try again</div>`,
+                                });
+                            },
+                            success: function(r)
+                            {
+                                $('form#upload_offer').unblock();
+                                vex.dialog.alert({
+                                    unsafeMessage: `<div style="text-align: center"><img src="img/success.png" style="width:100px;height:100px; display: block; margin:0 auto; text-align:center" />
+                                    Uploaded successfully</div>`,
+                                });
+                                setTimeout(function(){
+                                    vex.closeAll();
+                                    $(".upload_offer_letter").modal('hide');
+                                     window.location.reload();
+                                },2000)
+                            }
+
+                        }
+                    );
+                }
+            })
+            @endif
+            
+
+            $('body').on('click','tr[data-id]',function(e)
+            {
+                e.preventDefault();
+                var no=$(this).data("id");
+                var the_route="{{url('/application_details/')}}";
+                $.ajax(
+                    {
+                        type:"GET",
+                        url:`${the_route}/${no}`,
+                        beforeSend:function()
+                        {
+                            $('table').block();
+                        },
+                        success: function(r)
+                        {
+                            $('table').unblock();
+                            $('div.modal-body').html(r);
+                            $('.general_modal').modal({
+                                backdrop: 'static',
+                                keyboard: false
+                            });
+                        }
+                    }
+                );
+            });
+
+            if ($('#dataTable').length) {
+                $('#dataTable').DataTable({
+                    "scrollX": true
+                });
+            }
+            //SOLVE BOOTSTRAP INPUT ISSUE
+            $('.general_modal').on('shown.bs.modal', function() {
+                $(document).off('focusin.modal');
+            });
+
+           
+
+            @if($accept_offer_upload == false)
+            $(".upload_offer_letter").modal
+            (
+                {
+                    backdrop:'static',
+                    keyboard:false
+                }
+            );
+            @endif
+
+            @if(isset($psw))
+            $(".edit_area").modal
+            (
+                {
+                    backdrop:'static',
+                    keyboard:false
+                }
+            );
+
+            $('form#new_pass').on('blur','input',(function(e)
+            {
+                var $this=$(this);
+                if($.trim($this.val())!="")
+                {
+                    //validate
+                    $this.next('span.error-message').html('');
+                    $this.closest('div.form-group').removeClass('has-error');
+                    $this.closest('div.form-group').addClass('has-success');
+                }
+
+            }));
+
+            $('button.save').click(function(e){
+                    e.preventDefault();
+                    var formData = new FormData($('form#new_pass')[0]);
+                    var password1=$.trim($("input[name='password1']").val());
+                    var password2=$.trim($("input[name='password2']").val());
+                    if(password1=="" || password2=="")
+                    {
+                        
+                        
+                    }
+
+                    else if(password1==password2)
+                    {
+
+                        $.ajax(
+                            {
+                                type:"POST",
+                                data:formData,
+                                cache:false,
+                                contentType:false,
+                                processData:false,
+                                url:"{{route('first_changepsw')}}",
+                                beforeSend:function()
+                                {
+                                    $('form#new_pass').block();
+                                },
+                                error: function(r)
+                                {
+                                    $('form#new_pass').unblock();
+                                    const errors = r.responseJSON.errors;
+                                    //clear any previous errors
+                                    $('span.error-message').html('');
+                                    $('div.has-error').removeClass('has-error');
+                                    $.each(errors,function(index,value)
+                                        {
+                                            $('input[name="'+index+'"]').next('span.error-message').html(''+value);
+                                            $('input[name"'+index+'"]').closest('div.form-group').addClass('has-error');
+                                        }
+                                    );
+                                },
+                                success: function(r)
+                                {
+                                    $('.edit_area').modal('hide');
+                                    $('form#new_pass').unblock();
+                                   
+                                    Swal.fire(
+                                        'Awesome!',
+                                        'New password successfully set!',
+                                        'success'
+                                    );
+                                    $('span.error-message').html('');
+                                    $('div.has-error').removeClass('has-error');
+                                    $('div.has-success').removeClass('has-success');
+                                    //clear all items
+                                    $('form#new_pass')[0].reset();
+
+
+                                }
+                            }
+
+                        );
+                    }else
+                    {
+                        
+                          Swal.fire(
+                                        'Error',
+                                        'Passwords must match',
+                                        'error'
+                                    );
+                    }
+
+                }
+            );
+            @endif
+        });
+    </script>
 
 
 <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->

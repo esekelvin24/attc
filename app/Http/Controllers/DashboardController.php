@@ -63,42 +63,7 @@ class DashboardController extends Controller
 		$psw_query= User::select('password', 'chng_password_logon')->where('id',$id)->get();
         $psw=$psw_query[0]->password;
 
-        
-        $fees_amount = 0;
-        $application_id = "";
-        $accept_offer_upload = true;
-
-        //checking for active application that has been approved 
-        $application_details = DB::table('tbl_applications')->where('user_id',Auth::user()->id)->where('status',1)->where('action_1_status', 1)->where('payment_status',0)->get();
-
-        if(count($application_details) > 0)
-        {
-             $application_id = $application_details[0]->application_id;
-             
-            if ($application_details[0]->accept_offer == 0)//if the user have not accepted the offer
-            {
-                $accept_offer_upload = false;
-
-            }else
-            {
-               
-                //checking if there are any application with a pending fees payment
-                $fees_amount =  DB::table('tbl_application_courses')
-                ->selectRaw('SUM(application_course_price) as total_amt')
-                ->where('application_id',$application_id)
-                ->first()->total_amt;
-    
-                
-                //check if successful payment has been made for this application
-                $payment_check = DB::table('tbl_payments')->where('application_id',$application_id)->where('paystack_status','success')->get();
-                
-                if(count($payment_check) > 0)
-                {
-                    $fees_amount = 0; //assign fees to zero because the application has been paid for
-                }
-
-            }
-        }
+       
         
         
 
@@ -126,11 +91,9 @@ class DashboardController extends Controller
            $user =  DB::table("users")->get();
            $data = [
                "users" => $user,
-               "accept_offer_upload" => $accept_offer_upload,
+         
                "all_application_collection" => $all_application_collection,
-               "fees_amount" => $fees_amount,
-               "application_details" => $application_details,
-               "application_id" => $application_id
+            
            ];
            
             return view('dashboard')->with($data);
