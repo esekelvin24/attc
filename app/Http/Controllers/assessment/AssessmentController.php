@@ -40,19 +40,39 @@ class AssessmentController extends Controller
         return view('assessment.assessment_weight', compact('assessment_weight_collection'));
     }
 
-    public function edit_assessment()
+    public function manage_assessment()
     {
         $user_id = Auth::user()->id;
         
-        $queryBuilder = assessment::query();
-        $queryBuilder->join('tbl_courses','tbl_courses.short_code','tbl_assessment_creation.course_short_code')
-        ->leftjoin('tbl_session','tbl_session.session_id','tbl_assessment_creation.session_id')
+        $queryBuilder = Assessment::query();
+        $queryBuilder->join('tbl_courses','tbl_courses.course_id','tbl_assessment_creation.course_id')
+        ->leftjoin('tbl_batch','tbl_batch.batch_no','tbl_assessment_creation.batch_id')
         ->where('tbl_assessment_creation.created_by',$user_id);
         $assessment_collection = $queryBuilder->get();
 
 
         return view('assessment.assessment', compact('assessment_collection'));
     }
+
+    
+    public function  edit_assessment (Request $request)
+     {
+       
+        $assessment_id = decrypt($request->id);
+
+
+        $assessment_collection =  DB::table('tbl_assessment_creation')->where('assessment_id',$assessment_id)->get();
+        
+        
+        if (isset($session_assessment_id->session_id))
+        {
+            $assessment_session_type = $session_assessment_id->type;
+        }
+
+        $assessment_id = $request->id;
+
+        return view("assessment.edit_assessment", compact('assessment_id','assessment_collection'));
+     }
 
     public function take_ca()
     {
@@ -568,48 +588,100 @@ class AssessmentController extends Controller
             'expiration_date'=>'required',
             'expiration_time'=>'required',
             'start_date'=>'required',
-            'start_time'=>'required',
-
-                      
+            'start_time'=>'required',        
         ];
         
         $this->validate($request,$rules);
+        $assessment_id = decrypt($request->assessment_id);
 
-        $assessment_id = base64_decode($request->assessment_id);
 
         $update = DB::table('tbl_assessment_creation')
         ->where('assessment_id', $assessment_id)
         ->update(['start_date'=> $request->start_date, 'start_time' => $request->start_time,'expiration_date'=> $request->expiration_date, 'expiration_time' => $request->expiration_time]);
 
-        return redirect()->route('edit_assessment')->with('assessment_success',' assessment updated successfully');
+        return redirect()->route('manage_assessment')->with('success','Assessment updated successfully');
     }
 
-    public function set_assessment(Request $request)
+    public function add_new_assessment(Request $request)
     {
 
         $user_id = Auth::user()->id;
         $course_collection =  DB::table('tbl_map_lecturer_to_courses')
         ->where('lecturer_user_id',$user_id)
-        ->join('tbl_courses','tbl_courses.short_code','tbl_map_lecturer_to_courses.short_code')
+        ->join('tbl_courses','tbl_courses.course_id','tbl_map_lecturer_to_courses.course_id')
         ->get();
 
         $assessment_session_type = 0;
 
-        $current_section = DB::table('tbl_session')->where('session_status',1)->first();
-        $current_section_id = $current_section->session_id;
+        $current_batch = DB::table('tbl_batch')->where('status',1)->orderBy('created_at','desc')->first();
+        $current_batch_no = $current_batch->batch_no;
 
 
-        $session_assessment_id = DB::table('tbl_assessment_weights')->where('session_id',$current_section_id)->first();
+        $session_assessment_id = DB::table('tbl_assessment_weights')->where('batch_id',$current_batch_no)->first();
 
-        if (isset($session_assessment_id->session_id))
+        if (isset($session_assessment_id->batch_id))
         {
             $assessment_session_type = $session_assessment_id->type;
         }
 
-       
-
         return view('assessment.new_assessment', compact('course_collection','session_assessment_id','assessment_session_type'));
     }
+
+    
+    public function save_assessement(Request $request)
+    {
+        $rules =
+        [
+            'course_id'=>'required',
+            'ca_no'=>'required|numeric',
+            'expiration_time'=>'required', 
+            'expiration_date'=>'required',  
+            'start_time'=>'required', 
+            'start_date'=>'required',       
+        ];
+    
+        //check validation options
+        $this->validate($request,$rules);
+        $user_id = Auth::user()->id;
+
+        $current_batch = DB::table('tbl_batch')->where('status',1)->orderBy('created_at','desc')->first();
+        $current_batch_no = $current_batch->batch_no;
+
+        $check = DB::table('tbl_assessment_creation')
+            ->where('batch_id', $current_batch_no)
+            ->where('course_id',$request->course_id)
+            ->where('assessment_type',$request->ca_no)
+            ->where('status',0)->first();
+
+           
+
+            if(isset($check->assessement_status))
+            {
+                return redirect()->route('manage_assessment')->with('ca_error',$request->ca_no.' C.A Test has already been created for this course');
+            }else
+            {
+               $data = [
+                   "start_date" =>$request->start_date,
+                   "start_time" =>$request->start_time,
+                   "expiration_date" =>$request->expiration_date,
+                   "expiration_time" =>$request->expiration_time,
+                   "course_id" => $request->course_id,
+                   "batch_id" => $current_batch_no,
+                   "assessment_status" => 1, //1 ->Open 2->Close  -> Cancel
+                   "assessment_type" => $request->ca_no,
+                   "created_at" => NOW(),
+                   "created_by" => $user_id,
+               ];
+
+               DB::table('tbl_assessment_creation')->insert($data);
+
+               return redirect()->route('manage_assessment')->with('success',' C.A Assessement created successfully');
+            }
+
+
+        
+    }
+
 
     public function upload_exam_score()
     {

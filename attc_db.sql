@@ -11,7 +11,7 @@
  Target Server Version : 100413
  File Encoding         : 65001
 
- Date: 03/06/2021 21:48:35
+ Date: 07/06/2021 17:30:57
 */
 
 SET NAMES utf8mb4;
@@ -80,7 +80,7 @@ CREATE TABLE `permissions`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 46 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 61 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of permissions
@@ -111,7 +111,7 @@ INSERT INTO `permissions` VALUES (23, 'View Course Manager', 'view-course-manage
 INSERT INTO `permissions` VALUES (24, 'View All Course List', 'view-all-course-list', '2021-05-16 23:58:03', NULL, NULL);
 INSERT INTO `permissions` VALUES (25, 'Edit Courses', 'edit-courses', NULL, NULL, NULL);
 INSERT INTO `permissions` VALUES (26, 'Create Course', 'create-course', NULL, NULL, NULL);
-INSERT INTO `permissions` VALUES (27, 'Map Course to Lecturer', 'map-course-to-lecturer', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (27, 'Map Course to Lecturer', 'map-lecturer-to-courses', NULL, NULL, NULL);
 INSERT INTO `permissions` VALUES (28, 'View Assigned Courses', 'view-assigned-courses', NULL, NULL, NULL);
 INSERT INTO `permissions` VALUES (29, 'View Online Class Facility', 'view-online-class-facility', NULL, NULL, NULL);
 INSERT INTO `permissions` VALUES (30, 'View Take C.A ', 'view-take-ca', NULL, NULL, NULL);
@@ -129,6 +129,21 @@ INSERT INTO `permissions` VALUES (42, 'Pay with Bank Transfer', 'pay-with-bank-t
 INSERT INTO `permissions` VALUES (43, 'Pay with Debit Card', 'pay-with-debit-card', NULL, NULL, NULL);
 INSERT INTO `permissions` VALUES (44, 'View Bank Transfer', 'view-bank-transfer', NULL, NULL, NULL);
 INSERT INTO `permissions` VALUES (45, 'Confirm Bank Transfer', 'confirm-bank-transfer', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (46, 'View Student ID', 'view-student-id', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (47, 'View Time Table', 'view-time-table', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (48, 'Manage Assessment Weight', 'manage-assessment-weight', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (49, 'View Upload C.A Question', 'view-upload-ca-question', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (50, 'View All Courses Selection List', 'view-all-courses-selection-list', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (51, 'View Manage Student', 'view-manage-student', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (52, 'View My Student', 'view-my-student', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (53, 'View All Student', 'view-all-students', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (54, 'Edit Student Record', 'edit-student-record', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (55, 'Manage My Assessment', 'manage-my-assessment', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (56, 'Edit Assessment', 'edit_assessement', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (57, 'Create Assessment', 'create-assessment', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (58, 'Event List', 'view-event-list', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (59, 'Edit Event', 'edit-event', NULL, NULL, NULL);
+INSERT INTO `permissions` VALUES (60, 'Create Event', 'create-event', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for roles
@@ -151,7 +166,7 @@ INSERT INTO `roles` VALUES (1, 'Developer', 'developer', '2021-05-03 14:02:22', 
 INSERT INTO `roles` VALUES (2, 'System Support', 'support', '2021-05-03 14:02:22', '2021-05-23 22:32:39', 'User with this role have full admin rights to the system');
 INSERT INTO `roles` VALUES (5, 'Prospective Student', 'prospective_student', '2021-05-23 22:31:10', '2021-05-23 22:31:10', 'Student who has not gotten admission into the institute');
 INSERT INTO `roles` VALUES (6, 'Student', 'student', '2021-05-23 22:32:13', '2021-05-23 22:32:13', 'Current student of the institute');
-INSERT INTO `roles` VALUES (7, 'instructor', 'instructor', '2021-05-26 15:52:29', '2021-05-26 15:52:29', 'Staff of ATTC');
+INSERT INTO `roles` VALUES (7, 'Lecturer', 'lecturer', '2021-05-26 15:52:29', '2021-06-07 09:58:04', 'Lecturer of ATTC');
 
 -- ----------------------------
 -- Table structure for roles_permissions
@@ -213,6 +228,20 @@ INSERT INTO `roles_permissions` VALUES (1, 42);
 INSERT INTO `roles_permissions` VALUES (1, 43);
 INSERT INTO `roles_permissions` VALUES (1, 44);
 INSERT INTO `roles_permissions` VALUES (1, 45);
+INSERT INTO `roles_permissions` VALUES (1, 47);
+INSERT INTO `roles_permissions` VALUES (1, 48);
+INSERT INTO `roles_permissions` VALUES (1, 49);
+INSERT INTO `roles_permissions` VALUES (1, 50);
+INSERT INTO `roles_permissions` VALUES (1, 51);
+INSERT INTO `roles_permissions` VALUES (1, 52);
+INSERT INTO `roles_permissions` VALUES (1, 53);
+INSERT INTO `roles_permissions` VALUES (1, 54);
+INSERT INTO `roles_permissions` VALUES (1, 55);
+INSERT INTO `roles_permissions` VALUES (1, 56);
+INSERT INTO `roles_permissions` VALUES (1, 57);
+INSERT INTO `roles_permissions` VALUES (1, 58);
+INSERT INTO `roles_permissions` VALUES (1, 59);
+INSERT INTO `roles_permissions` VALUES (1, 60);
 INSERT INTO `roles_permissions` VALUES (2, 2);
 INSERT INTO `roles_permissions` VALUES (2, 3);
 INSERT INTO `roles_permissions` VALUES (2, 15);
@@ -225,6 +254,9 @@ INSERT INTO `roles_permissions` VALUES (2, 21);
 INSERT INTO `roles_permissions` VALUES (2, 22);
 INSERT INTO `roles_permissions` VALUES (2, 44);
 INSERT INTO `roles_permissions` VALUES (2, 45);
+INSERT INTO `roles_permissions` VALUES (2, 58);
+INSERT INTO `roles_permissions` VALUES (2, 59);
+INSERT INTO `roles_permissions` VALUES (2, 60);
 INSERT INTO `roles_permissions` VALUES (5, 33);
 INSERT INTO `roles_permissions` VALUES (5, 36);
 INSERT INTO `roles_permissions` VALUES (5, 41);
@@ -239,10 +271,17 @@ INSERT INTO `roles_permissions` VALUES (6, 39);
 INSERT INTO `roles_permissions` VALUES (6, 41);
 INSERT INTO `roles_permissions` VALUES (6, 42);
 INSERT INTO `roles_permissions` VALUES (6, 43);
+INSERT INTO `roles_permissions` VALUES (6, 46);
+INSERT INTO `roles_permissions` VALUES (6, 47);
 INSERT INTO `roles_permissions` VALUES (7, 23);
-INSERT INTO `roles_permissions` VALUES (7, 24);
-INSERT INTO `roles_permissions` VALUES (7, 25);
-INSERT INTO `roles_permissions` VALUES (7, 26);
+INSERT INTO `roles_permissions` VALUES (7, 28);
+INSERT INTO `roles_permissions` VALUES (7, 32);
+INSERT INTO `roles_permissions` VALUES (7, 49);
+INSERT INTO `roles_permissions` VALUES (7, 51);
+INSERT INTO `roles_permissions` VALUES (7, 52);
+INSERT INTO `roles_permissions` VALUES (7, 55);
+INSERT INTO `roles_permissions` VALUES (7, 56);
+INSERT INTO `roles_permissions` VALUES (7, 57);
 
 -- ----------------------------
 -- Table structure for tbl_accommodation
@@ -279,6 +318,11 @@ CREATE TABLE `tbl_application_courses`  (
   `application_course_price` decimal(10, 2) NULL DEFAULT NULL,
   `app_created_by` int(10) NULL DEFAULT NULL,
   `app_creation_date` datetime(0) NULL DEFAULT NULL,
+  `ca1` int(10) NULL DEFAULT NULL COMMENT 'First C.A Written',
+  `ca2` int(10) NULL DEFAULT NULL COMMENT 'Second C.A Written',
+  `ca3` int(10) NULL DEFAULT NULL COMMENT 'Third C.A Written',
+  `ca4` int(10) NULL DEFAULT NULL COMMENT 'Fourth C.A Written',
+  `exam` int(10) NULL DEFAULT NULL COMMENT 'Exam Grade',
   PRIMARY KEY (`application_id`, `course_id`) USING BTREE,
   INDEX `course_id`(`course_id`) USING BTREE,
   CONSTRAINT `application_id` FOREIGN KEY (`application_id`) REFERENCES `tbl_applications` (`application_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
@@ -288,10 +332,10 @@ CREATE TABLE `tbl_application_courses`  (
 -- ----------------------------
 -- Records of tbl_application_courses
 -- ----------------------------
-INSERT INTO `tbl_application_courses` VALUES (22, 1, 154000.00, 4, '2021-06-02 09:55:12');
-INSERT INTO `tbl_application_courses` VALUES (22, 2, 346000.00, 4, '2021-06-02 09:55:12');
-INSERT INTO `tbl_application_courses` VALUES (22, 5, 20000.00, 4, '2021-06-02 09:55:12');
-INSERT INTO `tbl_application_courses` VALUES (23, 5, 20000.00, 4, '2021-06-03 09:29:20');
+INSERT INTO `tbl_application_courses` VALUES (22, 1, 154000.00, 4, '2021-06-02 09:55:12', 2, NULL, NULL, NULL, NULL);
+INSERT INTO `tbl_application_courses` VALUES (22, 2, 346000.00, 4, '2021-06-02 09:55:12', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tbl_application_courses` VALUES (22, 5, 20000.00, 4, '2021-06-02 09:55:12', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tbl_application_courses` VALUES (23, 5, 20000.00, 4, '2021-06-03 09:29:20', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for tbl_application_documents
@@ -332,6 +376,7 @@ CREATE TABLE `tbl_application_documents_upload`  (
 -- Records of tbl_application_documents_upload
 -- ----------------------------
 INSERT INTO `tbl_application_documents_upload` VALUES (22, 1, 'eseboy24@gmail.com-3Ojx2GlYkS.pdf', '2021-06-02 09:55:12', '2021-06-02 09:55:12');
+INSERT INTO `tbl_application_documents_upload` VALUES (22, 5, 'Completed_Offer_ATTC-0001-22.pdf', '2021-06-04 13:33:21', '2021-06-04 13:33:21');
 INSERT INTO `tbl_application_documents_upload` VALUES (23, 1, 'eseboy24@gmail.com-1yLFXN5VJC.pdf', '2021-06-03 09:29:20', '2021-06-03 09:29:20');
 INSERT INTO `tbl_application_documents_upload` VALUES (23, 3, 'Offer_Letter_ATTC-0001-23.pdf', '2021-06-03 09:29:53', '2021-06-03 09:29:53');
 INSERT INTO `tbl_application_documents_upload` VALUES (23, 4, 'Acceptance_Letter_ATTC-0001-23.pdf', '2021-06-03 09:29:53', '2021-06-03 09:29:53');
@@ -356,7 +401,7 @@ CREATE TABLE `tbl_applications`  (
   `application_date` datetime(0) NULL DEFAULT NULL,
   `updated_at` datetime(0) NULL DEFAULT NULL,
   `created_at` datetime(0) NULL DEFAULT NULL,
-  `payment_status` int(10) NULL DEFAULT 0 COMMENT '0 - Pending, 1- Successful, 2 - Failed',
+  `payment_status` int(10) NULL DEFAULT 0 COMMENT '0 - Pending, 1- Successful, 2 - Failed, 3 - Bank Trf Onhold',
   `accept_offer` int(1) NULL DEFAULT 0,
   PRIMARY KEY (`application_id`) USING BTREE,
   INDEX `programme_id_new`(`programme_id`) USING BTREE,
@@ -369,7 +414,121 @@ CREATE TABLE `tbl_applications`  (
 -- Records of tbl_applications
 -- ----------------------------
 INSERT INTO `tbl_applications` VALUES (22, 1, 4, 1, 1, 1, '2021-06-02 10:36:37', 1, NULL, NULL, NULL, NULL, '2021-06-02 10:36:37', '2021-06-02 09:55:12', 1, 1);
-INSERT INTO `tbl_applications` VALUES (23, 1, 4, 1, NULL, 2, '2021-06-03 14:46:09', 1, 'Nothing to say', NULL, NULL, NULL, '2021-06-03 14:46:09', '2021-06-03 09:29:20', 0, 0);
+INSERT INTO `tbl_applications` VALUES (23, 1, 4, 1, 1, 1, '2021-06-03 14:46:09', 1, '', NULL, NULL, NULL, '2021-06-04 15:52:37', '2021-06-03 09:29:20', 1, 1);
+
+-- ----------------------------
+-- Table structure for tbl_assessment_creation
+-- ----------------------------
+DROP TABLE IF EXISTS `tbl_assessment_creation`;
+CREATE TABLE `tbl_assessment_creation`  (
+  `assessment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `batch_id` int(11) NULL DEFAULT NULL,
+  `created_by` varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `assessment_status` int(1) NULL DEFAULT 1 COMMENT '1 - Open  2- Close  3 - Cancel',
+  `assessment_type` int(1) NULL DEFAULT NULL COMMENT '1 - First Assessment 2 - Second Assessment 3 - Second Assessment 4 - Second Assessment',
+  `display_result` int(1) UNSIGNED ZEROFILL NULL DEFAULT 0 COMMENT '1 - Display Result 2 - Hide Result',
+  `status` int(1) UNSIGNED ZEROFILL NULL DEFAULT 0 COMMENT '1 -> Delete',
+  `expiration_date` datetime(0) NULL DEFAULT NULL,
+  `expiration_time` time(0) NULL DEFAULT NULL,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `start_date` datetime(0) NULL DEFAULT NULL COMMENT 'Date it will be display on student dashboard',
+  `start_time` time(0) NULL DEFAULT NULL COMMENT 'Time it will be display on student dashboard',
+  PRIMARY KEY (`assessment_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tbl_assessment_creation
+-- ----------------------------
+INSERT INTO `tbl_assessment_creation` VALUES (1, '1', 1, '6', 1, 1, 0, 0, '2021-06-07 00:00:00', '16:10:00', '2021-06-06 15:50:20', '2021-06-06 00:00:00', '10:00:00');
+INSERT INTO `tbl_assessment_creation` VALUES (2, '1', 1, '6', 1, 2, 0, 0, '2021-06-25 00:00:00', '16:10:00', '2020-05-17 15:50:20', '2020-05-20 00:00:00', '07:45:00');
+INSERT INTO `tbl_assessment_creation` VALUES (3, '6', 1, '6', 1, 1, 0, 0, '2021-06-08 00:00:00', '23:00:00', '2021-06-07 15:41:09', '2021-06-07 00:00:00', '14:00:00');
+
+-- ----------------------------
+-- Table structure for tbl_assessment_session
+-- ----------------------------
+DROP TABLE IF EXISTS `tbl_assessment_session`;
+CREATE TABLE `tbl_assessment_session`  (
+  `assessment_id` int(1) UNSIGNED ZEROFILL NOT NULL AUTO_INCREMENT,
+  `user_id` int(3) NOT NULL,
+  `marks` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `created_by` varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `status` int(1) UNSIGNED ZEROFILL NOT NULL DEFAULT 0,
+  `course_id` int(11) NULL DEFAULT NULL,
+  `finished_ca` int(1) UNSIGNED ZEROFILL NULL DEFAULT 0 COMMENT '0 - Ongoing 1 - FInished 2 - cancel',
+  `question_json` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+  `question_id_list` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+  `batch_id` int(11) NULL DEFAULT NULL,
+  `assessement_type` int(1) NULL DEFAULT NULL COMMENT '1 - First Assessment 2 - Second Assessment 3 - Second Assessment 4 - Second Assessment',
+  `completed_at` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`assessment_id`, `user_id`) USING BTREE,
+  INDEX `assessment_id`(`assessment_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tbl_assessment_session
+-- ----------------------------
+INSERT INTO `tbl_assessment_session` VALUES (1, 4, NULL, '2021-06-06 22:00:02', '4', 0, 1, 1, '[{\"question_id\":16,\"question\":\"Identify false statement\",\"option_1\":\"You can find deleted files in recycle bin\",\"option_2\":\"You can restore any files in recycle bin if you ever need\",\"option_3\":\"You can increase free space of disk by sending files in recycle bin\",\"option_4\":\"You can right click and choose Empty Recycle Bin to clean it at once\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":20,\"question\":\"A Microsoft Windows is a(n)\",\"option_1\":\"Operating system\",\"option_2\":\"Graphic program\",\"option_3\":\"Word Processing\",\"option_4\":\"Database program\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":14,\"question\":\"Ajit has a certain average for 9 innings. In the tenth innings, he scores 100 runs thereby increasing his average by 8 runs. His new average is:\",\"option_1\":\"20\",\"option_2\":\"21\",\"option_3\":\"29\",\"option_4\":\"32\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":18,\"question\":\"World Wide Web is being standard by\",\"option_1\":\"Worldwide corporation\",\"option_2\":\"W3C\",\"option_3\":\"World Wide Consortium\",\"option_4\":\"World Wide Web Standard\",\"answer\":\"2\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":17,\"question\":\"You should save your computer from?\",\"option_1\":\"Viruses\",\"option_2\":\"Time bombs\",\"option_3\":\"Worms\",\"option_4\":\"All of the above\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":11,\"question\":\"The speed of the train going from Nagpur to Allahabad is 100 km\\/h while when coming back from Allahabad to Nagpur, its speed is 150 km\\/h. find the average speed during whole journey.\",\"option_1\":\"125 Km\\/hr\",\"option_2\":\"75 km\\/hr\",\"option_3\":\"135 km\\/hr\",\"option_4\":\"120 km\\/hr\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":15,\"question\":\"If there are multiple recycle bin for a hard disk\",\"option_1\":\"You can set different size for each recycle bin\",\"option_2\":\"You can choose which recycle bin to use to store your deleted files\",\"option_3\":\"You can make any one of them default recycle bin\",\"option_4\":\"None of above\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":13,\"question\":\"Find the average of first 97 natural numbers.\",\"option_1\":\"47\",\"option_2\":\"37\",\"option_3\":\"48\",\"option_4\":\"49\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":12,\"question\":\"If the displayed system time and date is wrong, you can reset it using\",\"option_1\":\"Write\",\"option_2\":\"Calendar\",\"option_3\":\"Write file\",\"option_4\":\"Control panel\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":19,\"question\":\"A co-processor\",\"option_1\":\"Is relatively easy to support in software\",\"option_2\":\"Causes all processor to function equally\",\"option_3\":\"Works with any application\",\"option_4\":\"Is quite common in modern computer\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1}]', '\"16\",\"20\",\"14\",\"18\",\"17\",\"11\",\"15\",\"13\",\"12\",\"19\"', 1, NULL, '2021-06-06 22:00:35');
+
+-- ----------------------------
+-- Table structure for tbl_assessment_student_answers
+-- ----------------------------
+DROP TABLE IF EXISTS `tbl_assessment_student_answers`;
+CREATE TABLE `tbl_assessment_student_answers`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `assessment_id` int(11) NOT NULL,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `user_id` int(1) NULL DEFAULT NULL,
+  `total_questions` int(2) NULL DEFAULT NULL,
+  `question_json` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+  `question_id_list` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `status` int(1) NULL DEFAULT NULL COMMENT '1 - Status, 2 - Failed',
+  `question_answer` varchar(1) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `question_user_response` int(1) NULL DEFAULT NULL,
+  `question_arr_index` int(3) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 74 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tbl_assessment_student_answers
+-- ----------------------------
+INSERT INTO `tbl_assessment_student_answers` VALUES (64, 1, '2021-06-06 22:00:06', 4, 10, '[{\"question_id\":16,\"question\":\"Identify false statement\",\"option_1\":\"You can find deleted files in recycle bin\",\"option_2\":\"You can restore any files in recycle bin if you ever need\",\"option_3\":\"You can increase free space of disk by sending files in recycle bin\",\"option_4\":\"You can right click and choose Empty Recycle Bin to clean it at once\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":20,\"question\":\"A Microsoft Windows is a(n)\",\"option_1\":\"Operating system\",\"option_2\":\"Graphic program\",\"option_3\":\"Word Processing\",\"option_4\":\"Database program\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":14,\"question\":\"Ajit has a certain average for 9 innings. In the tenth innings, he scores 100 runs thereby increasing his average by 8 runs. His new average is:\",\"option_1\":\"20\",\"option_2\":\"21\",\"option_3\":\"29\",\"option_4\":\"32\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":18,\"question\":\"World Wide Web is being standard by\",\"option_1\":\"Worldwide corporation\",\"option_2\":\"W3C\",\"option_3\":\"World Wide Consortium\",\"option_4\":\"World Wide Web Standard\",\"answer\":\"2\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":17,\"question\":\"You should save your computer from?\",\"option_1\":\"Viruses\",\"option_2\":\"Time bombs\",\"option_3\":\"Worms\",\"option_4\":\"All of the above\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":11,\"question\":\"The speed of the train going from Nagpur to Allahabad is 100 km\\/h while when coming back from Allahabad to Nagpur, its speed is 150 km\\/h. find the average speed during whole journey.\",\"option_1\":\"125 Km\\/hr\",\"option_2\":\"75 km\\/hr\",\"option_3\":\"135 km\\/hr\",\"option_4\":\"120 km\\/hr\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":15,\"question\":\"If there are multiple recycle bin for a hard disk\",\"option_1\":\"You can set different size for each recycle bin\",\"option_2\":\"You can choose which recycle bin to use to store your deleted files\",\"option_3\":\"You can make any one of them default recycle bin\",\"option_4\":\"None of above\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":13,\"question\":\"Find the average of first 97 natural numbers.\",\"option_1\":\"47\",\"option_2\":\"37\",\"option_3\":\"48\",\"option_4\":\"49\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":12,\"question\":\"If the displayed system time and date is wrong, you can reset it using\",\"option_1\":\"Write\",\"option_2\":\"Calendar\",\"option_3\":\"Write file\",\"option_4\":\"Control panel\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":19,\"question\":\"A co-processor\",\"option_1\":\"Is relatively easy to support in software\",\"option_2\":\"Causes all processor to function equally\",\"option_3\":\"Works with any application\",\"option_4\":\"Is quite common in modern computer\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1}]', '\"16\",\"20\",\"14\",\"18\",\"17\",\"11\",\"15\",\"13\",\"12\",\"19\"', 2, '3', 1, 0);
+INSERT INTO `tbl_assessment_student_answers` VALUES (65, 1, '2021-06-06 22:00:09', 4, 10, '[{\"question_id\":16,\"question\":\"Identify false statement\",\"option_1\":\"You can find deleted files in recycle bin\",\"option_2\":\"You can restore any files in recycle bin if you ever need\",\"option_3\":\"You can increase free space of disk by sending files in recycle bin\",\"option_4\":\"You can right click and choose Empty Recycle Bin to clean it at once\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":20,\"question\":\"A Microsoft Windows is a(n)\",\"option_1\":\"Operating system\",\"option_2\":\"Graphic program\",\"option_3\":\"Word Processing\",\"option_4\":\"Database program\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":14,\"question\":\"Ajit has a certain average for 9 innings. In the tenth innings, he scores 100 runs thereby increasing his average by 8 runs. His new average is:\",\"option_1\":\"20\",\"option_2\":\"21\",\"option_3\":\"29\",\"option_4\":\"32\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":18,\"question\":\"World Wide Web is being standard by\",\"option_1\":\"Worldwide corporation\",\"option_2\":\"W3C\",\"option_3\":\"World Wide Consortium\",\"option_4\":\"World Wide Web Standard\",\"answer\":\"2\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":17,\"question\":\"You should save your computer from?\",\"option_1\":\"Viruses\",\"option_2\":\"Time bombs\",\"option_3\":\"Worms\",\"option_4\":\"All of the above\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":11,\"question\":\"The speed of the train going from Nagpur to Allahabad is 100 km\\/h while when coming back from Allahabad to Nagpur, its speed is 150 km\\/h. find the average speed during whole journey.\",\"option_1\":\"125 Km\\/hr\",\"option_2\":\"75 km\\/hr\",\"option_3\":\"135 km\\/hr\",\"option_4\":\"120 km\\/hr\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":15,\"question\":\"If there are multiple recycle bin for a hard disk\",\"option_1\":\"You can set different size for each recycle bin\",\"option_2\":\"You can choose which recycle bin to use to store your deleted files\",\"option_3\":\"You can make any one of them default recycle bin\",\"option_4\":\"None of above\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":13,\"question\":\"Find the average of first 97 natural numbers.\",\"option_1\":\"47\",\"option_2\":\"37\",\"option_3\":\"48\",\"option_4\":\"49\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":12,\"question\":\"If the displayed system time and date is wrong, you can reset it using\",\"option_1\":\"Write\",\"option_2\":\"Calendar\",\"option_3\":\"Write file\",\"option_4\":\"Control panel\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":19,\"question\":\"A co-processor\",\"option_1\":\"Is relatively easy to support in software\",\"option_2\":\"Causes all processor to function equally\",\"option_3\":\"Works with any application\",\"option_4\":\"Is quite common in modern computer\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1}]', '\"16\",\"20\",\"14\",\"18\",\"17\",\"11\",\"15\",\"13\",\"12\",\"19\"', 2, '1', 4, 1);
+INSERT INTO `tbl_assessment_student_answers` VALUES (66, 1, '2021-06-06 22:00:13', 4, 10, '[{\"question_id\":16,\"question\":\"Identify false statement\",\"option_1\":\"You can find deleted files in recycle bin\",\"option_2\":\"You can restore any files in recycle bin if you ever need\",\"option_3\":\"You can increase free space of disk by sending files in recycle bin\",\"option_4\":\"You can right click and choose Empty Recycle Bin to clean it at once\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":20,\"question\":\"A Microsoft Windows is a(n)\",\"option_1\":\"Operating system\",\"option_2\":\"Graphic program\",\"option_3\":\"Word Processing\",\"option_4\":\"Database program\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":14,\"question\":\"Ajit has a certain average for 9 innings. In the tenth innings, he scores 100 runs thereby increasing his average by 8 runs. His new average is:\",\"option_1\":\"20\",\"option_2\":\"21\",\"option_3\":\"29\",\"option_4\":\"32\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":18,\"question\":\"World Wide Web is being standard by\",\"option_1\":\"Worldwide corporation\",\"option_2\":\"W3C\",\"option_3\":\"World Wide Consortium\",\"option_4\":\"World Wide Web Standard\",\"answer\":\"2\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":17,\"question\":\"You should save your computer from?\",\"option_1\":\"Viruses\",\"option_2\":\"Time bombs\",\"option_3\":\"Worms\",\"option_4\":\"All of the above\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":11,\"question\":\"The speed of the train going from Nagpur to Allahabad is 100 km\\/h while when coming back from Allahabad to Nagpur, its speed is 150 km\\/h. find the average speed during whole journey.\",\"option_1\":\"125 Km\\/hr\",\"option_2\":\"75 km\\/hr\",\"option_3\":\"135 km\\/hr\",\"option_4\":\"120 km\\/hr\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":15,\"question\":\"If there are multiple recycle bin for a hard disk\",\"option_1\":\"You can set different size for each recycle bin\",\"option_2\":\"You can choose which recycle bin to use to store your deleted files\",\"option_3\":\"You can make any one of them default recycle bin\",\"option_4\":\"None of above\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":13,\"question\":\"Find the average of first 97 natural numbers.\",\"option_1\":\"47\",\"option_2\":\"37\",\"option_3\":\"48\",\"option_4\":\"49\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":12,\"question\":\"If the displayed system time and date is wrong, you can reset it using\",\"option_1\":\"Write\",\"option_2\":\"Calendar\",\"option_3\":\"Write file\",\"option_4\":\"Control panel\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":19,\"question\":\"A co-processor\",\"option_1\":\"Is relatively easy to support in software\",\"option_2\":\"Causes all processor to function equally\",\"option_3\":\"Works with any application\",\"option_4\":\"Is quite common in modern computer\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1}]', '\"16\",\"20\",\"14\",\"18\",\"17\",\"11\",\"15\",\"13\",\"12\",\"19\"', 2, '3', 2, 2);
+INSERT INTO `tbl_assessment_student_answers` VALUES (67, 1, '2021-06-06 22:00:17', 4, 10, '[{\"question_id\":16,\"question\":\"Identify false statement\",\"option_1\":\"You can find deleted files in recycle bin\",\"option_2\":\"You can restore any files in recycle bin if you ever need\",\"option_3\":\"You can increase free space of disk by sending files in recycle bin\",\"option_4\":\"You can right click and choose Empty Recycle Bin to clean it at once\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":20,\"question\":\"A Microsoft Windows is a(n)\",\"option_1\":\"Operating system\",\"option_2\":\"Graphic program\",\"option_3\":\"Word Processing\",\"option_4\":\"Database program\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":14,\"question\":\"Ajit has a certain average for 9 innings. In the tenth innings, he scores 100 runs thereby increasing his average by 8 runs. His new average is:\",\"option_1\":\"20\",\"option_2\":\"21\",\"option_3\":\"29\",\"option_4\":\"32\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":18,\"question\":\"World Wide Web is being standard by\",\"option_1\":\"Worldwide corporation\",\"option_2\":\"W3C\",\"option_3\":\"World Wide Consortium\",\"option_4\":\"World Wide Web Standard\",\"answer\":\"2\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":17,\"question\":\"You should save your computer from?\",\"option_1\":\"Viruses\",\"option_2\":\"Time bombs\",\"option_3\":\"Worms\",\"option_4\":\"All of the above\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":11,\"question\":\"The speed of the train going from Nagpur to Allahabad is 100 km\\/h while when coming back from Allahabad to Nagpur, its speed is 150 km\\/h. find the average speed during whole journey.\",\"option_1\":\"125 Km\\/hr\",\"option_2\":\"75 km\\/hr\",\"option_3\":\"135 km\\/hr\",\"option_4\":\"120 km\\/hr\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":15,\"question\":\"If there are multiple recycle bin for a hard disk\",\"option_1\":\"You can set different size for each recycle bin\",\"option_2\":\"You can choose which recycle bin to use to store your deleted files\",\"option_3\":\"You can make any one of them default recycle bin\",\"option_4\":\"None of above\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":13,\"question\":\"Find the average of first 97 natural numbers.\",\"option_1\":\"47\",\"option_2\":\"37\",\"option_3\":\"48\",\"option_4\":\"49\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":12,\"question\":\"If the displayed system time and date is wrong, you can reset it using\",\"option_1\":\"Write\",\"option_2\":\"Calendar\",\"option_3\":\"Write file\",\"option_4\":\"Control panel\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":19,\"question\":\"A co-processor\",\"option_1\":\"Is relatively easy to support in software\",\"option_2\":\"Causes all processor to function equally\",\"option_3\":\"Works with any application\",\"option_4\":\"Is quite common in modern computer\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1}]', '\"16\",\"20\",\"14\",\"18\",\"17\",\"11\",\"15\",\"13\",\"12\",\"19\"', 2, '2', 3, 3);
+INSERT INTO `tbl_assessment_student_answers` VALUES (68, 1, '2021-06-06 22:00:20', 4, 10, '[{\"question_id\":16,\"question\":\"Identify false statement\",\"option_1\":\"You can find deleted files in recycle bin\",\"option_2\":\"You can restore any files in recycle bin if you ever need\",\"option_3\":\"You can increase free space of disk by sending files in recycle bin\",\"option_4\":\"You can right click and choose Empty Recycle Bin to clean it at once\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":20,\"question\":\"A Microsoft Windows is a(n)\",\"option_1\":\"Operating system\",\"option_2\":\"Graphic program\",\"option_3\":\"Word Processing\",\"option_4\":\"Database program\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":14,\"question\":\"Ajit has a certain average for 9 innings. In the tenth innings, he scores 100 runs thereby increasing his average by 8 runs. His new average is:\",\"option_1\":\"20\",\"option_2\":\"21\",\"option_3\":\"29\",\"option_4\":\"32\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":18,\"question\":\"World Wide Web is being standard by\",\"option_1\":\"Worldwide corporation\",\"option_2\":\"W3C\",\"option_3\":\"World Wide Consortium\",\"option_4\":\"World Wide Web Standard\",\"answer\":\"2\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":17,\"question\":\"You should save your computer from?\",\"option_1\":\"Viruses\",\"option_2\":\"Time bombs\",\"option_3\":\"Worms\",\"option_4\":\"All of the above\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":11,\"question\":\"The speed of the train going from Nagpur to Allahabad is 100 km\\/h while when coming back from Allahabad to Nagpur, its speed is 150 km\\/h. find the average speed during whole journey.\",\"option_1\":\"125 Km\\/hr\",\"option_2\":\"75 km\\/hr\",\"option_3\":\"135 km\\/hr\",\"option_4\":\"120 km\\/hr\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":15,\"question\":\"If there are multiple recycle bin for a hard disk\",\"option_1\":\"You can set different size for each recycle bin\",\"option_2\":\"You can choose which recycle bin to use to store your deleted files\",\"option_3\":\"You can make any one of them default recycle bin\",\"option_4\":\"None of above\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":13,\"question\":\"Find the average of first 97 natural numbers.\",\"option_1\":\"47\",\"option_2\":\"37\",\"option_3\":\"48\",\"option_4\":\"49\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":12,\"question\":\"If the displayed system time and date is wrong, you can reset it using\",\"option_1\":\"Write\",\"option_2\":\"Calendar\",\"option_3\":\"Write file\",\"option_4\":\"Control panel\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":19,\"question\":\"A co-processor\",\"option_1\":\"Is relatively easy to support in software\",\"option_2\":\"Causes all processor to function equally\",\"option_3\":\"Works with any application\",\"option_4\":\"Is quite common in modern computer\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1}]', '\"16\",\"20\",\"14\",\"18\",\"17\",\"11\",\"15\",\"13\",\"12\",\"19\"', 2, '4', NULL, 4);
+INSERT INTO `tbl_assessment_student_answers` VALUES (69, 1, '2021-06-06 22:00:23', 4, 10, '[{\"question_id\":16,\"question\":\"Identify false statement\",\"option_1\":\"You can find deleted files in recycle bin\",\"option_2\":\"You can restore any files in recycle bin if you ever need\",\"option_3\":\"You can increase free space of disk by sending files in recycle bin\",\"option_4\":\"You can right click and choose Empty Recycle Bin to clean it at once\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":20,\"question\":\"A Microsoft Windows is a(n)\",\"option_1\":\"Operating system\",\"option_2\":\"Graphic program\",\"option_3\":\"Word Processing\",\"option_4\":\"Database program\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":14,\"question\":\"Ajit has a certain average for 9 innings. In the tenth innings, he scores 100 runs thereby increasing his average by 8 runs. His new average is:\",\"option_1\":\"20\",\"option_2\":\"21\",\"option_3\":\"29\",\"option_4\":\"32\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":18,\"question\":\"World Wide Web is being standard by\",\"option_1\":\"Worldwide corporation\",\"option_2\":\"W3C\",\"option_3\":\"World Wide Consortium\",\"option_4\":\"World Wide Web Standard\",\"answer\":\"2\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":17,\"question\":\"You should save your computer from?\",\"option_1\":\"Viruses\",\"option_2\":\"Time bombs\",\"option_3\":\"Worms\",\"option_4\":\"All of the above\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":11,\"question\":\"The speed of the train going from Nagpur to Allahabad is 100 km\\/h while when coming back from Allahabad to Nagpur, its speed is 150 km\\/h. find the average speed during whole journey.\",\"option_1\":\"125 Km\\/hr\",\"option_2\":\"75 km\\/hr\",\"option_3\":\"135 km\\/hr\",\"option_4\":\"120 km\\/hr\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":15,\"question\":\"If there are multiple recycle bin for a hard disk\",\"option_1\":\"You can set different size for each recycle bin\",\"option_2\":\"You can choose which recycle bin to use to store your deleted files\",\"option_3\":\"You can make any one of them default recycle bin\",\"option_4\":\"None of above\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":13,\"question\":\"Find the average of first 97 natural numbers.\",\"option_1\":\"47\",\"option_2\":\"37\",\"option_3\":\"48\",\"option_4\":\"49\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":12,\"question\":\"If the displayed system time and date is wrong, you can reset it using\",\"option_1\":\"Write\",\"option_2\":\"Calendar\",\"option_3\":\"Write file\",\"option_4\":\"Control panel\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":19,\"question\":\"A co-processor\",\"option_1\":\"Is relatively easy to support in software\",\"option_2\":\"Causes all processor to function equally\",\"option_3\":\"Works with any application\",\"option_4\":\"Is quite common in modern computer\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1}]', '\"16\",\"20\",\"14\",\"18\",\"17\",\"11\",\"15\",\"13\",\"12\",\"19\"', 2, '4', 2, 5);
+INSERT INTO `tbl_assessment_student_answers` VALUES (70, 1, '2021-06-06 22:00:26', 4, 10, '[{\"question_id\":16,\"question\":\"Identify false statement\",\"option_1\":\"You can find deleted files in recycle bin\",\"option_2\":\"You can restore any files in recycle bin if you ever need\",\"option_3\":\"You can increase free space of disk by sending files in recycle bin\",\"option_4\":\"You can right click and choose Empty Recycle Bin to clean it at once\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":20,\"question\":\"A Microsoft Windows is a(n)\",\"option_1\":\"Operating system\",\"option_2\":\"Graphic program\",\"option_3\":\"Word Processing\",\"option_4\":\"Database program\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":14,\"question\":\"Ajit has a certain average for 9 innings. In the tenth innings, he scores 100 runs thereby increasing his average by 8 runs. His new average is:\",\"option_1\":\"20\",\"option_2\":\"21\",\"option_3\":\"29\",\"option_4\":\"32\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":18,\"question\":\"World Wide Web is being standard by\",\"option_1\":\"Worldwide corporation\",\"option_2\":\"W3C\",\"option_3\":\"World Wide Consortium\",\"option_4\":\"World Wide Web Standard\",\"answer\":\"2\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":17,\"question\":\"You should save your computer from?\",\"option_1\":\"Viruses\",\"option_2\":\"Time bombs\",\"option_3\":\"Worms\",\"option_4\":\"All of the above\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":11,\"question\":\"The speed of the train going from Nagpur to Allahabad is 100 km\\/h while when coming back from Allahabad to Nagpur, its speed is 150 km\\/h. find the average speed during whole journey.\",\"option_1\":\"125 Km\\/hr\",\"option_2\":\"75 km\\/hr\",\"option_3\":\"135 km\\/hr\",\"option_4\":\"120 km\\/hr\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":15,\"question\":\"If there are multiple recycle bin for a hard disk\",\"option_1\":\"You can set different size for each recycle bin\",\"option_2\":\"You can choose which recycle bin to use to store your deleted files\",\"option_3\":\"You can make any one of them default recycle bin\",\"option_4\":\"None of above\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":13,\"question\":\"Find the average of first 97 natural numbers.\",\"option_1\":\"47\",\"option_2\":\"37\",\"option_3\":\"48\",\"option_4\":\"49\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":12,\"question\":\"If the displayed system time and date is wrong, you can reset it using\",\"option_1\":\"Write\",\"option_2\":\"Calendar\",\"option_3\":\"Write file\",\"option_4\":\"Control panel\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":19,\"question\":\"A co-processor\",\"option_1\":\"Is relatively easy to support in software\",\"option_2\":\"Causes all processor to function equally\",\"option_3\":\"Works with any application\",\"option_4\":\"Is quite common in modern computer\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1}]', '\"16\",\"20\",\"14\",\"18\",\"17\",\"11\",\"15\",\"13\",\"12\",\"19\"', 2, '1', 3, 6);
+INSERT INTO `tbl_assessment_student_answers` VALUES (71, 1, '2021-06-06 22:00:29', 4, 10, '[{\"question_id\":16,\"question\":\"Identify false statement\",\"option_1\":\"You can find deleted files in recycle bin\",\"option_2\":\"You can restore any files in recycle bin if you ever need\",\"option_3\":\"You can increase free space of disk by sending files in recycle bin\",\"option_4\":\"You can right click and choose Empty Recycle Bin to clean it at once\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":20,\"question\":\"A Microsoft Windows is a(n)\",\"option_1\":\"Operating system\",\"option_2\":\"Graphic program\",\"option_3\":\"Word Processing\",\"option_4\":\"Database program\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":14,\"question\":\"Ajit has a certain average for 9 innings. In the tenth innings, he scores 100 runs thereby increasing his average by 8 runs. His new average is:\",\"option_1\":\"20\",\"option_2\":\"21\",\"option_3\":\"29\",\"option_4\":\"32\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":18,\"question\":\"World Wide Web is being standard by\",\"option_1\":\"Worldwide corporation\",\"option_2\":\"W3C\",\"option_3\":\"World Wide Consortium\",\"option_4\":\"World Wide Web Standard\",\"answer\":\"2\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":17,\"question\":\"You should save your computer from?\",\"option_1\":\"Viruses\",\"option_2\":\"Time bombs\",\"option_3\":\"Worms\",\"option_4\":\"All of the above\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":11,\"question\":\"The speed of the train going from Nagpur to Allahabad is 100 km\\/h while when coming back from Allahabad to Nagpur, its speed is 150 km\\/h. find the average speed during whole journey.\",\"option_1\":\"125 Km\\/hr\",\"option_2\":\"75 km\\/hr\",\"option_3\":\"135 km\\/hr\",\"option_4\":\"120 km\\/hr\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":15,\"question\":\"If there are multiple recycle bin for a hard disk\",\"option_1\":\"You can set different size for each recycle bin\",\"option_2\":\"You can choose which recycle bin to use to store your deleted files\",\"option_3\":\"You can make any one of them default recycle bin\",\"option_4\":\"None of above\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":13,\"question\":\"Find the average of first 97 natural numbers.\",\"option_1\":\"47\",\"option_2\":\"37\",\"option_3\":\"48\",\"option_4\":\"49\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":12,\"question\":\"If the displayed system time and date is wrong, you can reset it using\",\"option_1\":\"Write\",\"option_2\":\"Calendar\",\"option_3\":\"Write file\",\"option_4\":\"Control panel\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":19,\"question\":\"A co-processor\",\"option_1\":\"Is relatively easy to support in software\",\"option_2\":\"Causes all processor to function equally\",\"option_3\":\"Works with any application\",\"option_4\":\"Is quite common in modern computer\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1}]', '\"16\",\"20\",\"14\",\"18\",\"17\",\"11\",\"15\",\"13\",\"12\",\"19\"', 2, '4', 1, 7);
+INSERT INTO `tbl_assessment_student_answers` VALUES (72, 1, '2021-06-06 22:00:32', 4, 10, '[{\"question_id\":16,\"question\":\"Identify false statement\",\"option_1\":\"You can find deleted files in recycle bin\",\"option_2\":\"You can restore any files in recycle bin if you ever need\",\"option_3\":\"You can increase free space of disk by sending files in recycle bin\",\"option_4\":\"You can right click and choose Empty Recycle Bin to clean it at once\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":20,\"question\":\"A Microsoft Windows is a(n)\",\"option_1\":\"Operating system\",\"option_2\":\"Graphic program\",\"option_3\":\"Word Processing\",\"option_4\":\"Database program\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":14,\"question\":\"Ajit has a certain average for 9 innings. In the tenth innings, he scores 100 runs thereby increasing his average by 8 runs. His new average is:\",\"option_1\":\"20\",\"option_2\":\"21\",\"option_3\":\"29\",\"option_4\":\"32\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":18,\"question\":\"World Wide Web is being standard by\",\"option_1\":\"Worldwide corporation\",\"option_2\":\"W3C\",\"option_3\":\"World Wide Consortium\",\"option_4\":\"World Wide Web Standard\",\"answer\":\"2\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":17,\"question\":\"You should save your computer from?\",\"option_1\":\"Viruses\",\"option_2\":\"Time bombs\",\"option_3\":\"Worms\",\"option_4\":\"All of the above\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":11,\"question\":\"The speed of the train going from Nagpur to Allahabad is 100 km\\/h while when coming back from Allahabad to Nagpur, its speed is 150 km\\/h. find the average speed during whole journey.\",\"option_1\":\"125 Km\\/hr\",\"option_2\":\"75 km\\/hr\",\"option_3\":\"135 km\\/hr\",\"option_4\":\"120 km\\/hr\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":15,\"question\":\"If there are multiple recycle bin for a hard disk\",\"option_1\":\"You can set different size for each recycle bin\",\"option_2\":\"You can choose which recycle bin to use to store your deleted files\",\"option_3\":\"You can make any one of them default recycle bin\",\"option_4\":\"None of above\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":13,\"question\":\"Find the average of first 97 natural numbers.\",\"option_1\":\"47\",\"option_2\":\"37\",\"option_3\":\"48\",\"option_4\":\"49\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":12,\"question\":\"If the displayed system time and date is wrong, you can reset it using\",\"option_1\":\"Write\",\"option_2\":\"Calendar\",\"option_3\":\"Write file\",\"option_4\":\"Control panel\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":19,\"question\":\"A co-processor\",\"option_1\":\"Is relatively easy to support in software\",\"option_2\":\"Causes all processor to function equally\",\"option_3\":\"Works with any application\",\"option_4\":\"Is quite common in modern computer\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1}]', '\"16\",\"20\",\"14\",\"18\",\"17\",\"11\",\"15\",\"13\",\"12\",\"19\"', 1, '4', 4, 8);
+INSERT INTO `tbl_assessment_student_answers` VALUES (73, 1, '2021-06-06 22:00:35', 4, 10, '[{\"question_id\":16,\"question\":\"Identify false statement\",\"option_1\":\"You can find deleted files in recycle bin\",\"option_2\":\"You can restore any files in recycle bin if you ever need\",\"option_3\":\"You can increase free space of disk by sending files in recycle bin\",\"option_4\":\"You can right click and choose Empty Recycle Bin to clean it at once\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":20,\"question\":\"A Microsoft Windows is a(n)\",\"option_1\":\"Operating system\",\"option_2\":\"Graphic program\",\"option_3\":\"Word Processing\",\"option_4\":\"Database program\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":14,\"question\":\"Ajit has a certain average for 9 innings. In the tenth innings, he scores 100 runs thereby increasing his average by 8 runs. His new average is:\",\"option_1\":\"20\",\"option_2\":\"21\",\"option_3\":\"29\",\"option_4\":\"32\",\"answer\":\"3\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":18,\"question\":\"World Wide Web is being standard by\",\"option_1\":\"Worldwide corporation\",\"option_2\":\"W3C\",\"option_3\":\"World Wide Consortium\",\"option_4\":\"World Wide Web Standard\",\"answer\":\"2\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":17,\"question\":\"You should save your computer from?\",\"option_1\":\"Viruses\",\"option_2\":\"Time bombs\",\"option_3\":\"Worms\",\"option_4\":\"All of the above\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":11,\"question\":\"The speed of the train going from Nagpur to Allahabad is 100 km\\/h while when coming back from Allahabad to Nagpur, its speed is 150 km\\/h. find the average speed during whole journey.\",\"option_1\":\"125 Km\\/hr\",\"option_2\":\"75 km\\/hr\",\"option_3\":\"135 km\\/hr\",\"option_4\":\"120 km\\/hr\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":15,\"question\":\"If there are multiple recycle bin for a hard disk\",\"option_1\":\"You can set different size for each recycle bin\",\"option_2\":\"You can choose which recycle bin to use to store your deleted files\",\"option_3\":\"You can make any one of them default recycle bin\",\"option_4\":\"None of above\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":13,\"question\":\"Find the average of first 97 natural numbers.\",\"option_1\":\"47\",\"option_2\":\"37\",\"option_3\":\"48\",\"option_4\":\"49\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":12,\"question\":\"If the displayed system time and date is wrong, you can reset it using\",\"option_1\":\"Write\",\"option_2\":\"Calendar\",\"option_3\":\"Write file\",\"option_4\":\"Control panel\",\"answer\":\"4\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1},{\"question_id\":19,\"question\":\"A co-processor\",\"option_1\":\"Is relatively easy to support in software\",\"option_2\":\"Causes all processor to function equally\",\"option_3\":\"Works with any application\",\"option_4\":\"Is quite common in modern computer\",\"answer\":\"1\",\"posted_by\":\"7\",\"created_date\":\"2020-05-17 07:16:50\",\"assessment_type\":1,\"dummy_questions\":0,\"course_id\":1}]', '\"16\",\"20\",\"14\",\"18\",\"17\",\"11\",\"15\",\"13\",\"12\",\"19\"', 1, '1', 1, 9);
+
+-- ----------------------------
+-- Table structure for tbl_assessment_weights
+-- ----------------------------
+DROP TABLE IF EXISTS `tbl_assessment_weights`;
+CREATE TABLE `tbl_assessment_weights`  (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `batch_id` int(10) NULL DEFAULT NULL,
+  `type` int(1) NULL DEFAULT NULL COMMENT '1 -> 2CA, 1 Exam.  2 -> 3CA. 1 Exam, 3 -> 4CA, 1 Exam',
+  `ca_1` int(3) NULL DEFAULT NULL,
+  `ca_2` int(3) NULL DEFAULT NULL,
+  `ca_3` int(3) NULL DEFAULT NULL,
+  `ca_4` int(3) NULL DEFAULT NULL,
+  `exam` int(3) NULL DEFAULT NULL,
+  `created_by` int(10) NULL DEFAULT NULL,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `status` int(1) UNSIGNED ZEROFILL NULL DEFAULT 0 COMMENT '1 -> Delete',
+  `exam_duration` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL COMMENT 'Online Exam Duration in minutes',
+  `ca_duration` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL COMMENT 'Online C.A Duration in minutes',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tbl_assessment_weights
+-- ----------------------------
+INSERT INTO `tbl_assessment_weights` VALUES (1, 1, 1, 10, 10, NULL, NULL, 80, 1, '2020-05-17 14:26:07', 0, '50', '20');
 
 -- ----------------------------
 -- Table structure for tbl_batch
@@ -531,8 +690,8 @@ CREATE TABLE `tbl_event`  (
 -- ----------------------------
 -- Records of tbl_event
 -- ----------------------------
-INSERT INTO `tbl_event` VALUES (4, 'Total Gas Training Exhibition', 'Total V.I Office', '2021-06-02', '10:00:00', '12:00:00', 'no_image.jpg', '2021-05-17 21:35:23', 1, 1, '<h4>Teaching Welding in the Virtual World</h4>\r\n<p>Welding instructors that are struggling to teach in today&rsquo;s virtual environment, there are few experts helping them figure out how to teach welding this new way and they need help.</p>\r\n<p>The Education/Workforce Development Conference has been held over a 5 year period at FABTECH. The conferences have always been geared towards welding instructors and providing essential information and products that can be transcended into the classroom. This Workshop is intended to provide welding instructors with tools and examples of how to teach welding in a virtual environment.</p>', 1, NULL);
-INSERT INTO `tbl_event` VALUES (5, 'Welding School Junior Student Competition', 'Dangote Refinery JETTI', '2021-05-31', '09:00:00', '16:30:00', '5.png', '2021-05-17 21:39:52', 1, 1, '<h4>Teaching Welding in the Virtual World</h4>\r\n<p>Welding instructors that are struggling to teach in today&rsquo;s virtual environment, there are few experts helping them figure out how to teach welding this new way and they need help.</p>\r\n<p>The Education/Workforce Development Conference has been held over a 5 year period at FABTECH. The conferences have always been geared towards welding instructors and providing essential information and products that can be transcended into the classroom. This Workshop is intended to provide welding instructors with tools and examples of how to teach welding in a virtual environment.</p>', 1, NULL);
+INSERT INTO `tbl_event` VALUES (4, 'Total Gas Training Exhibition', 'Total V.I Office', '2021-06-02', '10:00:00', '12:00:00', 'no_image.jpg', '2021-05-17 21:35:23', 1, 1, '<h4>Teaching Welding in the Virtual World</h4>\r\n<p>Welding instructors that are struggling to teach in today&rsquo;s virtual environment, there are few experts helping them figure out how to teach welding this new way and they need help.</p>\r\n<p>The Education/Workforce Development Conference has been held over a 5 year period at FABTECH. The conferences have always been geared towards welding instructors and providing essential information and products that can be transcended into the classroom. This Workshop is intended to provide welding instructors with tools and examples of how to teach welding in a virtual environment.</p>', 0, NULL);
+INSERT INTO `tbl_event` VALUES (5, 'Welding School Junior Student Competition', 'Dangote Refinery JETTI', '2021-05-31', '09:00:00', '16:30:00', '5.png', '2021-06-07 16:14:34', 1, 1, '<p>Teaching Welding in the Virtual World</p>\r\n\r\n<p>Welding instructors that are struggling to teach in today&rsquo;s virtual environment, there are few experts helping them figure out how to teach welding this new way and they need help.</p>\r\n\r\n<p>The Education/Workforce Development Conference has been held over a 5 year period at FABTECH. The conferences have always been geared towards welding instructors and providing essential information and products that can be transcended into the classroom. This Workshop is intended to provide welding instructors with tools and examples of how to teach welding in a virtual environment.</p>', 1, '18120431432815.pdf');
 
 -- ----------------------------
 -- Table structure for tbl_main_tab
@@ -556,8 +715,34 @@ INSERT INTO `tbl_main_tab` VALUES (4, 'Assessment Manager', 'icon-pencil', 'view
 INSERT INTO `tbl_main_tab` VALUES (5, 'Application Manager', 'fa fa-file', 'view-application-manager');
 INSERT INTO `tbl_main_tab` VALUES (6, 'Payments Portal', 'icon-credit-card', 'view-payment-portal');
 INSERT INTO `tbl_main_tab` VALUES (7, 'Events Manager', 'icon-picture', 'view-events-manager');
+INSERT INTO `tbl_main_tab` VALUES (8, 'Student Manager', 'fa fa-users', 'view-manage-student');
 INSERT INTO `tbl_main_tab` VALUES (10, 'Master Manager', 'icon-drawer', 'view-master-manager');
 INSERT INTO `tbl_main_tab` VALUES (30, 'System Settings', 'fa fa-gear', 'view-settings');
+
+-- ----------------------------
+-- Table structure for tbl_map_lecturer_to_courses
+-- ----------------------------
+DROP TABLE IF EXISTS `tbl_map_lecturer_to_courses`;
+CREATE TABLE `tbl_map_lecturer_to_courses`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `course_id` int(10) NULL DEFAULT NULL,
+  `lecturer_user_id` int(3) NULL DEFAULT NULL,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `created_by` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 39 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tbl_map_lecturer_to_courses
+-- ----------------------------
+INSERT INTO `tbl_map_lecturer_to_courses` VALUES (31, 6, 6, '2021-06-07 11:02:05', '1');
+INSERT INTO `tbl_map_lecturer_to_courses` VALUES (32, 7, 6, '2021-06-07 11:02:05', '1');
+INSERT INTO `tbl_map_lecturer_to_courses` VALUES (33, 8, 6, '2021-06-07 11:02:05', '1');
+INSERT INTO `tbl_map_lecturer_to_courses` VALUES (34, 1, 6, '2021-06-07 12:52:06', '1');
+INSERT INTO `tbl_map_lecturer_to_courses` VALUES (35, 2, 6, '2021-06-07 12:52:06', '1');
+INSERT INTO `tbl_map_lecturer_to_courses` VALUES (36, 3, 6, '2021-06-07 12:52:06', '1');
+INSERT INTO `tbl_map_lecturer_to_courses` VALUES (37, 4, 6, '2021-06-07 12:52:06', '1');
+INSERT INTO `tbl_map_lecturer_to_courses` VALUES (38, 5, 6, '2021-06-07 12:52:06', '1');
 
 -- ----------------------------
 -- Table structure for tbl_payments
@@ -577,14 +762,14 @@ CREATE TABLE `tbl_payments`  (
   `bank_trans_confirmed_by` int(10) NULL DEFAULT NULL,
   `bank_trans_confirmed_date` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`payment_id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 63 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 80 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_payments
 -- ----------------------------
-INSERT INTO `tbl_payments` VALUES (60, 4, 520000, 22, 1, NULL, '2021-06-03 11:17:43', 'success', NULL, 2, NULL, NULL);
-INSERT INTO `tbl_payments` VALUES (61, 4, 20000, 23, 1, NULL, '2021-06-03 13:00:22', '', NULL, 2, NULL, NULL);
-INSERT INTO `tbl_payments` VALUES (62, 4, 20000, 23, 1, NULL, '2021-06-03 13:13:01', '', NULL, 2, 1, '2021-06-03 14:05:39');
+INSERT INTO `tbl_payments` VALUES (79, 4, 20000, 23, 1, NULL, '2021-06-04 15:52:37', 'success', NULL, 2, 1, '2021-06-04 15:52:55');
+INSERT INTO `tbl_payments` VALUES (78, 4, 520000, 22, 1, '4_20210604_98695', '2021-06-04 15:50:38', 'success', 52000000, 1, NULL, NULL);
+INSERT INTO `tbl_payments` VALUES (77, 4, 520000, 22, 1, '4_20210604_12016', '2021-06-04 15:50:24', NULL, NULL, 1, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for tbl_programmes
@@ -638,6 +823,42 @@ INSERT INTO `tbl_qualifications` VALUES (2, 'Secondary', '2021-05-26 13:08:26');
 INSERT INTO `tbl_qualifications` VALUES (3, 'Bsc', '2021-05-26 13:08:26');
 INSERT INTO `tbl_qualifications` VALUES (4, 'Msc', '2021-05-26 13:08:26');
 INSERT INTO `tbl_qualifications` VALUES (5, 'PHD', '2021-05-26 13:08:26');
+
+-- ----------------------------
+-- Table structure for tbl_questions
+-- ----------------------------
+DROP TABLE IF EXISTS `tbl_questions`;
+CREATE TABLE `tbl_questions`  (
+  `question_id` int(100) NOT NULL AUTO_INCREMENT,
+  `question` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL,
+  `option_1` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `option_2` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `option_3` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `option_4` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `answer` varchar(3) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `posted_by` varchar(1) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `created_date` datetime(0) NULL DEFAULT NULL,
+  `assessment_type` int(1) NULL DEFAULT NULL,
+  `dummy_questions` int(1) NULL DEFAULT 0,
+  `course_id` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`question_id`) USING BTREE,
+  INDEX `course_id_new`(`course_id`) USING BTREE,
+  CONSTRAINT `course_id_new` FOREIGN KEY (`course_id`) REFERENCES `tbl_courses` (`course_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tbl_questions
+-- ----------------------------
+INSERT INTO `tbl_questions` VALUES (11, 'The speed of the train going from Nagpur to Allahabad is 100 km/h while when coming back from Allahabad to Nagpur, its speed is 150 km/h. find the average speed during whole journey.', '125 Km/hr', '75 km/hr', '135 km/hr', '120 km/hr', '4', '7', '2020-05-17 07:16:50', 1, 0, 1);
+INSERT INTO `tbl_questions` VALUES (12, 'If the displayed system time and date is wrong, you can reset it using', 'Write', 'Calendar', 'Write file', 'Control panel', '4', '7', '2020-05-17 07:16:50', 1, 0, 1);
+INSERT INTO `tbl_questions` VALUES (13, 'Find the average of first 97 natural numbers.', '47', '37', '48', '49', '4', '7', '2020-05-17 07:16:50', 1, 0, 1);
+INSERT INTO `tbl_questions` VALUES (14, 'Ajit has a certain average for 9 innings. In the tenth innings, he scores 100 runs thereby increasing his average by 8 runs. His new average is:', '20', '21', '29', '32', '3', '7', '2020-05-17 07:16:50', 1, 0, 1);
+INSERT INTO `tbl_questions` VALUES (15, 'If there are multiple recycle bin for a hard disk', 'You can set different size for each recycle bin', 'You can choose which recycle bin to use to store your deleted files', 'You can make any one of them default recycle bin', 'None of above', '1', '7', '2020-05-17 07:16:50', 1, 0, 1);
+INSERT INTO `tbl_questions` VALUES (16, 'Identify false statement', 'You can find deleted files in recycle bin', 'You can restore any files in recycle bin if you ever need', 'You can increase free space of disk by sending files in recycle bin', 'You can right click and choose Empty Recycle Bin to clean it at once', '3', '7', '2020-05-17 07:16:50', 1, 0, 1);
+INSERT INTO `tbl_questions` VALUES (17, 'You should save your computer from?', 'Viruses', 'Time bombs', 'Worms', 'All of the above', '4', '7', '2020-05-17 07:16:50', 1, 0, 1);
+INSERT INTO `tbl_questions` VALUES (18, 'World Wide Web is being standard by', 'Worldwide corporation', 'W3C', 'World Wide Consortium', 'World Wide Web Standard', '2', '7', '2020-05-17 07:16:50', 1, 0, 1);
+INSERT INTO `tbl_questions` VALUES (19, 'A co-processor', 'Is relatively easy to support in software', 'Causes all processor to function equally', 'Works with any application', 'Is quite common in modern computer', '1', '7', '2020-05-17 07:16:50', 1, 0, 1);
+INSERT INTO `tbl_questions` VALUES (20, 'A Microsoft Windows is a(n)', 'Operating system', 'Graphic program', 'Word Processing', 'Database program', '1', '7', '2020-05-17 07:16:50', 1, 0, 1);
 
 -- ----------------------------
 -- Table structure for tbl_settings
@@ -724,7 +945,7 @@ CREATE TABLE `tbl_sub_tab`  (
   `sub_tab_named_route` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `permission_slug` varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT '',
   PRIMARY KEY (`sub_tab_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 43 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 46 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_sub_tab
@@ -740,11 +961,18 @@ INSERT INTO `tbl_sub_tab` VALUES (8, 5, 'My Application', 'my_application', 'vie
 INSERT INTO `tbl_sub_tab` VALUES (9, 5, 'Student Application', 'student_application', 'view-student-application');
 INSERT INTO `tbl_sub_tab` VALUES (10, 6, 'Pay Tuition Fees', 'pay_tution_fees', 'can-pay-tuition-fees');
 INSERT INTO `tbl_sub_tab` VALUES (11, 6, 'Confirm Bank Transfer', 'confirm_bank_transfer', 'view-bank-transfer');
+INSERT INTO `tbl_sub_tab` VALUES (12, 3, 'My Time Table', 'my_time_table', 'view-time-table');
+INSERT INTO `tbl_sub_tab` VALUES (13, 4, 'Assessment Weight', 'assessment_weight', 'manage-assessment-weight');
+INSERT INTO `tbl_sub_tab` VALUES (14, 8, 'My Students', 'my_students', 'view-my-student');
+INSERT INTO `tbl_sub_tab` VALUES (15, 8, 'All Students', 'all_students', 'view-all-students');
 INSERT INTO `tbl_sub_tab` VALUES (38, 2, 'Courses List', 'courses_list', 'view-all-course-list');
-INSERT INTO `tbl_sub_tab` VALUES (39, 2, 'Map Course to Lecturer', 'map_course_to_lecturer', 'map-course-to-lecturer');
+INSERT INTO `tbl_sub_tab` VALUES (39, 2, 'Map Lecturer to Courses', 'map_lecturer_to_courses', 'map-lecturer-to-courses');
 INSERT INTO `tbl_sub_tab` VALUES (40, 2, 'Assigned Courses', 'assigned_courses', 'view-assigned-courses');
 INSERT INTO `tbl_sub_tab` VALUES (41, 3, 'Take C.A', 'take_ca', 'view-take-ca');
 INSERT INTO `tbl_sub_tab` VALUES (42, 3, 'My Certificate', 'my_certificate', 'view-certificate');
+INSERT INTO `tbl_sub_tab` VALUES (43, 4, 'Upload C.A Question', 'upload_ca_question', 'view-upload-ca-question');
+INSERT INTO `tbl_sub_tab` VALUES (44, 4, 'Manage Assessment', 'manage_assessment', 'manage-my-assessment');
+INSERT INTO `tbl_sub_tab` VALUES (45, 7, 'Event List', 'event_list', 'view-event-list');
 
 -- ----------------------------
 -- Table structure for tbl_suber_tab
@@ -843,14 +1071,14 @@ CREATE TABLE `users`  (
   UNIQUE INDEX `users_email_unique`(`email`) USING BTREE,
   INDEX `batch_no`(`batch_no`) USING BTREE,
   CONSTRAINT `batch_no` FOREIGN KEY (`batch_no`) REFERENCES `tbl_batch` (`batch_no`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of users
 -- ----------------------------
 INSERT INTO `users` VALUES (1, 'Ese', 'Kelvin', 'Uvbiekpahor', 'esekelvin24@gmail.com', NULL, '$2y$10$EQfCJPWAztoqoylE63zjIuvyx9uSNPc.wnarqvMkc3F/wdR.hD37.', 'eseuvbiekpahor_7129554.jpg', '080', '0000-00-00', '0', '1', '1', '1', NULL, '2021-05-03 14:02:22', '2021-05-23 23:13:01', 1, 1, NULL, 2, NULL, NULL, NULL);
-INSERT INTO `users` VALUES (2, 'System', 'K', 'Support', 'attc@gmail.com', NULL, '$2y$10$XsVRDKbzG9sWihM/4DJ2i.FYpL3t79qWKZSYTlvoXqlUEBZUeVRKa', 'no_pic.jpg', '08097191027', '0000-00-00', '0', '1', '1', '1', NULL, '2021-05-03 14:02:22', '2021-05-05 20:14:01', NULL, 0, NULL, 2, NULL, NULL, 1);
-INSERT INTO `users` VALUES (4, 'Student', 'Ese', 'Kelvin', 'eseboy24@gmail.com', NULL, '$2y$10$EQfCJPWAztoqoylE63zjIuvyx9uSNPc.wnarqvMkc3F/wdR.hD37.', 'studentkelvin_1844511.jpg', '080', '0000-00-00', '0', '1', '1', '1', 'iBEV3UH2PybrpemxKlf5GRugzgED6N2ygZigHCAUPDZYOkqoEi0pz6hJFwFQ', '2021-05-10 00:00:00', '2021-05-26 14:38:06', 1, 5, NULL, 1, '1', 'I am expert in gas wedding ', 1);
+INSERT INTO `users` VALUES (4, 'Student', 'Ese', 'Kelvin', 'eseboy24@gmail.com', NULL, '$2y$10$EQfCJPWAztoqoylE63zjIuvyx9uSNPc.wnarqvMkc3F/wdR.hD37.', 'studentkelvin_1844511.jpg', '080', '0000-00-00', '0', '1', '1', '1', 'jG2vAmQI6q5vKJOhrQqwc7bXsEHlaG64ibSlKVkPYZcQ7dzwgyAYBkqygbFW', '2021-05-10 00:00:00', '2021-06-07 10:01:28', 1, 4, NULL, 1, '1', 'I am expert in gas wedding ', 1);
+INSERT INTO `users` VALUES (6, 'Lecturer', '', 'One', 'ese.kelvin@dangoteprojects.com', NULL, '$2y$10$AnTYstsRXUc/S3mEeoR2legmCPy4u/5f87K8.7Guf4QjaI.1Y46D2', 'no_pic.jpg', '08097191027', '0000-00-00', '0', '1', '1', '1', 'XQpgxcCnqnsXLilAHFO09FP6HOMrBlKMj7nkcRWnspedzPm7ZfNdH7kBxENP', '2021-06-07 00:00:00', '2021-06-07 10:02:02', 1, 5, '1', 2, '1', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for users_permissions
@@ -882,7 +1110,7 @@ CREATE TABLE `users_roles`  (
 -- Records of users_roles
 -- ----------------------------
 INSERT INTO `users_roles` VALUES (1, 1);
-INSERT INTO `users_roles` VALUES (2, 2);
-INSERT INTO `users_roles` VALUES (4, 5);
+INSERT INTO `users_roles` VALUES (4, 6);
+INSERT INTO `users_roles` VALUES (6, 7);
 
 SET FOREIGN_KEY_CHECKS = 1;

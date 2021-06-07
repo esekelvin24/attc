@@ -22,7 +22,7 @@
 							display: block;
 							padding: 0.5rem 0.75rem;
 							margin-left: -1px;
-							line-height: 1.25;
+							line-height: 1.25; 
 							color: #047bf8;
 							background-color: #fff;
 							border: 1px solid #dee2e6;
@@ -31,10 +31,44 @@
 					@if(Auth::user()->can('create-user'))
 					<a href="{{route('new_user')}}" class="btn btn-info text-white" style="background:#1F1D5E; margin-bottom: 15px;"><i class="fa fa-plus"></i> Create New User</a>
 					@endif
+
+					<form method="GET" action="">
+					<div class="row">
+						<div class="col-md-6 col-sm-12">
+							<div class="form-group">
+								<label for="course_id">Course</label>
+								<select  autocomplete="off" class="form-control" id="course_id"  name="course_id">
+									<option value="" >--All Courses--</option>
+									@if(!$get_my_courses->isEmpty())
+										@foreach($get_my_courses as $val)
+											<option {{$selected_course==$val->course_id?"selected":""}} value="{{ encrypt($val->course_id) }}">{{ $val->course_name }}</option>
+										@endforeach
+									@endif
+								</select>
+							</div>
+						</div>
+						<div class="col-md-3 col-sm-12">
+							<div class="form-group">
+								<label for="course_id">Batch</label>
+								<select  autocomplete="off" class="form-control" id="batch_no"  name="batch_no">
+									@if(!$current_batch_details->isEmpty())
+										@foreach($current_batch_details as $val)
+											<option {{$selected_batch==$val->batch_no?"selected":""}} value="{{ encrypt($val->batch_no) }}"> Batch {{ $val->batch_no }}</option>
+										@endforeach
+									@endif
+								</select>
+							</div>
+						</div>
+						<div class="col-md-3 col-sm-12">
+							<button style="margin-top:27px; margin-bottom:25px" class="btn btn-success"><i class="fa fa-filter"></i> Filter</button>
+						</div>
+                    </div>
+					</form>
+
 					<table id="dataTable1" class="table table-striped" style="width: 100% !important;">
 						<thead>
 							<tr>
-                                @if(Auth::user()->can('view-manage-user'))
+                                @if(Auth::user()->can('view-manage-user') || Auth::user()->can('view-my-student') || Auth::user()->can('view-all-students'))
 								<th></th>
                                 @endif
 								<th></th>
@@ -48,7 +82,7 @@
 						</thead>
 						<tfoot>
 							<tr>
-                                 @if(Auth::user()->can('view-manage-user') )
+                                 @if(Auth::user()->can('view-manage-user') || Auth::user()->can('view-my-student') || Auth::user()->can('view-all-students'))
 								<th></th>
                                 @endif
 								<th></th>
@@ -63,7 +97,7 @@
 						<tbody>
 						@foreach($staff_collection as $val)
 							<tr>
-                                @if(Auth::user()->can('view-manage-user'))
+                                @if(Auth::user()->can('view-manage-user') || Auth::user()->can('view-my-student') || Auth::user()->can('view-all-students'))
 								<td><i title="Edit {{ $val->firstname." ".$val->lastname }}" style="cursor: pointer" data-id="{{ $val->id }}" class="fa fa-edit"></i></td>
                                 @endif
 								<td class="center"><img class="img-rounded" height="30" width="30" src='{{ asset("img/users/".$val->pics) }}'/></td>
@@ -172,6 +206,7 @@
 
 	$('body').on('click','i[data-id]',function(e)
 			{
+				
 				e.preventDefault();
 
 				var no=$(this).data("id");
@@ -181,7 +216,7 @@
 				$.ajax(
 						{
 							type:"GET",
-							@if(Auth::user()->can('view-manage-user'))
+							@if(Auth::user()->can('view-manage-user') || Auth::user()->can('view-my-student') || Auth::user()->can('view-all-students'))
 							url:`${da_link}/${no}`,
 							@endif
 							beforeSend:function()

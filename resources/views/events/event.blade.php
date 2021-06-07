@@ -9,28 +9,14 @@
 	<div class="content-box">
 		<div class="element-wrapper">
 			<h6 class="element-header">
-				All Assessment List (@if( $assessment_collection->isEmpty() ) 0 @else{{$assessment_collection->count()}}@endif)
+				All Event List (@if( $event_collection->isEmpty() ) 0 @else{{$event_collection->count()}}@endif)
 			</h6>
-
-			@if(Session::get('assessement_success'))
+			@if(Session::get('news_success'))
 			<div class="alert alert-success" style="margin-top:3px; margin-bottom:0">
-				{{Session::get('assessement_success')}}
+				Events Updated successfully!
 			</div>
 			<br/>
 			@endif
-
-			@if(Session::get('ca_error'))
-			<div class="alert alert-danger" style="margin-top:3px; margin-bottom:0">
-				{{Session::get('ca_error')}}
-			</div>
-			<br/>
-			@endif
-
-
-
-
-
-
 			<div class="element-box">
 				<div class="table-responsive">
 					<style>
@@ -48,80 +34,58 @@
 							border: 1px solid #dee2e6;
 						}
 					</style>
-					@if(Auth::user()->can('create-assessment'))
-					<button id="new_assessment" class="btn btn-info text-white" style="background:#1F1D5E; margin-bottom: 15px;"><i class="fa fa-plus"></i> Create Assessment</button>
+					@if(Auth::user()->can('create-event'))
+					<button id="create_event" class="btn btn-info text-white" style="background:#1F1D5E;margin-bottom: 15px;"><i class="fa fa-plus"></i> Add New Event</button>
 					@endif
-
 					<table id="dataTable1" class="table table-striped" style="width: 100% !important;">
 						<thead>
 							<tr>
-                                @if(Auth::user()->can('edit_assessement'))
+                                 @if(Auth::user()->can('edit-event'))
 								<th></th>
                                 @endif
-								<th>Course Title</th>
-								<th>Short Code</th>
-								<th>Batch No</th>
-								<th>Assessement Type</th>
-								<th>Start Date</th>
-								<th>Start Time</th>
-								<th>Expiration Date</th>
-								<th>Expiration Time</th>
-								
-								
+								<th></th>
+								<th>Title</th>
+								<th>Venue</th>
+								<th>Date</th>
+								<th>Start</th>
+								<th>End</th>
+								<th>Created by</th>
 							</tr>
 						</thead>
 						<tfoot>
 							<tr>
-                                 @if(Auth::user()->can('edit_assessement'))
+                                 @if(Auth::user()->can('edit-event'))
 								<th></th>
                                 @endif
-								<th>Course Title</th>
-								<th>Short Code</th>
-								<th>Batch No</th>
-								<th>Assessement Type</th>
-								{{-- <th>Assessement Status</th> --}}
-								{{-- <th>Show Results</th> --}}
-								<th>Start Date</th>
-								<th>Start Time</th>
-								<th>Expiration Date</th>
-								<th>Expiration Time</th>
-								
+								<th></th>
+								<th>Title</th>
+								<th>Venue</th>
+								<th>Date</th>
+								<th>Start</th>
+								<th>End</th>
+								<th>Created by</th>
 							</tr>
 						</tfoot>
 						<tbody>
-							
-						@foreach($assessment_collection as $val)
+						@foreach($event_collection as $val)
 							<tr>
-                                 @if(Auth::user()->can('edit_assessement'))
+                                @if(Auth::user()->can('edit-event'))
 								<td>
 
-										<i title="Edit Assessement weight" style="cursor: pointer" data-id="{{ encrypt($val->assessment_id) }}" class="fa fa-edit"></i>
+										<i title="Edit {{ $val->event_title." ".$val->event_title }}" style="cursor: pointer" data-id="{{ $val->event_id }}" class="fa fa-edit"></i>
 								</td>
                                 @else
                                     {{--<td>
                                     <i title="View More info of {{ $val->firstname." ".$val->lastname }}" style="cursor: pointer" data-id="{{ $val->id }}" class="fa fa-eye"></i>
                                     </td>--}}
                                 @endif
-								
-								<td>{{$val->course_name}}</td>
-								<td>{{$val->short_code}}</td>
-								<td>{{$val->batch_id}}</td>
-
-								@if($val->assessment_type == 1)
-								  <td>1st Assessment</td>
-								@elseif($val->assessment_type == 2)
-								<td>2nd Assessment</td>
-								@elseif($val->assessment_type == 3)
-								  <td>3rd Assessment</td>
-							    @elseif($val->assessment_type == 4)
-								  <td>4th Assessment</td>
-								@endif
-
-								<td>{{substr($val->start_date,0,10)}}</td>
-								<td>{{$val->start_time}}</td>
-								<td>{{substr($val->expiration_date,0,10)}}</td>
-								<td>{{$val->expiration_time}}</td>
-
+								<td class="center"><img class="img-rounded" height="30" width="30" src='{{ asset("frontend/assets/img/event/".$val->img_path) }}'/></td>
+								<td>{{$val->event_title}}</td>
+								<td>{{$val->event_venue}}</td>
+								<td>{{$val->event_date}}</td>
+								<td>{{$val->event_start_time}}</td>
+								<td>{{$val->event_end_time}}</td>
+								<td>{{$val->user_id}}</td>
 							</tr>
 						@endforeach
 						</tbody>
@@ -158,15 +122,15 @@
 
 @section('additional_js')
 	<script>
-     @if(Auth::user()->can('create-assessment'))
-          $("#new_assessment").click(function()
+	 @if(Auth::user()->can('create-event'))
+          $("#create_event").click(function()
 		  {
-             var toks=$("input[name='_token']").val();
+                var toks=$("input[name='_token']").val();
              $.ajax(
 					{
 						type:"POST",
 						data:{ _token:toks},
-						url:"{{ route('add_new_assessment') }}",
+						url:"{{ route('create_event') }}",
 						beforeSend:function()
 						{
 							$('table').block({ message: null });
@@ -184,11 +148,7 @@
 					}
 			);
 		  });
-		  @endif
-
-
-
-
+          @endif
 
 
 	if ($('#dataTable1').length) {
@@ -206,10 +166,8 @@
 						{
 							type:"POST",
 							data:{id:no, _token:toks},
-							 @if(Auth::user()->can('edit_assessement'))
-							url:"{{ route('edit_assessment') }}",
-							@else
-							url:"{{ route('edit_assessment') }}",
+							@if(Auth::user()->can('edit-event'))
+							url:"{{ route('edit_event') }}",
 							@endif
 							beforeSend:function()
 							{
@@ -231,6 +189,7 @@
 
 				);
 			});
+
 
 
 

@@ -436,7 +436,7 @@
      @endphp
     
 
-    @if($intended_route[0] == url('/apply'))
+    @if($intended_route[0] == url('/apply') || $intended_route[0] == url('/dashboard'))
          $(document).ready(function() {             
             $('#loginModal').modal('show');
             $(function () {

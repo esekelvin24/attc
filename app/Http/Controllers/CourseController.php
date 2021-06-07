@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use DB;
 use Auth;
 use App\Models\User;
+use App\Models\Course;
 
 class CourseController extends Controller
 {
@@ -14,11 +15,11 @@ class CourseController extends Controller
     public function assigned_courses()
     {
 
-        $assigned_courses = DB::table('tbl_map_lecturer_to_courses')->where('lecturer_user_id',Auth::user()->id)->pluck('short_code')->toArray();
+        $assigned_courses = DB::table('tbl_map_lecturer_to_courses')->where('lecturer_user_id',Auth::user()->id)->pluck('course_id')->toArray();
 
     
         $course_collection =  Course::
-        whereIn('short_code',$assigned_courses)
+        whereIn('course_id',$assigned_courses)
         ->leftjoin('tbl_programmes','tbl_programmes.programme_id','tbl_courses.programme_id')
         ->get();
         //dd($cross_course_collection);
@@ -37,24 +38,23 @@ class CourseController extends Controller
             ->join('users_roles','users.id','users_roles.user_id')
             ->where('users_roles.role_id', 7)//Lecturer Rights
             ->where('user_type',2) //staff
+            ->where('status',1)
             ->where('god_eye',0);
             
             
             //Lecturer
-
-
-
 
             $lecturer_collection = $builder->get();
 
 
 
             // $programme_collection = Programme::all();
-                 $program_type_collection = Program_Type::all();
+                 $program_collection = DB::table('tbl_programmes')->where('status',1)->get();
 
-            return view('course.map_lecturer_to_courses',compact('lecturer_collection','program_type_collection'));
+            return view('course.map_lecturer_to_courses',compact('lecturer_collection','program_collection'));
     }
 
+    
     public function course_map_list(Request $request)
         {
            $id = $request->id;
@@ -67,31 +67,17 @@ class CourseController extends Controller
            $lect_map_history = array();
            foreach ($get as $val)
            {
-              $lect_map_history[] = $val->short_code;
+              $lect_map_history[] = $val->course_id;
            }
 
-           $lecturer_details = DB::table('tbl_users')->where('id', Auth::user()->id)->first();
+           $lecturer_details = DB::table('users')->where('id', Auth::user()->id)->first();
 
            $builder = Course::query();
            $builder->where('tbl_courses.programme_id',$id);
 
-           if (isset($lecturer_details->rights_id))
-            {
-               
-                if($lecturer_details->rights_id == 6) //This user is a Lecturer
-                {
-                    $supper_lecturer_assigned_courses =  DB::table('tbl_map_lecturer_to_courses')->where('lecturer_user_id',Auth::user()->id)->pluck('short_code')->toArray();
-                    $builder->whereIn('short_code',$supper_lecturer_assigned_courses);
-                }
-
-            }
-
 
 
            $course_collection =  $builder->get();
-
-
-
 
            return view('course.course_map_list',compact('course_collection','lect_map_history'));
         }
@@ -117,7 +103,7 @@ class CourseController extends Controller
                 {
                     
                     $insert[] = [
-                        "short_code" => $val,
+                        "course_id" => $val,
                         "lecturer_user_id" => $request->lecturer,
                         "created_at" => now(),
                         "created_by" => Auth::user()->id
@@ -125,11 +111,11 @@ class CourseController extends Controller
                 }
            }
            
-           $course_array =  DB::table('tbl_courses')->where('programme_id',$request->programme_id)->pluck('short_code');
+           $course_array =  DB::table('tbl_courses')->where('programme_id',$request->programme_id)->pluck('course_id');
         
            //Delete the course current mapping to other lecturers
            DB::table('tbl_map_lecturer_to_courses')
-           ->whereIn('short_code',$course_array)
+           ->whereIn('course_id',$course_array)
            ->where("lecturer_user_id",$request->lecturer)->delete();
         
            

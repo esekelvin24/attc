@@ -3,6 +3,44 @@
 @section('content')
 
 
+<style>
+.card{ box-shadow: 0 0px 2px 0 rgba(0, 0, 10, 0.2), 0 10px 15px 0 rgba(0, 100, 200, 0.19); transition: all 0.3s ease-in-out;}
+.card::after {content: '';position: absolute; z-index: -1;opacity: 0;border-radius: 5px; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  transition: opacity 0.3s ease-in-out;
+}
+.card:hover { box-shadow: 0 0px 0.5px 0 rgba(0, 0, 0, 0.5), 0 0px 0px 0 rgba(0, 0, 0, 0.19);} 
+.card:hover::after {opacity: 1; }/* Fade in the pseudo-element with the bigger shadow */
+.card .header .icon{ /*border: 2px solid red;*/ margin:3px 0px 10px 0px;text-align:center;}
+.card .header .icon-text{margin:10px 0px 20px 0px;text-align:center;}
+.card .header .count{ /*border: 2px solid red;*/ margin:5px 0px 0px 0px; }
+.card .header .count-text{ /*border: 2px solid red;*/ margin:20px 0px 55px 0px; }
+.card .header .count h1{ text-align:center;	font-weight: 600;font-size: 2.7em;}
+.card .header .count h2{text-align:center;font-weight: 600;font-size: 1em;}
+.card .header .count h1 a{ color:#333;font-weight: 600;/*text-decoration: none;*/}
+.card .header .text {margin: 7px 2px;text-align:center;}
+.card .header .text .title { margin:20px 0px 20px 0px;font-weight:600;line-height: 1.4em;color: navy;font-size:1.2em;}
+.card .header .text .title a {margin:20px 0px 20px 0px; font-weight:600; line-height: 1.4em;color: navy;/*text-decoration: none;*/}
+.grading {background: rgba(255,255,255,1);
+background: -moz-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(237,237,237,1) 0%, rgba(246,246,246,1) 47%, rgba(246,246,246,1) 84%);
+background: -webkit-gradient(left top, right top, color-stop(0%, rgba(255,255,255,1)), color-stop(0%, rgba(237,237,237,1)), color-stop(47%, rgba(246,246,246,1)), color-stop(84%, rgba(246,246,246,1)));
+background: -webkit-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(237,237,237,1) 0%, rgba(246,246,246,1) 47%, rgba(246,246,246,1) 84%);
+background: -o-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(237,237,237,1) 0%, rgba(246,246,246,1) 47%, rgba(246,246,246,1) 84%);
+background: -ms-linear-gradient(left, rgba(255,255,255,1) 0%, rgba(237,237,237,1) 0%, rgba(246,246,246,1) 47%, rgba(246,246,246,1) 84%);
+}
+
+.grading2{
+padding: 3px 0px 3px 0px;
+margin-bottom:10px;
+background: rgba(255,255,255,0.02);
+background: -moz-linear-gradient(left, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 3%, rgba(231,244,249,1) 100%);
+background: -webkit-gradient(left top, right top, color-stop(0%, rgba(255,255,255,0.02)), color-stop(3%, rgba(255,255,255,0.05)), color-stop(100%, rgba(231,244,249,1)));
+background: -webkit-linear-gradient(left, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 3%, rgba(231,244,249,1) 100%);
+background: -o-linear-gradient(left, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 3%, rgba(231,244,249,1) 100%);
+background: -ms-linear-gradient(left, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 3%, rgba(231,244,249,1) 100%);
+background: linear-gradient(to right, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 3%, rgba(231,244,249,1) 100%);
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e7f4f9', GradientType=1 );}
+
+</style>
 
 @if(true)
    
@@ -41,9 +79,102 @@
                     </div>
                 </div>
             </div>
+
+
+            @if(false)
+                <div class="row"><!-- Top row-->
+                        <div class="col-md-4 col-sm-12 col-lg-3">
+                            <div class="card grading2">
+                                <div class="header">
+                                            <div class="icon">
+                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-user-o"></i></a>
+                                            </div>
+                                       
+                                            <div class="count">
+                                                <h1>20</h1>
+                                            </div>
+                                            <div class="text">
+                                                <h4 class="title">Active Students</h4>
+                                            </div>
+                                </div>				
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-12 col-lg-3">
+                            <div class="card grading2">
+                                <div class="header">
+                                            <div class="icon">
+                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-file-o"></i></a>
+                                            </div>
+                                       
+                                            <div class="count">
+                                                <h1>20</h1>
+                                            </div>
+                                            <div class="text">
+                                                <h4 class="title">No of Applications</h4>
+                                            </div>
+                                </div>				
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-4 col-sm-12 col-lg-3">
+                            <div class="card grading2">
+                                <div class="header">
+                                            <div class="icon">
+                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-book"></i></a>
+                                            </div>
+                                       
+                                            <div class="count">
+                                                <h1>3</h1>
+                                            </div>
+                                            <div class="text">
+                                                <h4 class="title">Assigned Courses</h4>
+                                            </div>
+                                </div>				
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 col-sm-12 col-lg-3">
+                            <div class="card grading2">
+                                <div class="header">
+                                            <div class="icon">
+                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-users"></i></a>
+                                            </div>
+                                       
+                                            <div class="count">
+                                                <h1>3</h1>
+                                            </div>
+                                            <div class="text">
+                                                <h4 class="title">My Students</h4>
+                                            </div>
+                                </div>				
+                            </div>
+                        </div>
+
+                         <div class="col-md-4 col-sm-12 col-lg-3">
+                            <div class="card grading2">
+                                <div class="header">
+                                            <div class="icon">
+                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-book"></i></a>
+                                            </div>
+                                       
+                                            <div class="count">
+                                                <h1>3</h1>
+                                            </div>
+                                            <div class="text">
+                                                <h4 class="title">Total Registered Courses</h4>
+                                            </div>
+                                </div>				
+                            </div>
+                        </div>
+
+                        
+                </div>
+                @endif
+
             <div class="support-index">
-                <div class="">
-                   
+                <div class="">                   
                    @if(Auth::user()->can('view-application-on-dashboard')) 
                    <div class="support-tickets-header">
                         <div class="tickets-control">
@@ -104,9 +235,24 @@
                                 </table>
                             </div>
                         </div>
-                   @endif  
+                   @endif  {{-- End can view application on dashboard --}}  
+
                 </div>
             </div> 
+
+              
+
+
+
+
+
+
+
+
+
+
+
+
         </div>
     
     @else

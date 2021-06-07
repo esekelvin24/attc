@@ -44,29 +44,21 @@
 				</div>
 				
 			  
-				<div class="col-sm-3">
+				<div class="col-sm-6">
 					<div class="form-group">
-						<label for="programme_id">Programme Type</label>
-						<select onchange="get_programme_list()" required autocomplete="off" class="form-control" id="programme_type"  name="programme_type">
-							<option value="" selected>--Please Select Programme Type--</option>
-							@if(!$program_type_collection->isEmpty())
-								@foreach($program_type_collection as $val)
-									<option value="{{ $val->program_type_id }}">{{ $val->program_type_name }}</option>
+						<label for="programme_id">Programme</label>
+						<select onchange="dd(this.value)" required autocomplete="off" class="form-control" id="programme_id"  name="programme_id">
+							<option value="" selected>--Please Select Programme --</option>
+							@if(!$program_collection->isEmpty())
+								@foreach($program_collection as $val)
+									<option value="{{ $val->programme_id }}">{{ $val->programme_name }}</option>
 								@endforeach
 							@endif
 						</select>
 					</div>
 				</div>
 			
-				<div class="col-sm-4">
-					<div class="form-group">
-						<label for="programme_id">Programme</label>
-						<select onchange="get_course_list(this.value)" required autocomplete="off" class="form-control" id="programme_id"  name="programme_id">
-							
-						</select>
-					</div>
-				 </div>
-
+			
 				<div style="margin-top:7px;" class="col-sm-1">
 					<div class="form-group">
 						<label for="programme_id"></label>
@@ -119,102 +111,42 @@
 	$('#dataTable1').DataTable({ buttons: ['copy', 'excel', 'pdf'] });
 	}
 
-	$('body').on('click','i[data-id]',function(e)//fetching edit form from the server
-			{
-				e.preventDefault();
 
-				var no=$(this).data("id");
-				//alert(no);
-				var toks=$("input[name='_token']").val();
-
-				$.ajax(
-						{
-							type:"POST",
-							data:{id:no, _token:toks},
-							@if(Route::current()->getName() == 'edit_course')
-							url:"{{ route('dynamic_course_edit') }}",
-							@else
-							url:"{{ route('dynamic_course_edit') }}",
-							@endif
-							beforeSend:function()
-							{
-								$('table').block({ message: null });
-								$('div.modal-body').attr("data-print",no);
-							},
-							success: function(r)
-							{
-								$('table').unblock();
-								$('div.modal-body').html(r);
-								$('.edit_area').modal(
-										{
-											backdrop: 'static',
-											keyboard: false
-										});
-
-							}
-						}
-
-				);
-			});
-
-
-			function get_programme_list()
-		      {
-				 
-				$('#table_list').html("");
-
-		                    $.ajax(
-								 {
-									 type:"POST",
-									 data:{
-										 id : $("#programme_type").val(),
-										 _token:$("input[name='_token']").val()
-									 },
-									 url:"{{route('get_programmes_for_map_lecturer')}}",
-									 beforeSend:function()
-									  {
-										  $('form#form').block({ message: null }); 
-									  },
-									  success: function(r)
-									  {							  
-										 $('form#form').unblock(); 
-							              $("#programme_id").html(r);
-											// swal("success!", "Operation was successful", "success");
-										     //location.reload();
-									  }
-								 }
-				 
-						     );
-		        }
-
-
-				 function get_course_list(get_course_list)
+				 function dd(id)
 				 {
 					
-					$.ajax(
-								 {
-									 type:"POST",
-									 data:{
-										 lecturer : $("#lecturer").val(),
-										 id : get_course_list,
-										 _token:$("input[name='_token']").val()
-									 },
-									 url:"{{route('course_map_list')}}",
-									 beforeSend:function()
-									  {
-										  $('form#form').block({ message: null }); 
-									  },
-									  success: function(r)
-									  {							  
-										 $('form#form').unblock(); 
-							              $("#table_list").html(r);
-											// swal("success!", "Operation was successful", "success");
-										     //location.reload();
-									  }
-								 }
-				 
-						     );
-			
+					if ($("#lecturer").val() == "")
+					{
+
+                      Swal.fire('Error!','Select a Lecturer','error');
+					}else
+					{
+
+						
+						$.ajax(
+									{
+										type:"POST",
+										data:{
+											lecturer : $("#lecturer").val(),
+											id : id,
+											_token:$("input[name='_token']").val()
+										},
+										url:"{{route('course_map_list')}}",
+										beforeSend:function()
+										{
+											$('form#form').block({ message: null }); 
+										},
+										success: function(r)
+										{							  
+											$('form#form').unblock(); 
+											$("#table_list").html(r);
+												// swal("success!", "Operation was successful", "success");
+												//location.reload();
+										}
+									}
+					
+								);
+					}
 
 
 
@@ -223,8 +155,8 @@
 
    function reset_selection_field() 
    {
-	$("#programme_id").html(""); 
-	$('#programme_type').prop('selectedIndex',0);
+
+	$('#programme_id').prop('selectedIndex',0);
    }
 
 

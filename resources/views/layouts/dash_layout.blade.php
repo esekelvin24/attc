@@ -250,6 +250,7 @@ exit();
     <link rel="stylesheet" href="{{asset("bower_components/vex/vex.css")}}" />
     <link rel="stylesheet" href="{{asset("bower_components/vex/vex-theme-flat-attack.css")}}" />
     <link rel="stylesheet" href="{{asset("bower_components/vex/vex-theme-default.css")}}" />
+       <link href="{{asset("bower_components/time_picker/mdtimepicker.css")}}" rel="stylesheet" type="text/css">
 
     <!-- start: favicon -->
     <link rel="shortcut icon" href="{{ asset('frontend/assets/img/favicon.png') }}">

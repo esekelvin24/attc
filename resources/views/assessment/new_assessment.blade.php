@@ -1,7 +1,5 @@
-@extends('../layouts.dash_layout')
 
-@section('required_css')
-@endsection
+
 
 
 @section('content')
@@ -31,19 +29,19 @@
 						   <div class="col-sm-6">
 							   <div class="form-group">
 								   <label for="dean">Course</label>
-								   <select required autocomplete="off" class="form-control" id="course"  name="course">
+								   <select required autocomplete="off" class="form-control" id="course_id"  name="course_id">
 									   <option value="" selected>--Select a Course--</option>
 									   @if(!$course_collection->isEmpty())
 										   @foreach($course_collection as $val)
-											   <option value="{{ $val->short_code }}">{{ $val->course_title }}</option>
+											   <option value="{{ $val->course_id }}">{{ $val->course_name }}</option>
 										   @endforeach
 									   @endif
 								   </select>
 							   </div>
 						   </div>
-					   </div>
+					   
 
-					   @php
+					     @php
 											function get_ca_text($value)
 											{
 												if ($value == 1 )
@@ -61,7 +59,7 @@
 											}	
 									@endphp
 									
-					   <div class="row">
+					   
 						<div class="col-sm-6">
 							<div class="form-group">
 								<label for="dean">Assessment Type</label>
@@ -88,9 +86,7 @@
 								<span class="text-danger error-message here"></span>
 							</div>
 						</div>
-					</div>
-
-					<div class="row">
+					
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="faculty">
@@ -112,9 +108,7 @@
 								<span class="text-danger error-message here"></span>
 							</div>
 						</div>
-					</div>
-
-					<div class="row">
+					
 						<div class="col-md-6">
 							<div class="form-group">
 								<label for="faculty">
@@ -126,12 +120,17 @@
 						</div>
 					</div>
 
-
-				<div class="row">
-					<div class="col-md-6">
-						<button class="btn btn-primary btn-block btn-scroll btn-scroll-left ti-book create" type="submit"><span>CREATE ASSESSEMENT</span></button>
-					</div>
-			   </div>
+				
+			    <div class="content" >
+                 <div class="inner" align="center" >
+                 <div style ="min-width:350px !important" class="row">
+                    
+                     <div class="col-md-12">
+                         <button  class="btn btn-primary btn-block btn-scroll btn-scroll-left ti-book create" type="submit"><span>CREATE ASSESSMENT</span></button>
+                     </div>
+                 </div>
+                 </div>    
+                </div>
 
                 		
 		
@@ -146,16 +145,14 @@
 		@else
 
 					<div align="center">
-						<img width="150" height="150" src="{{asset('_img/barred.png')}}" >
+						<img width="150" height="150" src="{{asset('img/barred.png')}}" >
 						<p> Kindly contact the admin to set assessment weight for this session<p>
 					</div>
 
 		@endif
     </div>
-@endsection
 
 
-@section('additional_js')
     <script>
 
 
@@ -194,4 +191,4 @@
 			); //Initializes the time picker
 			});		
 	</script>
-@endsection
+

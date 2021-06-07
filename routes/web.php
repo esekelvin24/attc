@@ -54,7 +54,7 @@ Route::post('bank_transfer_completed', [App\Http\Controllers\FeesController::cla
 
 Route::get('/courses_list', [App\Http\Controllers\HomeController::class, 'courses_list'])->name('courses_list');
 Route::get('/map_course_to_lecturer', [App\Http\Controllers\HomeController::class, 'map_course_to_lecturer'])->name('map_course_to_lecturer');
-Route::get('/assigned_courses', [App\Http\Controllers\HomeController::class, 'assigned_courses'])->name('assigned_courses');
+Route::get('/assigned_courses', [App\Http\Controllers\CourseController::class, 'assigned_courses'])->name('assigned_courses');
 Route::get('/my_certificate', [App\Http\Controllers\ApplicationController::class, 'my_certificate'])->name('my_certificate');
 Route::get('/my_time_table', [App\Http\Controllers\ApplicationController::class, 'my_time_table'])->name('my_time_table');
 
@@ -69,10 +69,36 @@ Route::get('/upload_ca_question', [App\Http\Controllers\assessment\AssessmentCon
 Route::post('/save_ca_upload', [App\Http\Controllers\assessment\AssessmentController::class, 'save_ca_upload'])->name('save_ca_upload');
 
 Route::get('/manage_assessment_weight', [App\Http\Controllers\assessment\AssessmentController::class, 'assessment_weight'])->name('assessment_weight');
-Route::post('/dynamic_assessement_weight_edit', [App\Http\Controllers\assessment\AssessmentController::class, 'dynamic_assessement_weight_edit'])->name('dynamic_assessement_weight_edit');
+Route::get('/manage_assessment', [App\Http\Controllers\assessment\AssessmentController::class, 'manage_assessment'])->name('manage_assessment');
 Route::get('/map_lecturer_to_courses', [App\Http\Controllers\CourseController::class, 'map_lecturer_to_courses'])->name('map_lecturer_to_courses');
+Route::post('/edit_assessment', [App\Http\Controllers\assessment\AssessmentController::class, 'edit_assessment'])->name('edit_assessment');
+Route::post('/save_edit_assessment', [App\Http\Controllers\assessment\AssessmentController::class, 'save_edit_assessment'])->name('save_edit_assessment');
 
- 
+
+Route::post('/add_new_assessment', [App\Http\Controllers\assessment\AssessmentController::class, 'add_new_assessment'])->name('add_new_assessment');
+Route::post('/save_assessement', [App\Http\Controllers\assessment\AssessmentController::class, 'save_assessement'])->name('save_assessement');
+
+
+Route::get('/event_list', [App\Http\Controllers\EventController::class, 'event_list'])->name('event_list');
+Route::post('/edit_event', [App\Http\Controllers\EventController::class, 'edit_event'])->name('edit_event');
+Route::post('/save_edit_event', [App\Http\Controllers\EventController::class, 'save_edit_event'])->name('save_edit_event');
+Route::post('/create_event', [App\Http\Controllers\EventController::class, 'create_event'])->name('create_event');
+Route::post('/save_event', [App\Http\Controllers\EventController::class, 'save_event'])->name('save_event');
+
+
+
+
+
+Route::get('/all_students', [App\Http\Controllers\StudentController::class, 'all_students'])->name('all_students');
+Route::get('/my_students', [App\Http\Controllers\StudentController::class, 'my_students'])->name('my_students');
+
+
+Route::post('/save_mapped_lecturer', [App\Http\Controllers\CourseController::class, 'save_mapped_lecturer'])->name('save_mapped_lecturer');
+Route::post('/course_map_list', [App\Http\Controllers\CourseController::class, 'course_map_list'])->name('course_map_list');
+
+
+
+
 
  
 Route::get('/pay_tution_fees', [App\Http\Controllers\FeesController::class, 'pay_tution_fees'])->name('pay_tution_fees');
@@ -160,7 +186,12 @@ Route::get('/profile/{user_id?}',[App\Http\Controllers\DashboardController::clas
 
 Route::get('/new_user',[App\Http\Controllers\user\UserController::class, 'make'])->name('new_user');
 Route::post('/username_check', [App\Http\Controllers\user\UserController::class, 'username_check'])->name('username_check');
-   
+
+Route::get('/all_students',[App\Http\Controllers\StudentController::class, 'manage_students'])->name('all_students');
+Route::get('/my_students',[App\Http\Controllers\StudentController::class, 'my_students'])->name('my_students');
+
+
+
 Route::get('/manage_user',[App\Http\Controllers\user\UserController::class, 'manage_user'])->name('manage_user');
 Route::get('/manage_department',[App\Http\Controllers\DashboardController::class, 'manage_department'])->name('manage_department');
 

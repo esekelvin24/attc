@@ -172,8 +172,8 @@ class UserController extends Controller
 
         $company_details = DB::table('tbl_settings')->get();
         $company_name = $company_details[0]->value;
-        $company_email = $company_details[4]->value;
-        $plain_password = $company_details[5]->value;
+       // $company_email = $company_details[4]->value;
+       // $plain_password = $company_details[5]->value;
 	   //Saving to tbl_staff in order of arrangement in form
 	   $user = new User;
 	   $user->user_type = 2;// 2- Staff, 1 - General User
@@ -200,7 +200,7 @@ class UserController extends Controller
         $permitted_chars = '0123456789abcdefghijklmnopqrstuvwxyz';
             // Output: 54esmdr0qf
        
-        //$plain_password = substr(str_shuffle($permitted_chars), 0, 6);
+        $plain_password = substr(str_shuffle($permitted_chars), 0, 6);
         $password = Hash::make($plain_password); //All new users have a default password
         $unique_code=Str::random(45);
         $user->status   = 1;
@@ -215,12 +215,22 @@ class UserController extends Controller
 
 	    #Send welcome email to new user
         //$link = url("/login",$unique_code);//verify email link
-        $link = url("/login");
-        $data = array('full_name'=>request()->firstname." ".request()->lastname,'link'=> $link, 'username' => $email, 'password' => $plain_password, 'company_name' => $company_name);
+        $link = url("/dashboard");
+        $data = array('full_name'=>request()->firstname." ".request()->lastname,'link'=> $link, 'email' => $email, 'password' => $plain_password, 'company_name' => $company_name);
       
         if ($user && $role)
         {
             DB::commit(); 
+            
+            Mail::send('emails.account_creation', $data, function($message) use ($data,$email){
+                $message->from("dangote.gts@gmail.com", 'ATTC Nigeria Portal');
+                $message->to($email);
+            // $message->bcc("isokenodigie@gmail.com");
+            // $message->bcc("mailaustin37@gmail.com");
+                $message->subject('ATTC User Account Creation');
+            });
+
+
         }else{
             return json_encode(["error" => "An unknown error occured"]);
             DB::rollback();
