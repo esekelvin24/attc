@@ -410,7 +410,36 @@ class ApplicationController extends Controller
     }
 
 
+    public function my_certificate()
+    {
+        $all_application_collection = Application::join('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
+        ->selectRaw('*,SUM(ac.application_course_price) as programme_total_amt')
+        ->join('users','users.id','tbl_applications.user_id')
+        ->join('tbl_application_courses as ac','ac.application_id','tbl_applications.application_id')
+        ->where('tbl_applications.user_id',Auth::user()->id)
+        ->groupBy('tbl_applications.application_id')
+       // ->orderBy('tbl_applications.created_at','desc')
+        ->get();
 
+        return view('applications.my_certificate', compact('all_application_collection'));
+    }
+
+    public function my_time_table()
+    {
+        $current_batch_details = DB::table('tbl_batch')->where('status',1)->orderBy('created_at','desc')->get();
+
+        $all_application_collection = Application::join('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
+        ->join('users','users.id','tbl_applications.user_id')
+        ->join('tbl_application_courses as ac','ac.application_id','tbl_applications.application_id')
+        ->join('tbl_courses as c','c.course_id','ac.course_id')
+        ->where('tbl_applications.user_id',Auth::user()->id)
+        ->where('batch_id', $current_batch_details[0]->batch_no)
+       // ->orderBy('tbl_applications.created_at','desc')
+        ->get();
+        
+
+        return view('applications.my_time_table', compact('all_application_collection'));
+    }
 
 
 

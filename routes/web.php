@@ -55,10 +55,26 @@ Route::post('bank_transfer_completed', [App\Http\Controllers\FeesController::cla
 Route::get('/courses_list', [App\Http\Controllers\HomeController::class, 'courses_list'])->name('courses_list');
 Route::get('/map_course_to_lecturer', [App\Http\Controllers\HomeController::class, 'map_course_to_lecturer'])->name('map_course_to_lecturer');
 Route::get('/assigned_courses', [App\Http\Controllers\HomeController::class, 'assigned_courses'])->name('assigned_courses');
-Route::get('/take_ca', [App\Http\Controllers\HomeController::class, 'take_ca'])->name('take_ca');
-Route::get('/my_certificate', [App\Http\Controllers\HomeController::class, 'my_certificate'])->name('my_certificate');
+Route::get('/my_certificate', [App\Http\Controllers\ApplicationController::class, 'my_certificate'])->name('my_certificate');
+Route::get('/my_time_table', [App\Http\Controllers\ApplicationController::class, 'my_time_table'])->name('my_time_table');
+
+Route::get('/take_ca', [App\Http\Controllers\assessment\AssessmentController::class, 'take_ca'])->name('take_ca');
+Route::get('/take_ca_questions', [App\Http\Controllers\assessment\AssessmentController::class, 'take_ca_questions'])->name('take_ca_questions');
+Route::post('/next_question', [App\Http\Controllers\assessment\AssessmentController::class, 'next_question'])->name('next_question');
+Route::post('/prev_question', [App\Http\Controllers\assessment\AssessmentController::class, 'prev_question'])->name('prev_question');
+Route::post('/this_log', [App\Http\Controllers\assessment\AssessmentController::class, 'this_log'])->name('this_log');
 
 
+Route::get('/upload_ca_question', [App\Http\Controllers\assessment\AssessmentController::class, 'upload_ca_question'])->name('upload_ca_question');
+Route::post('/save_ca_upload', [App\Http\Controllers\assessment\AssessmentController::class, 'save_ca_upload'])->name('save_ca_upload');
+
+Route::get('/manage_assessment_weight', [App\Http\Controllers\assessment\AssessmentController::class, 'assessment_weight'])->name('assessment_weight');
+Route::post('/dynamic_assessement_weight_edit', [App\Http\Controllers\assessment\AssessmentController::class, 'dynamic_assessement_weight_edit'])->name('dynamic_assessement_weight_edit');
+Route::get('/map_lecturer_to_courses', [App\Http\Controllers\CourseController::class, 'map_lecturer_to_courses'])->name('map_lecturer_to_courses');
+
+ 
+
+ 
 Route::get('/pay_tution_fees', [App\Http\Controllers\FeesController::class, 'pay_tution_fees'])->name('pay_tution_fees');
 Route::get('/payment/{type}/{id}', [App\Http\Controllers\FeesController::class, 'payment'])->name('payment');
 Route::post('/verify_transaction', [App\Http\Controllers\FeesController::class, 'verify_transaction'])->name('verify_transaction');

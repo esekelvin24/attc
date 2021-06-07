@@ -36,7 +36,7 @@
                                         <th>STATUS</th>
                                         <th>APPLICANT</th>
                                         <th>PROGRAMME</th>
-                                          <th>AMOUNT</th>
+                                        <th>AMOUNT</th>
                                         <th>APPLIED ON</th>
                                     </tr>
                                     </thead>
@@ -46,7 +46,7 @@
                                         <th>STATUS</th>
                                         <th>APPLICANT</th>
                                         <th>PROGRAMME</th>
-                                          <th>AMOUNT</th>
+                                        <th>AMOUNT</th>
                                         <th>APPLIED ON</th>
                                     </tr>
                                     </tfoot>
