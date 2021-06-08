@@ -7,6 +7,7 @@ Registration
 
 @section('content')
 
+
 <style>
 
 .my-fieldset {
@@ -69,6 +70,30 @@ Registration
     color: #fff !important
 }
 
+
+fieldset {
+    font-family: sans-serif;
+    border: 1px solid #1F497D;
+    background: white;
+    border-radius: 5px;
+    margin-top: 1px;
+	padding-left:10px;
+	padding-right:10px;
+}
+
+fieldset legend {
+    background: #1F497D;
+    width:280px;
+    font-size:18px;
+    color: #fff;
+    padding: 5px 10px ;*/
+    font-size: 17px;
+    border-radius: 5px;
+    box-shadow: 0 0 0 5px #ddd;
+    margin-left: 0px;
+}
+
+
 </style>
 
 
@@ -95,35 +120,42 @@ Registration
 
       
 
-        <form class="form-horizontal" action="{{route('sumbit_application')}}" method="post"  id="form" enctype="multipart/form-data">
+        <form class="form-horizontal" action="{{route('sumbit_registration')}}" method="post"   enctype="multipart/form-data">
         @csrf
         <fieldset>
 
         <!-- Form Name -->
-        <legend><center><h2><b>Registration Form</b></h2></center></legend><br>
-
-
-
+        <legend><b>Pernsonal Information</b></legend><br>
 
 
 
         <div class="form-group"> 
           <div class="col-md-4 selectContainer">
-             <label class="">Title</label>
+             <label class="">Title <span class="text-danger"><b>*</b></span></label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-list"></i></span>
-                    <select required name="programme" id="programme" class="form-control selectpicker">
+                    <select required name="title" id="title" class="form-control selectpicker">
                     @foreach($title_collections as $val)
-                        <option value="{{$val->title_id}}">{{$val->title_name}}</option>
+                        <option {{old('title')==$val->title_id?"selected":""}} value="{{$val->title_id}}">{{$val->title_name}}</option>
                     @endforeach
                     </select>
+                    @if ($errors->has('title'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('title') }}</strong>
+                                    </span>
+                    @endif
                 </div>
             </div>
             <div class="col-md-4 selectContainer">
-            <label >FIRST NAME</label>
+            <label >FIRST NAME <span class="text-danger"><b>*</b></span></label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input class="form-control" value="" name="" id="">
+                    <input required placeholder="Enter your first name" class="form-control" value="{{old('firstname')}}" name="firstname" id="firstname">
+                    @if ($errors->has('firstname'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('firstname') }}</strong>
+                                    </span>
+                    @endif
                 </div>
             </div>
            
@@ -131,7 +163,12 @@ Registration
              <label >MIDDLE NAME</label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                    <input class="form-control" value="" name="" id="">
+                    <input placeholder="Enter your middle name" class="form-control" value="{{old('middlename')}}" name="middlename" id="middlename">
+                    @if ($errors->has('middlename'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('middlename') }}</strong>
+                                    </span>
+                    @endif
                 </div>
             </div>
         </div>
@@ -140,88 +177,240 @@ Registration
          <div class="form-group"> 
             
             <div class="col-md-4 selectContainer">
-            <label class="">LAST NAME</label>
+            <label class="">LAST NAME <span class="text-danger"><b>*</b></span></label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                   <input class="form-control" value="" name="" id="">
+                   <input required placeholder="Enter your last name" class="form-control" value="{{old('lastname')}}" name="lastname" id="lastname">
+                    @if ($errors->has('lastname'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('lastname') }}</strong>
+                                    </span>
+                    @endif
                 </div>
             </div>
             <div class="col-md-4 selectContainer">
-             <label class="">NATIONALITY</label>
+             <label class="">NATIONALITY <span class="text-danger"><b>*</b></span></label>
                 <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                    <input class="form-control" value="" name="" id="">
+                    <span class="input-group-addon"><i class="fa fa-passport"></i></span>
+                    <input required placeholder="Enter your nationality" class="form-control" value="{{old('nationality')}}" name="nationality" id="nationality">
+                    @if ($errors->has('nationality'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('nationality') }}</strong>
+                                    </span>
+                    @endif
                 </div>
             </div>
+            
              <div class="col-md-4 selectContainer">
-                <label class="">STATE OF ORIGIN</label>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                   <input class="form-control" value="" name="" id="">
+                <label class="">STATE OF ORIGIN <span class="text-danger"><b>*</b></span></label>
+               <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-list"></i></span>
+                    <select name="state_of_origin" id="state_of_origin" class="form-control selectpicker">
+                        <option selected value="">-- SELECT A STATE --</option>
+                    @foreach($states_collection as $val)
+                        <option {{old('state_of_origin')==$val->state_id?"selected":""}} value="{{$val->state_id}}">{{$val->state}}</option>
+                    @endforeach
+                    </select>
+                     @if ($errors->has('state_of_origin'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('state_of_origin') }}</strong>
+                                    </span>
+                    @endif
                 </div>
             </div>
+            
         </div>
 
          <div class="form-group"> 
-            <div class="col-md-4 selectContainer">
-               <label class=>EMAIL</label>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
-                    <input class="form-control" value="" name="" id="">
+
+           <div class="col-md-4 selectContainer">
+                <label class="">GENDER <span class="text-danger"><b>*</b></span></label>
+               <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-list"></i></span>
+                    <select name="gender" id="gender" class="form-control selectpicker">
+                        <option  value="">-- SELECT A GENDER --</option>
+                        <option {{old('gender')=="1"?"selected":""}}  value="1">Male</option>
+                        <option {{old('gender')=="2"?"selected":""}}  value="2">Female</option>
+                   
+                    </select>
+                     @if ($errors->has('gender'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('gender') }}</strong>
+                                    </span>
+                    @endif
                 </div>
             </div>
             <div class="col-md-4 selectContainer">
-                <label class="">DATE OF BIRTH</label>
+                <label class="">DATE OF BIRTH <span class="text-danger"><b>*</b></span></label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input class="form-control" value="" name="" id="">
+                    <input autocomplete="off" required class="form-control" value="{{old('date_of_birth')}}" name="date_of_birth" id="date_of_birth">
+                </div>
+                 @if ($errors->has('date_of_birth'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('date_of_birth') }}</strong>
+                                    </span>
+                @endif
+            </div>
+
+            <div class="col-md-4 selectContainer">
+             <label class="">RELIGION <span class="text-danger"><b>*</b></span></label>
+               <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-list"></i></span>
+                    <select  name="religion" id="religion" class="form-control selectpicker">
+                        <option selected value="">-- SELECT RELIGION --</option>
+                        <option {{old('religion')=="Christianity"?"selected":""}} value="Christianity">Christianity</option>
+                        <option {{old('religion')=="Islam"?"selected":""}} value="Islam">Islam</option>
+                        <option {{old('religion')=="Myth"?"selected":""}} value="Myth">Myth</option>
+                        <option {{old('religion')=="Hinduism"?"selected":""}} value="Hinduism">Hinduism</option>
+                        <option {{old('religion')=="Buddhism"?"selected":""}} value="Buddhism">Buddhism</option>
+                       
+                    </select>
+                     @if ($errors->has('religion'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('religion') }}</strong>
+                                    </span>
+                    @endif
                 </div>
             </div>
          
-            <div class="col-md-4 selectContainer">
-                <label class="">PHONE NUMBER</label>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-phone"></i></span>
-                    <input class="form-control" value="" name="" id="">
-                </div>
-            </div>
+            
         </div>
+</fieldset>
 
+<fieldset>
+        <!-- Form Name -->
+        <legend><b>Contact Information</b></legend><br>
+
+        
         <div class="form-group"> 
         
-            <div class="col-md-4 selectContainer">
-             <label class="">RELIGION</label>
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="fa fa-building"></i></span>
-                   <input class="form-control" value="" name="" id="">
+           
+
+            <div class="col-md-6 selectContainer">
+                <label class="">PERMANET RESIDENCE STATE <span class="text-danger"><b>*</b></span></label>
+               <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-list"></i></span>
+                    <select   name="permanent_state_of_residence" id="permanent_state_of_residence" class="form-control selectpicker">
+                        <option value="">-- SELECT A STATE --</option>
+                    @foreach($states_collection as $val)
+                        <option {{old('permanent_state_of_residence')==$val->state_id?"selected":""}} value="{{$val->state_id}}">{{$val->state}}</option>
+                    @endforeach
+                    </select>
+                     @if ($errors->has('permanent_state_of_residence'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('permanent_state_of_residence') }}</strong>
+                                    </span>
+                    @endif
                 </div>
             </div>
+
+            <div class="col-md-6 selectContainer">
+                <label class="">CURRENT ADDRESS STATE <span class="text-danger"><b>*</b></span></label>
+               <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-list"></i></span>
+                    <select  name="current_state_of_residence" id="current_state_of_residence" class="form-control selectpicker">
+                        <option value="">-- SELECT A STATE --</option>
+                    @foreach($states_collection as $val)
+                        <option {{old('current_state_of_residence')==$val->state_id?"selected":""}} value="{{$val->state_id}}">{{$val->state}}</option>
+                    @endforeach
+                    </select>
+                     @if ($errors->has('c_state_of_residence'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('current_state_of_residence') }}</strong>
+                                    </span>
+                    @endif
+                </div>
+            </div>
+
+            
          </div>
 
         
 
          <div class="form-group"> 
         
-            <div class="col-md-12 selectContainer">
-             <label class="">PERMANET ADDRESS</label>
+            <div class="col-md-6 selectContainer">
+             <label class="">PERMANET ADDRESS <span class="text-danger"><b>*</b></span></label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-building"></i></span>
-                    <textarea rows="3" class="form-control" value="" name="" id=""></textarea>
+                    <textarea required placeholder="Enter your permanet address" rows="3" class="form-control" value="" name="permanent_residence" id="permanent_residence">{{old('permanent_residence')}}</textarea>
+                   @if ($errors->has('permanent_residence'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('permanent_residence') }}</strong>
+                                    </span>
+                    @endif
                 </div>
             </div>
-         </div>
-
-          <div class="form-group"> 
         
-            <div class="col-md-12 selectContainer">
-             <label class="">CURRENT ADDRESS</label>
+            <div class="col-md-6 selectContainer">
+             <label class="">CURRENT ADDRESS <span class="text-danger"><b>*</b></span></label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-building"></i></span>
-                    <textarea rows="3" class="form-control" value="" name="" id=""></textarea>
+                    <textarea required placeholder="Enter your current address" rows="3" class="form-control" value="" name="current_residence" id="current_residence">{{old('current_residence')}}</textarea>
+                    @if ($errors->has('current_residence'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('current_residence') }}</strong>
+                                    </span>
+                    @endif
                 </div>
             </div>
          </div>
 
+<div class="form-group">
+         <div class="col-md-6 selectContainer">
+                <label class="">PHONE NUMBER <span class="text-danger"><b>*</b></span></label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-phone"></i></span>
+                    <input required placeholder="Enter your phone number" class="form-control" value="{{old('phone_number')}}" name="phone_number" id="phone_number">
+                    @if ($errors->has('phone_number'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('phone_number') }}</strong>
+                                    </span>
+                    @endif
+                </div>
+         </div>
+        <div class="col-md-6 selectContainer">
+               <label class=>EMAIL <span class="text-danger"><b>*</b></span></label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
+                    <input required placeholder="Enter your email" class="form-control" value="{{old('email')}}" name="email" id="email">
+                    @if ($errors->has('email'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                    @endif
+                </div>
+        </div>
+</div>
+ 
+    <div class="form-group">        
+            <div class="col-md-6 selectContainer">
+                <label class="">Password <span class="text-danger"><b>*</b></span></label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                    <input required placeholder="Enter your password" type="password" class="form-control" value="" name="password" id="password">
+                    @if ($errors->has('password'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                    @endif
+                </div>
+            </div>
+         
+            <div class="col-md-6 selectContainer">
+                <label class="">Confirm Password <span class="text-danger"><b>*</b></span></label>
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="fa fa-lock"></i></span>
+                    <input required placeholder="Enter your confirm password" type="password" class="form-control" value="" name="confirm_password" id="confirm_password">
+                    @if ($errors->has('confirm_password'))
+                                    <span class="text-danger">
+                                        <strong>{{ $errors->first('confirm_password') }}</strong>
+                                    </span>
+                    @endif
+                </div>
+            </div>
+        </div>
 
             <br/>
             
@@ -258,34 +447,20 @@ Registration
         maximumFractionDigits: 2
         });
 
+       
+       @if(Session::get('success'))
+            Swal.fire('Success','{{Session::get('success')}}','success');
+       @endif
+
+       @if(Session::get('error'))
+           Swal.fire('Oops!','{{Session::get('error')}}','error');
+       @endif
         
-
-        $('form#form').on('click','button.create',(function(e)
-		{
-			e.preventDefault();
-			
-			var academic_qualification_upload = $("input#academic_qualification_upload").val();
-			//var previous_experience_upload = $.trim($("input#previous_experience_upload").val());
-			var programme = $("select#programme").val();
-            var qualification = $("select#qualification").val();
-            var attestation = $("input#attestation").val();
-          
-           
-            if(!programme)
-                Swal.fire("Error", "Programme field is compulsory", "error");
-			else if(!qualification)
-				Swal.fire("Error", "Academic Qualification is compulsory", "error");
-            else if(!academic_qualification_upload)
-				Swal.fire("Error", "Academic Qualification Document is compulsory", "error");
-            else if(!total_checked)
-                Swal.fire("Error", "kindly select a course", "error");
-            else if(! $('#attestation').is(':checked'))
-                Swal.fire("Error", "Attestation check box is not checked", "error");
-			else
-				$('form#form').submit();
-
-		}));
-
+       @if($errors->any())
+       {
+           Swal.fire('Oops!','An error occurred while trying to submit your form','error');
+       }
+       @endif
 
         
         /*--------------------------Apply checkbox select ---------------------*/
@@ -307,6 +482,11 @@ Registration
             $("#price_div").html("Total: ₦"+xx.format(total_checked));         
         });
         /*--------------------------End Apply checkbox select ---------------------*/  
+        $('#date_of_birth').datepicker({
+            format: 'yyyy-mm-dd'
+        });
+
+        
 </script>
 @endsection
 

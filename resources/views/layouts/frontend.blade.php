@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
+
 <head>
     <!-- ========== Meta Tags ========== -->
     <meta charset="utf-8">
@@ -27,6 +29,9 @@
     <link href="{{asset('frontend/style.css')}}" rel="stylesheet">
     <link href="{{asset('frontend/assets/css/responsive.css')}}" rel="stylesheet" />
         <link href="{{asset('frontend/assets/css/drag-and-drop.css')}}" rel="stylesheet" />
+        <link href="{{asset('frontend/assets/css/bootstrap-datepicker.css')}}" rel="stylesheet" />
+        
+        
     <!-- ========== End Stylesheet ========== -->
 
 
@@ -409,23 +414,48 @@
     <script src="{{asset('frontend/assets/js/bootsnav.js')}}"></script>
     <script src="{{asset('frontend/assets/js/main.js')}}"></script>
     <script src="{{asset('frontend/assets/js/drag-and-drop.js')}}"></script>
+    <script src="{{asset('frontend/assets/js/bootstrap-datepicker.min.js')}}"></script>
     <script src="{{asset('js/sweetalert2.js')}}"></script>
+    
      
     @yield('additional_js')
+
+    @php
+        use Illuminate\Support\Facades\DB;
+
+        $email_verified = false;
+        if(isset(request()->confirm_email) && filter_var(decrypt(request()->confirm_email), FILTER_VALIDATE_EMAIL))
+        {
+            $check = DB::table('users')->where("email_verified_at",NULL)->where("email",decrypt(request()->confirm_email))->get();
+            if(count($check) > 0)
+            {
+                $update = DB::table('users')->where("email_verified_at",NULL)->where("email",decrypt(request()->confirm_email))->update(["email_verified_at" => NOW()]);
+                if ($update)
+                {
+                    $email_verified = true;
+                }
+            }
+        }
+        
+    @endphp
 
     <script>
     
 
 
-
+    @if($email_verified == true)
+       Swal.fire('Success','Your account has been verified','success');
+    @endif
 
      @error('email')
-         $(document).ready(function() {             
-            $('#loginModal').modal('show');
-            $(function () {
-                $('[data-toggle="tooltip"]').tooltip()
-            })
-         });
+         @if ($message != 'The email has already been taken.')
+            $(document).ready(function() {             
+                $('#loginModal').modal('show');
+                $(function () {
+                    $('[data-toggle="tooltip"]').tooltip()
+                })
+            });
+         @endif
      @enderror
 
      @php

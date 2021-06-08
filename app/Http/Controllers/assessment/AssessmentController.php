@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\assessment;
 
-use App\Questions;
+use App\Models\Questions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
@@ -803,7 +803,7 @@ class AssessmentController extends Controller
     {
         $rules = array(
             'assessment_type' => 'required',
-            'short_code' => 'required',
+            'course_id' => 'required',
         );
          $this->validate($request,$rules);
          $errors=[];
@@ -816,7 +816,7 @@ class AssessmentController extends Controller
             $file_open = fopen($file, "r");
             $date=date('Y-m-d h:i:s');
             $assessment_type= $request->assessment_type;
-            $short_code= $request->short_code;
+            $course_id= decrypt($request->course_id);
 
             while (($line = fgetcsv($file_open, 10000, ",")) !== false) {
                 if ($my_sentinel != 0) {
@@ -832,13 +832,13 @@ class AssessmentController extends Controller
                         //Check if the question doesnt't exist
                         $question_collection = DB::table('tbl_questions')
                             ->where('question',$question)
-                            ->where('short_code',$short_code)
+                            ->where('course_id',$course_id)
                             ->get();
 
                         if($question_collection->isEmpty()) {
                             $question_model = new Questions;
                             $question_model->assessment_type = $assessment_type;
-                            $question_model->short_code = $short_code;
+                            $question_model->course_id = $course_id;
                             $question_model->answer = $answer;
                             $question_model->answer = $answer;
                             $question_model->question = $question;
@@ -846,7 +846,7 @@ class AssessmentController extends Controller
                             $question_model->option_2 = $option2;
                             $question_model->option_3 = $option3;
                             $question_model->option_4 = $option4;
-                            $question_model->created_date = $date;
+                            $question_model->created_at = $date;
                             $question_model->posted_by = Auth::user()->id;
                             $question_model->save();
                             $succeeded[] = "success";

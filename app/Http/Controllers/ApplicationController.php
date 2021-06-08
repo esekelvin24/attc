@@ -48,10 +48,11 @@ class ApplicationController extends Controller
 
       
         $user_id = Auth::user()->id;
-
+        
+        $application_id = decrypt($application_id);
        
         $application_collection = DB::table('tbl_applications as a')
-        ->selectRaw('*,u.batch_no as user_batch_no, action_one.firstname as action_1_taker_firstname,action_one.lastname as action_1_taker_lastname')
+        ->selectRaw('*,a.created_at as application_date, u.firstname, u.lastname, u.dob, u.phone, u.email, u.batch_no as user_batch_no, action_one.firstname as action_1_taker_firstname,action_one.lastname as action_1_taker_lastname')
         ->join('users as u','u.id','a.user_id')
         ->join('tbl_programmes as p','p.programme_id','a.programme_id')
         ->leftjoin('users as action_one','action_one.id','a.action_1_user')
@@ -97,7 +98,7 @@ class ApplicationController extends Controller
                         Application Details
                     </h3><br/>
                     <div class="invoice-date">
-                        Date Applied: <?php echo date('d, F, Y',strtotime($application_collection[0]->application_date)) ?>
+                        Date Applied: <?php echo date('d, F, Y h:i:sa',strtotime($application_collection[0]->application_date)) ?>
                     </div>
                     <div class="invoice-date">
                         Application No: <?php echo 'ATTC-'.str_pad($application_collection[0]->user_batch_no, 4, "0", STR_PAD_LEFT).'-'.$application_id ?>
@@ -183,6 +184,13 @@ class ApplicationController extends Controller
                             </tr>
                             </tfoot>
                         </table>
+
+                        <?php if($application_collection[0]->work_experience !="") { ?>
+                        <div class="col-lg-12 col-xxl-12">
+                          <lable><i class="fa fa-building"></i> Working Experience Description</label>
+                          <p style="margin-top:10px; ;padding:5px; border-style: solid; border-width: 2px;"><?php echo $application_collection[0]->work_experience; ?></p>
+                        </div>
+                        <?php }?>
 
                         <div class="col-lg-12 col-xxl-12">
                             <!--START - BALANCES-->

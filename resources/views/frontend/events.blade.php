@@ -34,6 +34,7 @@ Events
                 <div class="col-md-12">
                     <div class="event-items">
 
+                @if(count($event_collection) > 0)
                     @foreach( $event_collection as $val)
                         <!-- Single Item -->
                         <div class="item">
@@ -67,11 +68,20 @@ Events
                         <!-- End Single Item -->
                         @endforeach
 
+                        @else
+                                        <div align="center">
+                                            <img width="150" height="150" src="{{asset('img/barred.png')}}" >
+                                            <p> There is no event available at the moment<p>
+                                        </div>
+                        @endif
+
                     </div>
                 </div>
+                @if(count($event_collection) > 0)
                 <div class="more-btn col-md-12 text-center">
                     <a href="#" class="btn btn-theme effect btn-md">Load More</a>
                 </div>
+                @endif
             </div>
         </div>
     </div>

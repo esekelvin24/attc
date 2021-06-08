@@ -81,11 +81,12 @@ Contact
                         <div class="heading">
                             <h4>Contact Us</h4>
                         </div>
-                        <form action="#" method="POST" class="contact-form">
+                        <form action="{{url('submit_contact_form')}}" method="POST" >
+                         @csrf
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="form-group">
-                                        <input class="form-control" id="name" name="name" placeholder="Name" type="text">
+                                        <input required class="form-control" id="name" name="name" placeholder="Name" type="text">
                                         <span class="alert-error"></span>
                                     </div>
                                 </div>
@@ -93,7 +94,7 @@ Contact
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="form-group">
-                                        <input class="form-control" id="email" name="email" placeholder="Email*" type="email">
+                                        <input required class="form-control" id="email" name="email" placeholder="Email*" type="email">
                                         <span class="alert-error"></span>
                                     </div>
                                 </div>
@@ -101,7 +102,7 @@ Contact
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="form-group">
-                                        <input class="form-control" id="phone" name="phone" placeholder="Phone" type="text">
+                                        <input required class="form-control" id="phone" name="phone" placeholder="Phone" type="text">
                                         <span class="alert-error"></span>
                                     </div>
                                 </div>
@@ -109,15 +110,16 @@ Contact
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="form-group comments">
-                                        <textarea class="form-control" id="comments" name="comments" placeholder="Tell Me About Courses *"></textarea>
+                                        <textarea required class="form-control" id="comments" name="comments" placeholder="Tell Me About Courses *"></textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="row">
-                                    <button type="submit" name="submit">
+                                    <button type="submit" >
                                         Send Message <i class="fa fa-paper-plane"></i>
                                     </button>
+
                                 </div>
                             </div>
                           
@@ -130,7 +132,17 @@ Contact
         </div>
     </div>
     <!-- End Contact Info -->
+@endsection
+@section('additional_js')
+<script>
+  
+@if(Session::get('contact_success'))
 
+     Swal.fire('Success','{{Session::get("contact_success")}}','success');
+      
 
+@endif
+
+</script>
 
 @endsection

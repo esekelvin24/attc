@@ -119,7 +119,7 @@
 
 			    <div class="content" >
                  <div class="inner" align="center" >
-                 <div style ="min-width:350px !important" class="row">
+                 <div style ="max-width:350px !important" class="row">
                     
                      <div class="col-md-12">
                          <button  class="btn btn-primary btn-block btn-scroll btn-scroll-left ti-book create" type="submit"><span>CREATE EVENT</span></button>

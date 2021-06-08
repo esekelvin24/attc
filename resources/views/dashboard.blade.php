@@ -81,8 +81,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
             </div>
 
 
-            @if(false)
+
                 <div class="row"><!-- Top row-->
+
+                      @if($active_student > 0)
                         <div class="col-md-4 col-sm-12 col-lg-3">
                             <div class="card grading2">
                                 <div class="header">
@@ -91,7 +93,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
                                             </div>
                                        
                                             <div class="count">
-                                                <h1>20</h1>
+                                                <h1>{{$active_student}}</h1>
                                             </div>
                                             <div class="text">
                                                 <h4 class="title">Active Students</h4>
@@ -99,7 +101,9 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
                                 </div>				
                             </div>
                         </div>
+                        @endif
 
+                        @if($number_of_application > 0) {{-- For Students --}}
                         <div class="col-md-4 col-sm-12 col-lg-3">
                             <div class="card grading2">
                                 <div class="header">
@@ -108,33 +112,18 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
                                             </div>
                                        
                                             <div class="count">
-                                                <h1>20</h1>
+                                                <h1>{{$number_of_application}}</h1>
                                             </div>
                                             <div class="text">
                                                 <h4 class="title">No of Applications</h4>
                                             </div>
                                 </div>				
                             </div>
-                        </div>
+                          </div>
+                          @endif
 
-
-                        <div class="col-md-4 col-sm-12 col-lg-3">
-                            <div class="card grading2">
-                                <div class="header">
-                                            <div class="icon">
-                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-book"></i></a>
-                                            </div>
-                                       
-                                            <div class="count">
-                                                <h1>3</h1>
-                                            </div>
-                                            <div class="text">
-                                                <h4 class="title">Assigned Courses</h4>
-                                            </div>
-                                </div>				
-                            </div>
-                        </div>
-
+                        
+                         @if($my_students > 0)
                         <div class="col-md-4 col-sm-12 col-lg-3">
                             <div class="card grading2">
                                 <div class="header">
@@ -143,7 +132,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
                                             </div>
                                        
                                             <div class="count">
-                                                <h1>3</h1>
+                                                <h1>{{$my_students}}</h1>
                                             </div>
                                             <div class="text">
                                                 <h4 class="title">My Students</h4>
@@ -151,27 +140,90 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
                                 </div>				
                             </div>
                         </div>
+                        @endif
 
+                       @if($total_student_application > 0)
                          <div class="col-md-4 col-sm-12 col-lg-3">
                             <div class="card grading2">
                                 <div class="header">
                                             <div class="icon">
-                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-book"></i></a>
+                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-file"></i></a>
                                             </div>
                                        
                                             <div class="count">
-                                                <h1>3</h1>
+                                                <h1>{{$total_student_application}}</h1>
                                             </div>
                                             <div class="text">
-                                                <h4 class="title">Total Registered Courses</h4>
+                                                <h4 class="title">Total Student Application</h4>
                                             </div>
                                 </div>				
                             </div>
                         </div>
+                        @endif
+
+                       
+
+                         @if($total_programmes > 0)
+                         <div class="col-md-4 col-sm-12 col-lg-3">
+                            <div class="card grading2">
+                                <div class="header">
+                                            <div class="icon">
+                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-graduation-cap"></i></a>
+                                            </div>
+                                       
+                                            <div class="count">
+                                                <h1>{{$total_programmes}}</h1>
+                                            </div>
+                                            <div class="text">
+                                                <h4 class="title">Total Programmes</h4>
+                                            </div>
+                                </div>				
+                            </div>
+                        </div>
+                        @endif
+
+                          @if($total_courses > 0)
+                         <div class="col-md-4 col-sm-12 col-lg-3">
+                            <div class="card grading2">
+                                <div class="header">
+                                            <div class="icon">
+                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-book-open"></i></a>
+                                            </div>
+                                       
+                                            <div class="count">
+                                                <h1>{{$total_courses}}</h1>
+                                            </div>
+                                            <div class="text">
+                                                <h4 class="title">Total Courses</h4>
+                                            </div>
+                                </div>				
+                            </div>
+                        </div>
+                        @endif
 
                         
+
+                        @if($total_student > 0)
+                         <div class="col-md-4 col-sm-12 col-lg-3">
+                            <div class="card grading2">
+                                <div class="header">
+                                            <div class="icon">
+                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-users"></i></a>
+                                            </div>
+                                       
+                                            <div class="count">
+                                                <h1>{{$total_student}}</h1>
+                                            </div>
+                                            <div class="text">
+                                                <h4 class="title">Total Student</h4>
+                                            </div>
+                                </div>				
+                            </div>
+                        </div>
+                        @endif
+                        
                 </div>
-                @endif
+               
 
             <div class="support-index">
                 <div class="">                   
@@ -221,7 +273,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
                                     </tfoot>
                                     <tbody>
                                     @foreach($all_application_collection as $k=>$val)
-                                        <tr data-id="{{$val->application_id}}" style="cursor: pointer">
+                                        <tr data-id="{{encrypt($val->application_id)}}" style="cursor: pointer">
                                             <td style="width:10px">{{$k+1}}</td>
                                             <td>
                                                 @if($val->action_1_status==0) <strong class="text-info"><i class="fa fa-spinner"></i> Pending </strong>@elseif($val->action_1_status==1) <strong class="text-success"><i class="fa fa-check"></i> Approved </strong>  @elseif($val->action_1_status==2)<strong class="text-danger"><i class="fa fa-times"></i> Rejected </strong>  @endif

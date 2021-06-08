@@ -33,11 +33,15 @@ Route::get('/event_details/{event_id}', [App\Http\Controllers\FrontendController
 Route::get('/accommodation', [App\Http\Controllers\FrontendController::class, 'accommodation'])->name('accommodation');
 Route::get('/accommodation/{id}', [App\Http\Controllers\FrontendController::class, 'accommodation_description'])->name('accommodation_description');
 Route::get('/contact', [App\Http\Controllers\FrontendController::class, 'contact'])->name('contact');
+Route::post('/submit_contact_form', [App\Http\Controllers\FrontendController::class, 'submit_contact_form'])->name('submit_contact_form');
+
 Auth::routes();
 
 Route::view('/permission_denied', 'errors.permission_denied');
 
 Route::get('/register', [App\Http\Controllers\FrontendController::class, 'register'])->name('register');
+Route::post('/sumbit_registration', [App\Http\Controllers\FrontendController::class, 'sumbit_registration'])->name('sumbit_registration');
+
 
 
 Route::post('/attempt_login', [App\Http\Controllers\DashboardController::class, 'attempt_login'])->name('attempt_login');

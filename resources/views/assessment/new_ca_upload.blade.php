@@ -19,6 +19,36 @@
 		</div>
 		@endif
 
+
+		<div class="row">
+		<h5>CSV Format</h5>
+          <table class="table table-striped">
+		 <thead class="thead-dark">
+		   <tr>
+              <th>Questions</th>
+			   <th>Answer</th>
+			   <th>Option 1</th>
+			   <th>Option 2</th>
+			   <th>Option 3</th>
+			   <th>Option 4</th>
+		   </tr>
+		   </thead>
+		   <tr>
+		   <td>The speed of the train going from Nagpur to Allahabad is 100 km/h while when coming back from Allahabad to Nagpur, its speed is 150 km/h. find the average speed during whole journey.
+</td>
+           <td>4</td> 			
+		   <td>125 Km/hr</td>
+		   <td>75 km/hr</td>
+		   <td>135 km/hr</td>
+		   <td>120 km/hr</td>
+
+		   </tr>
+
+		  </table>
+
+
+		</div>
+
         <div class="row">
 		<div class="col-sm-12">
 		            <form enctype="multipart/form-data" id="form"  action="{{route("save_ca_upload")}}" method="post"  role="form">
@@ -29,11 +59,11 @@
 						   <div class="col-sm-6">
 							   <div class="form-group">
 								   <label for="short_code">Course</label>
-								   <select required autocomplete="off" class="form-control" id="short_code"  name="short_code">
+								   <select required autocomplete="off" class="form-control" id="course_id"  name="course_id">
 									   <option value="" selected>--Select a Course--</option>
 									   @if(!$course_collection->isEmpty())
 										   @foreach($course_collection as $val)
-											   <option value="{{ $val->course_id }}">{{ $val->course_name }}</option>
+											   <option value="{{ encrypt($val->course_id) }}">{{ $val->course_name }}</option>
 										   @endforeach
 									   @endif
 								   </select>

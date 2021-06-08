@@ -11,12 +11,7 @@
 			<h6 class="element-header">
 				All Event List (@if( $event_collection->isEmpty() ) 0 @else{{$event_collection->count()}}@endif)
 			</h6>
-			@if(Session::get('news_success'))
-			<div class="alert alert-success" style="margin-top:3px; margin-bottom:0">
-				Events Updated successfully!
-			</div>
-			<br/>
-			@endif
+			
 			<div class="element-box">
 				<div class="table-responsive">
 					<style>

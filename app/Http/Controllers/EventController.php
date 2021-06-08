@@ -56,8 +56,8 @@ class EventController extends Controller
         {
             $img_ext =  $request->banner_image->getClientOriginalExtension();
             $img_name = rand(1,9999999).rand(1,9999999).".".$img_ext;
-            if (file_exists("images/events/".$event_obj->file_path)  && $event_obj->file_path !="")
-                  unlink("images/events/".$event_obj->img_path);
+            if (file_exists("frontend/assets/img/event/".$event_obj->file_path)  && $event_obj->file_path !="")
+                  unlink("frontend/assets/img/event/".$event_obj->img_path);
         }else
         {
             $img_name = $event_obj->img_path;
@@ -97,7 +97,7 @@ class EventController extends Controller
 
         if($request->banner_image != null)
         {
-            $request->banner_image->move("images/events", $img_name);    
+            $request->banner_image->move("frontend/assets/img/event", $img_name);    
         }
 
         if ($result == true && $request->attachment_file != null)
@@ -167,7 +167,7 @@ class EventController extends Controller
         }
 
         $result = DB::table('tbl_event')->insert($insert);
-        $request->banner_image->move("images/events", $rand.".".$img_ext);
+        $request->banner_image->move("frontend/assets/img/event", $rand.".".$img_ext);
 
         if ($result == true && $request->att_chkbox == 1)
         {
@@ -177,7 +177,7 @@ class EventController extends Controller
         $data=[
             'event_success'=>'yes'
         ];
-        return redirect()->route('create_event')->with($data);
+        return redirect()->route('event_list')->with($data);
        
     }
 

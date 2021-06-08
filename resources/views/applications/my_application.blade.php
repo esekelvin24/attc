@@ -52,7 +52,7 @@
                                     </tfoot>
                                     <tbody>
                                     @foreach($all_application_collection as $k=>$val)
-                                        <tr data-id="{{$val->application_id}}" style="cursor: pointer">
+                                        <tr data-id="{{encrypt($val->application_id)}}" style="cursor: pointer">
                                             <td style="width:10px">{{$k+1}}</td>
                                             <td>
                                                 @if($val->action_1_status==0) <strong class="text-info"><i class="fa fa-spinner"></i> Pending </strong>@elseif($val->action_1_status==1) <strong class="text-success"><i class="fa fa-check"></i> Approved </strong>  @elseif($val->action_1_status==2)<strong class="text-danger"><i class="fa fa-times"></i> Rejected </strong>  @endif
@@ -121,7 +121,7 @@
     <script>
         jQuery(document).ready(function() {
             vex.defaultOptions.className = 'vex-theme-flat-attack';
-            $('body').on('click','button[data-action]',function(e)
+           /* $('body').on('click','button[data-action]',function(e)
             {
                 e.preventDefault();
                 var no=$(this).data("id");
@@ -212,7 +212,7 @@
                     });
                 }
             });
-
+*/
             $('body').on('click','button.save_offer_letter',function(e){
                 e.preventDefault();
                 var allowExt=['jpg','jpeg','pdf','png'];

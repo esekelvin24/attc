@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\Settings;
 use App\Models\Application;
@@ -15,7 +15,9 @@ use App\Models\Course;
 use App\Models\Programme;
 use DB;
 use Auth;
+use Mail;
 use App\Models\Applications_Documents_upload;
+use Illuminate\Support\Facades\Hash; 
 
 
 
@@ -25,7 +27,12 @@ class FrontendController extends Controller
     public function welcome()
     {
         $popular_courses = DB::table('tbl_courses')->skip(0)->take(6)->get();
-        $event_collection = DB::table('tbl_event')->orderBy('event_date','asc')->skip(0)->take(6)->get();
+        $event_collection = DB::table('tbl_event')
+        ->whereDate('event_date','>=',date('Y-m-d'))
+        ->orderBy('event_date','asc')
+        ->orderBy('event_start_time','asc')
+        ->skip(0)->take(6)
+        ->get();
 
         return view('frontend.home', compact('popular_courses','event_collection'));
     }
@@ -52,7 +59,11 @@ class FrontendController extends Controller
     public function events()
     {
 
-        $event_collection = DB::table('tbl_event')->orderBy('event_date','asc')->get();
+        $event_collection = DB::table('tbl_event')
+        ->whereDate('event_date','>=',date('Y-m-d'))
+        ->orderBy('event_date','asc')
+        ->orderBy('event_start_time','asc')
+        ->orderBy('event_date','asc')->get();
 
         return view('frontend.events',compact('event_collection'));
     }
@@ -74,12 +85,121 @@ class FrontendController extends Controller
         $accommodation_list = DB::table('tbl_accommodation')->where('status',1)->get();
         return view('frontend.accommodation',compact('accommodation_list'));
     }
+    public function sumbit_registration(Request $request)
+    {
+      
+        $rules = [
+            "title" => "required",
+            "firstname" => "required",
+            "middlename" => "sometimes",
+            "lastname" => "required",
+            "nationality" => "required",
+            "state_of_origin" => "required",
+            "date_of_birth" => "required",
+            "religion" => "required",
+            "gender" => "required",
+            "permanent_state_of_residence" => "required",
+            "current_state_of_residence" => "required",
+            "permanent_residence" => "required",
+            "current_residence" => "required",
+            "phone_number" => "required",
+            'email'=>'required|email|unique:users',
+            'password'=>'required|min:6',
+            'confirm_password'=>'required|min:6|same:password'
+        ];
 
+        $this->validate($request, $rules);
+
+        $fileNameToStore='no_pic.jpg';//or whatever
+        $current_batch = DB::table('tbl_batch')->where('status',1)->orderBy('created_at','desc')->first();
+        $current_batch_no = $current_batch->batch_no;
+
+      
+
+        DB::beginTransaction();
+
+        $company_details = DB::table('tbl_settings')->get();
+        $company_name = $company_details[0]->value;
+       // $company_email = $company_details[4]->value;
+       // $plain_password = $company_details[5]->value;
+	   //Saving to tbl_staff in order of arrangement in form
+	   $user = new User;
+	   $user->user_type = 1;// 2- Staff, 1 - General User
+	   $user->pics = $fileNameToStore;
+	   $user->firstname = $request->firstname;
+       $user->lastname = $request->lastname;
+       $user->middlename = $request->middlename == NULL?"":$request->middlename;
+	   $user->chng_password_logon = 1; //User has alread change password
+       $user->title_id = $request->title;
+       $user->branch_id = 1; //Refinery Office
+       $user->phone = $request->phone_number;
+	   $user->gender = $request->gender;
+	   $user->designation_id = 4;  //General User
+       //$user->created_by = ;
+       $user->nationality = $request->nationality ;
+       $user->state_of_origin = $request->state_of_origin;
+       $user->permanent_state_of_residence = $request->permanent_state_of_residence ;
+       $user->current_state_of_residence = $request->current_state_of_residence ;
+       $user->permanent_residence = $request->permanent_residence ;
+       $user->current_residence = $request->current_residence ;
+       $user->religion = $request->religion ;
+       $user->dob = $request->date_of_birth ;
+       $user->batch_no = $current_batch_no;
+	   $user->created_at = date('Y-m-d');
+	   $user->updated_at = NOW();
+      
+	   if($request->god_eye)
+	   		$user->god_eye = 1;
+
+        if(trim($request->email)!="")
+            $email = $request->email;
+     
+        $password = Hash::make($request->password); 
+        $unique_code=Str::random(45);
+        $user->status   = 1;
+        $user->email = $email;
+       
+        $user->password = $password;
+        $user->remember_token = $unique_code;
+        $user->save();
+
+        $role = DB::table('users_roles')->insert(['user_id'=> $user->id, "role_id"=> "5"]); //- 5 stand for prospective student
+        
+
+	    #Send welcome email to new user
+        //$link = url("/login",$unique_code);//verify email link
+        $link = url("/")."?confirm_email=".encrypt($email);
+        $data = array('full_name'=>request()->firstname." ".request()->lastname,'link'=> $link, 'email' => $email, 'password' => "", 'company_name' => $company_name);
+      
+        if ($user && $role)
+        {
+            DB::commit(); 
+            
+            Mail::send('emails.account_registration', $data, function($message) use ($data,$email){
+                $message->from("dangote.gts@gmail.com", 'ATTC Nigeria Portal');
+                $message->to($email);
+            // $message->bcc("isokenodigie@gmail.com");
+            // $message->bcc("mailaustin37@gmail.com");
+                $message->subject('ATTC User Account Creation');
+            });
+
+            return redirect('/register')->with('success','Your registration was successful, a confirmation link has been sent to your email address');
+        }else{
+            
+            DB::rollback();
+            return redirect('/register')->with('error','Your registration was not successful');
+           
+        }
+    }
     public function register()
     {
+
+        
         $title_collections = DB::table('titles')->get();
 
-        return view('frontend.register',compact('title_collections'));
+        $states_collection = DB::table('tbl_states')->get();
+
+        return view('frontend.register',compact('title_collections','states_collection'));
     }
 
     public function apply(Request $request)
@@ -222,6 +342,38 @@ class FrontendController extends Controller
     public function contact()
     {
         return view('frontend.contact');
+    }
+
+    public function submit_contact_form(Request $request)
+    {
+
+        
+        $rules = [
+            "email"=> "required",
+            "name" => "required",
+            "phone"=> "required",
+            "comments" => "required"
+        ];
+
+        $this->validate($request, $rules);
+
+        $company_details = DB::table('tbl_settings')->get();
+        $contact_us_email = $company_details[6]->value;
+
+        
+
+        $data = array('full_name'=>request()->name, 'email' => request()->email, 'phone' => request()->phone, 'comments' => request()->comments);
+      
+            
+            Mail::send('emails.contact_us', $data, function($message) use ($data,$contact_us_email){
+                $message->from("dangote.gts@gmail.com", 'ATTC Nigeria Portal');
+                $message->to($contact_us_email);
+                $message->subject('ATTC Web Contact Form');
+            });
+
+       return redirect()->route('contact')->with("contact_success","Thank you for contacting us, we will get back to you as soon as possible");
+
+
     }
 
     public function accommodation_description($id)

@@ -58,13 +58,58 @@ class DashboardController extends Controller
 
     public function landing()
 	{	
+        $active_student = 0;
+        $number_of_application = 0;
+        $no_of_pending_assessment = 0;
+        $my_students = 0;
+        $total_student = 0;
+        $total_student_application = 0;
+        $total_programmes = 0;
+        $total_courses = 0;
+        $total_lecturer = 0;
 
-		$id=Auth::user()->id;
-		$psw_query= User::select('password', 'chng_password_logon')->where('id',$id)->get();
-        $psw=$psw_query[0]->password;
+		$id = Auth::user()->id;
+		$psw_query = User::select('password', 'chng_password_logon')->where('id' , $id)->get();
+        $psw = $psw_query[0]->password;
+  
+        if (Auth::user()->user_type == 1) //if the user is a student get the total number of application
+        {
+            $number_of_application = DB::table('tbl_applications')->where('status',1)->where('user_id',Auth::user()->id)->count();
+        }
 
-       
+        if(Auth::user()->can('dashboard-total-student'))
+        {
+           
+            $total_student = DB::table('users as u')->join('tbl_applications as a','a.user_id','u.id')->where('u.user_type',1)->groupBy('u.id')->count();
+            
+        }
         
+
+        if(Auth::user()->can('dashboard-my-student'))
+        {
+            
+        }
+
+        if(Auth::user()->can('dashboard-total-student-application'))
+        {
+            $total_student_application = DB::table('tbl_applications as a')->where('a.action_1_user',"!=",2)->groupBy('a.user_id')->count();
+        }
+
+        if(Auth::user()->can('dashboard-total-programmes'))
+        {
+            $total_programmes = DB::table('tbl_programmes')->where('status',1)->count();
+        }
+
+        if(Auth::user()->can('dashboard-total-courses'))
+        {
+            $total_courses = DB::table('tbl_courses')->where('status',1)->count();
+        }
+
+        if(Auth::user()->can('dashboard-total-lecturer'))
+        {
+            
+        }
+
         
 
         $check = DB::table('users')->where('id', Auth::user()->id)->get();
@@ -77,27 +122,53 @@ class DashboardController extends Controller
         }
         */
 
-        if($psw_query[0]->chng_password_logon < 1)
-        		
-            return view('dashboard')->with('psw','yep!');
-		else {
-
-           
+        
+        	
             $all_application_collection = DB::table('tbl_applications')
             ->join('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
             ->join('users','users.id','tbl_applications.user_id')
             ->where('user_id', Auth::user()->id)->get();
             
            $user =  DB::table("users")->get();
+
+         
+
            $data = [
                "users" => $user,
-         
+               "active_student" => $active_student,
                "all_application_collection" => $all_application_collection,
-            
+               "number_of_application" => $number_of_application,
+               "no_of_pending_assessment" => $no_of_pending_assessment,
+               "my_students" => $my_students,
+               "total_student" => $total_student,
+               "total_student_application" => $total_student_application,
+               "total_programmes" => $total_programmes,
+               "total_courses" => $total_courses,
+               "total_lecturer" => $total_lecturer
            ];
+
+           if($psw_query[0]->chng_password_logon < 1)
+           {
+                $data = [
+                    'psw' =>'yep!',
+                    "users" => $user,
+                    "active_student" => $active_student,
+                    "users" => $user,
+                    "active_student" => $active_student,
+                    "all_application_collection" => $all_application_collection,
+                    "number_of_application" => $number_of_application,
+                    "no_of_pending_assessment" => $no_of_pending_assessment,
+                    "my_students" => $my_students,
+                    "total_student" => $total_student,
+                    "total_student_application" => $total_student_application,
+                    "total_programmes" => $total_programmes,
+                    "total_courses" => $total_courses,
+                    "total_lecturer" => $total_lecturer
+                ];
+           }
            
             return view('dashboard')->with($data);
-        }
+        
     }
   
 	public function first_changepsw(Request $request)
@@ -112,7 +183,7 @@ class DashboardController extends Controller
 		
 		$id=Auth::user()->id;
 		//dd($id);
-		User::where('id',$id)->update(['password'=>Hash::make($request->password1),"chng_password_logon" => 1]);
+		User::where('id',$id)->update(['email_verified_at'=> NOW(), 'password'=>Hash::make($request->password1),"chng_password_logon" => 1]);
 	 
 	   
     }
