@@ -12,6 +12,139 @@ class CourseController extends Controller
 {
     //
 
+    public function courses_list(Request $request)
+    {
+        $selected_programme = "";
+        $builder = Course::query();
+        $builder->selectRaw('*, tbl_courses.created_at as course_creation_date')
+        ->join('tbl_programmes','tbl_programmes.programme_id','tbl_courses.programme_id')
+        ->orderby('tbl_courses.created_at','desc');
+        
+        if(isset($request->programme_id) && $request->programme_id !="")
+        {
+            $selected_programme = decrypt($request->programme_id);
+            $builder->where('tbl_courses.programme_id',$selected_programme);
+           
+        }
+        $course_collection = $builder->get();
+        $programme_collection = DB::table('tbl_programmes')->get();
+
+
+        return view('course.course',compact('course_collection','programme_collection','selected_programme'));
+       
+    }
+    
+    public function save_course(Request $request)
+    {
+        $rules = [
+            
+            "disp_img" => 'required|mimes:jpeg,jpg,png,gif|max:10000',
+            "programme" => "required",
+            "course_name" => "required",
+            "short_code" => "required",
+            "course_duration" => "required",
+            "duration_type" => "required",
+            "course_price" => "required",
+            "title" => "required",
+            "course_description" => "required",
+            "course_outcome" => "required"
+        ];
+
+        $this->validate($request, $rules);
+
+        $Course = new Course();
+
+        $Course->course_name = $request->course_name;
+        $Course->short_code = $request->short_code;
+        $Course->course_duration = $request->course_duration;
+        $Course->course_duration_type = $request->duration_type;
+        $Course->course_price = $request->course_price;
+        $Course->course_outcome = $request->course_outcome;
+        $Course->course_description = $request->course_description;
+        $Course->programme_id = $request->programme;
+        $Course->title = $request->title;
+
+       
+
+        
+        if(isset($request->disp_img))
+        {
+            $rand_one = rand(1,9999999);
+            $rand_two = rand(1,9999999);
+            $rand = $rand_one.$rand_two;
+
+            $img_ext =  $request->disp_img->getClientOriginalExtension();
+            $Course->disp_img = $rand.".".$img_ext;
+            $request->disp_img->move("frontend/assets/img/courses", $rand.".".$img_ext);
+        }
+        $Course->save();
+
+        return redirect()->route('courses_list')->with("success", "Course creation was successfully");
+
+    }
+
+    public function save_edited_course(Request $request)
+    {
+        $rules = [
+            "course_id" => "required",
+            "disp_img" => 'sometimes|mimes:jpeg,jpg,png,gif|max:10000',
+            "programme" => "required",
+            "course_name" => "required",
+            "short_code" => "required",
+            "course_duration" => "required",
+            "duration_type" => "required",
+            "course_price" => "required",
+            "title" => "required",
+            "course_description" => "required",
+            "course_outcome" => "required"
+        ];
+
+        $this->validate($request, $rules);
+
+        $Course = Course::find($request->course_id);
+
+        $Course->course_name = $request->course_name;
+        $Course->short_code = $request->short_code;
+        $Course->course_duration = $request->course_duration;
+        $Course->course_duration_type = $request->duration_type;
+        $Course->course_price = $request->course_price;
+        $Course->course_outcome = $request->course_outcome;
+        $Course->course_description = $request->course_description;
+        $Course->programme_id = $request->programme;
+        $Course->title = $request->title;
+
+       
+
+        
+        if(isset($request->disp_img))
+        {
+
+            $img_ext =  $request->disp_img->getClientOriginalExtension();
+            $Course->disp_img = $request->course_id.".".$img_ext;
+            $request->disp_img->move("frontend/assets/img/courses", $request->course_id.".".$img_ext);
+        }
+        $Course->save();
+
+        return redirect()->route('courses_list')->with("success", "course was updated successfully");
+
+    }
+
+    public function create_course()
+    {
+        $programme_collection = DB::table('tbl_programmes')->where('status', 1)->get();    
+        return view('course.new_course',  compact('programme_collection')); 
+    }
+
+    public function course_edit(Request $request)
+    {
+        $course_collection = Course::where('course_id',decrypt($request->id))->get();
+        
+        $selected_programme = $course_collection[0]->programme_id; 
+        $programme_collection = DB::table('tbl_programmes')->where('status', 1)->get();       
+       
+        return view('course.course_edit', compact('course_collection','selected_programme','programme_collection'));
+    }
+
     public function assigned_courses()
     {
 

@@ -466,15 +466,14 @@
      @endphp
     
 
-    @if($intended_route[0] == url('/apply') || $intended_route[0] == url('/dashboard'))
+    @if(($intended_route[0] == url('/apply') || $intended_route[0] == url('/dashboard')) && Route::currentRouteName() != "register")
          $(document).ready(function() {             
             $('#loginModal').modal('show');
             $(function () {
                 $('[data-toggle="tooltip"]').tooltip()
             })
          });
-
-         @php
+    @php
            // dd(Route::currentRouteName());
 
              if (Route::currentRouteName() != "welcome")

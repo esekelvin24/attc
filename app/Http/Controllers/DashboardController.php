@@ -87,7 +87,16 @@ class DashboardController extends Controller
 
         if(Auth::user()->can('dashboard-my-student'))
         {
-            
+            $my_students  = DB::table('tbl_applications as a')
+            ->join('tbl_application_courses as ac', 'ac.application_id', 'a.application_id' )
+            ->join('tbl_courses as c','c.course_id','ac.course_id')
+            ->join('tbl_map_lecturer_to_courses','c.course_id', 'tbl_map_lecturer_to_courses.course_id')
+            ->where('a.action_1_user',"!=",2)
+            ->where('tbl_map_lecturer_to_courses.lecturer_user_id', Auth::user()->id)
+            ->groupBy('a.user_id')
+            ->count();
+
+      
         }
 
         if(Auth::user()->can('dashboard-total-student-application'))
@@ -107,7 +116,16 @@ class DashboardController extends Controller
 
         if(Auth::user()->can('dashboard-total-lecturer'))
         {
-            
+            $total_lecturer = DB::table('users as u')
+            ->leftjoin('users_roles as z','z.user_id','u.id')
+            ->leftjoin('roles as r','r.id','z.role_id')
+            ->leftjoin('titles as t','t.title_id','u.title_id')
+            ->leftjoin('tbl_designation as d','d.designation_id','u.designation_id')
+            ->select('u.id','u.email','firstname','lastname','name','designation','pics','god_eye','title_name')
+            ->where('r.id',7)
+            ->orderBy('u.created_at','desc')
+            ->count();
+           
         }
 
         

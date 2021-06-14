@@ -10,21 +10,9 @@
 	<div class="content-box">
 		<div class="element-wrapper">
 			<h6 class="element-header">
-				All Courses List (@if( $course_collection->isEmpty() ) 0 @else{{$course_collection->count()}}@endif)
+				All Programme List (@if( $programme_collections->isEmpty() ) 0 @else{{$programme_collections->count()}}@endif)
 			</h6>
-			@if(Session::get('course_success'))
-			<div class="alert alert-success" style="margin-top:3px; margin-bottom:0">
-				News Updated successfully!
-			</div>
-			<br/>
-			@endif
-
-			@if(Session::get('course_error'))
-			<div class="alert alert-error" style="margin-top:3px; margin-bottom:0">
-				An error occurred when performing updates!
-			</div>
-			<br/>
-			@endif
+		
 
 			
 			<div class="element-box">
@@ -45,75 +33,46 @@
 						}
 					</style>
 
-
-					@if(Auth::user()->can('create-course'))
-                       <button id="new_course" class="btn btn-info text-white" style="background:#1F1D5E;margin-bottom: 15px;"><i class="fa fa-plus"></i> Add New Course</button>
+					@if(Auth::user()->can('create-programme'))
+                       <button id="new_programme" class="btn btn-info text-white" style="background:#1F1D5E;margin-bottom: 15px;"><i class="fa fa-plus"></i> Add New Programme</button>
 					@endif
-					<form method="GET" action="">
-					<div class="row">
-						<div class="col-md-6 col-sm-12">
-							<div class="form-group">
-								<label for="course_id">Programme</label>
-								<select  autocomplete="off" class="form-control" id="programme_id"  name="programme_id">
-									<option value="" >--All Programmes--</option>
-									@if(!$programme_collection->isEmpty())
-										@foreach($programme_collection as $val)
-											<option {{$selected_programme==$val->programme_id?"selected":""}} value="{{ encrypt($val->programme_id) }}">{{ $val->programme_name }}</option>
-										@endforeach
-									@endif
-								</select>
-							</div>
-						</div>
-						
-						<div class="col-md-3 col-sm-12">
-							<button style="margin-top:27px; margin-bottom:25px" class="btn btn-success"><i class="fa fa-filter"></i> Filter</button>
-						</div>
-                    </div>
-					</form>
+
 					<table id="dataTable1" class="table table-striped" style="width: 100% !important;">
 						<thead>
 							<tr>
-                                @if(Auth::user()->can('edit-courses'))
+                                @if(Auth::user()->can('edit-programme'))
 								<th></th>
                                 @endif
-								<th>S/N</th>
+								
 								<th>Programme</th>
-								<th>Course</th>
-								<th>Title</th>
-								<th>Date</th>
+								
+								<th>Created at</th>
 								<th></th>
+								<!-- <th>Status</th> --->
 							</tr>
 						</thead>
 						<tfoot>
 							<tr>
-                                @if(Auth::user()->can('edit-courses'))
+                                @if(Auth::user()->can('edit-programme'))
 								<th></th>
                                 @endif
-								<th>S/N</th>
 								<th>Programme</th>
-								<th>Course</th>
-								<th>Title</th>
-								<th>Date</th>
+								<th>Created at</th>
 								<th></th>
 							</tr>
 						</tfoot>
 						<tbody>
-						@php
-							$counter = 0;
-						@endphp
-						@foreach($course_collection as $val)
+						@foreach($programme_collections as $val)
 							<tr>
-                                @if(Auth::user()->can('edit-courses'))
+                                @if(Auth::user()->can('edit-programme'))
 								<td>
-                                <i title="Edit {{ $val->course_name }}" style="cursor: pointer" data-id="{{ encrypt($val->course_id) }}" class="fa fa-edit"></i>
+										<i title="Edit {{ $val->programme_name }}" style="cursor: pointer" data-id="{{ encrypt($val->programme_id) }}" class="fa fa-edit"></i>
 								</td>
+							
 								@endif
-								<th>{{$counter = $counter + 1}}</th>
 								<td>{{$val->programme_name}}</td>
-								<td>{{$val->course_name}}</td>
-								<td>{{$val->title}}</td>
-								<td>{{$val->course_creation_date}}</td>
-								<td><a target="_blank" href="{{url('/course_details/'.encrypt($val->course_id))}}" class="btn btn-sm btn-info text-white"><i class="fa fa-eye"></i> Preview</a></td>
+								<td>{{$val->created_at}}</td>
+								<td><a target="_blank" class="btn btn-sm btn-info text-white" href="{{url('/programme_courses/'.encrypt($val->programme_id))}}"><i class="fa fa-eye"></i> Preview Courses</a></td>
 						     </tr>
 						@endforeach
 						</tbody>
@@ -155,17 +114,15 @@
 	}
 
 
-
-
-	 @if(Auth::user()->can('create-course'))
-          $("#new_course").click(function()
+	 @if(Auth::user()->can('create-programme'))
+          $("#new_programme").click(function()
 		  {
                 var toks=$("input[name='_token']").val();
              $.ajax(
 					{
 						type:"POST",
 						data:{ _token:toks},
-						url:"{{ route('create_course') }}",
+						url:"{{ route('create_programme') }}",
 						beforeSend:function()
 						{
 							$('table').block({ message: null });
@@ -192,12 +149,15 @@
 				var no=$(this).data("id");
 				//alert(no);
 				var toks=$("input[name='_token']").val();
-                @if(Auth::user()->can('edit-courses'))
+
+                @if (Auth::user()->can('edit-programme'))
 				$.ajax(
 						{
 							type:"POST",
 							data:{id:no, _token:toks},
-							url:"{{ route('course_edit') }}",
+							
+							url:"{{ route('programme_edit') }}",
+						
 							beforeSend:function()
 							{
 								$('table').block({ message: null });
@@ -217,7 +177,6 @@
 						}
 
 				);
-
 				@endif
 			});
 

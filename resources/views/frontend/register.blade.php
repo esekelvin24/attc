@@ -244,7 +244,7 @@ fieldset legend {
                 <label class="">DATE OF BIRTH <span class="text-danger"><b>*</b></span></label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                    <input autocomplete="off" required class="form-control" value="{{old('date_of_birth')}}" name="date_of_birth" id="date_of_birth">
+                    <input placeholder="YYYY-mm-dd" autocomplete="off" required class="form-control" value="{{old('date_of_birth')}}" name="date_of_birth" id="date_of_birth">
                 </div>
                  @if ($errors->has('date_of_birth'))
                                     <span class="text-danger">
@@ -374,7 +374,7 @@ fieldset legend {
                <label class=>EMAIL <span class="text-danger"><b>*</b></span></label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-envelope" aria-hidden="true"></i></span>
-                    <input required placeholder="Enter your email" class="form-control" value="{{old('email')}}" name="email" id="email">
+                    <input autocomplete="off" required placeholder="Enter your email" class="form-control" value="{{old('email')}}" name="email" id="email">
                     @if ($errors->has('email'))
                                     <span class="text-danger">
                                         <strong>{{ $errors->first('email') }}</strong>
@@ -389,7 +389,7 @@ fieldset legend {
                 <label class="">Password <span class="text-danger"><b>*</b></span></label>
                 <div class="input-group">
                     <span class="input-group-addon"><i class="fa fa-lock"></i></span>
-                    <input required placeholder="Enter your password" type="password" class="form-control" value="" name="password" id="password">
+                    <input autocomplete="off" required placeholder="Enter your password" type="password" class="form-control" value="" name="password" id="password">
                     @if ($errors->has('password'))
                                     <span class="text-danger">
                                         <strong>{{ $errors->first('password') }}</strong>

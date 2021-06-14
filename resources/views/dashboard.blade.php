@@ -221,6 +221,25 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
                             </div>
                         </div>
                         @endif
+                           @if($total_lecturer > 0)
+                         <div class="col-md-4 col-sm-12 col-lg-3">
+                            <div class="card grading2">
+                                <div class="header">
+                                            <div class="icon">
+                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-users"></i></a>
+                                            </div>
+                                       
+                                            <div class="count">
+                                                <h1>{{$total_lecturer}}</h1>
+                                            </div>
+                                            <div class="text">
+                                                <h4 class="title">Total Lecturer</h4>
+                                            </div>
+                                </div>				
+                            </div>
+                        </div>
+                        @endif
+                        
                         
                 </div>
                
@@ -230,9 +249,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
                    @if(Auth::user()->can('view-application-on-dashboard')) 
                    <div class="support-tickets-header">
                         <div class="tickets-control">
-                            <h5>
+                             <br/>
+                            <h6>
                                 All Applications (@if(isset($all_application_collection) && !$all_application_collection->isEmpty()){{$all_application_collection->count()}}@else{{"0"}}@endif)
-                            </h5>
+                            </h6>
                         </div>
                     </div>  
                         <div class="element-box">

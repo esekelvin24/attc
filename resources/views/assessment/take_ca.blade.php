@@ -41,7 +41,7 @@
 					<table id="dataTable1" class="table table-striped" style="width: 100% !important;">
 						<thead>
 							<tr>
-                               
+                                <th></th>
 								<th>Course Title</th>
 								<th>Short Code</th>
 								<th>Batch</th>
@@ -51,13 +51,13 @@
 								<th>Start Time</th>
 								<th>Expiration Date</th>
 								<th>Expiration Time</th>
-								
+								<th></th>
 								
 							</tr>
 						</thead>
 						<tfoot>
 							<tr>
-                               
+                                <th></th>
 								<th>Course Title</th>
 								<th>Short Code</th>
 								<th>Batch</th>
@@ -72,10 +72,11 @@
 						</tfoot>
 						<tbody>
 							@php
-								
-							@endphp
+							$counter = 0;
+						    @endphp
 						@foreach($assessment_collection as $val)
 							<tr>
+                                <td>{{$counter=$counter+1}}</td>
 								<td>{{$val->course_name}}</td>
 								<td>{{$val->short_code}}</td>
 								<td>{{$val->batch_id}}</td>
@@ -90,8 +91,10 @@
 								  <td>4th assessment</td>
 								@endif
 								
-								@if(substr($val->start_date,0,10)." ".$val->start_time < date('Y-m-d H:i:s')) {{-- Check if the test is opened --}}
-								          @if(date('Y-m-d H:i:s') < substr($val->expiration_date,0,10)." ".$val->expiration_time)
+								@if(date('Y-m-d H:i:s') > substr($val->start_date,0,10)." ".$val->start_time) {{-- Check if the test is opened --}}
+								       
+										
+										  @if(date('Y-m-d H:i:s') < substr($val->expiration_date,0,10)." ".$val->expiration_time)
 								               <td style="color:green">Opened    </td>
 										 @else
 										       <td style="color:red">Expired </td>
@@ -107,7 +110,7 @@
 								<td>{{substr($val->expiration_date,0,10)}}</td>
 								<td>{{$val->expiration_time}}</td>
 								
-								@if(substr($val->start_date,0,10)." ".$val->start_time < date('Y-m-d H:i:s')) {{-- Check if the test is opened --}}
+								@if(date('Y-m-d H:i:s') > substr($val->start_date,0,10)." ".$val->start_time) {{-- Check if the test is opened --}}
 										@if(!isset($completed_assessment_collection[$val->assessment_id])) 
 											
 										   @if(date('Y-m-d H:i:s') < substr($val->expiration_date,0,10)." ".$val->expiration_time)

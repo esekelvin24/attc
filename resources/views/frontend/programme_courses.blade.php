@@ -46,11 +46,11 @@ Our Programmes | Courses
                     <div class="col-md-4 col-sm-6 equal-height">
                         <div class="item">
                             <div class="thumb">
-                                <img src="{{asset('frontend/assets/img/courses/'.$val->disp_img)}}" alt="Thumb">
+                                <img src="{{asset('frontend/assets/img/courses/'.$val->disp_img."?".rand(1,9999999))}}" alt="Thumb">
                                 <div class="overlay">
                                    
                                     <ul>
-                                        <li><i class="fas fa-calendar"></i> {{$val->course_duration > 1?$val->course_duration." Weeks":$val->course_duration." Week"}}</li>
+                                        <li><i class="fas fa-calendar"></i> {{$val->course_duration." ".$val->course_duration_type}}</li>
                                        {{-- <li><i class="fas fa-list-ul"></i> 32</li> --}}
                                     </ul>
                                 </div>

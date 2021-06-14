@@ -55,8 +55,23 @@ Route::post('/offer_letter/submit', [App\Http\Controllers\DashboardController::c
 Route::post('bank_transfer_completed', [App\Http\Controllers\FeesController::class, 'bank_transfer_completed'])->name('bank_transfer_completed');
 
 
+Route::get('/programme_list', [App\Http\Controllers\ProgrammeController::class, 'programme_list'])->name('programme_list');
+Route::post('/programme_edit', [App\Http\Controllers\ProgrammeController::class, 'programme_edit'])->name('programme_edit');
+Route::post('/create_programme', [App\Http\Controllers\ProgrammeController::class, 'create_programme'])->name('create_programme');
+Route::post('/save_edited_programme', [App\Http\Controllers\ProgrammeController::class, 'save_edited_programme'])->name('save_edited_programme');
+Route::post('/save_programme', [App\Http\Controllers\ProgrammeController::class, 'save_programme'])->name('save_programme');
 
-Route::get('/courses_list', [App\Http\Controllers\HomeController::class, 'courses_list'])->name('courses_list');
+
+
+
+Route::post('/save_edited_course', [App\Http\Controllers\CourseController::class, 'save_edited_course'])->name('save_edited_course');
+Route::post('/save_course', [App\Http\Controllers\CourseController::class, 'save_course'])->name('save_course');
+
+
+Route::post('/create_course', [App\Http\Controllers\CourseController::class, 'create_course'])->name('create_course');
+Route::post('/course_edit', [App\Http\Controllers\CourseController::class, 'course_edit'])->name('course_edit');
+
+Route::get('/courses_list', [App\Http\Controllers\CourseController::class, 'courses_list'])->name('courses_list');
 Route::get('/map_course_to_lecturer', [App\Http\Controllers\HomeController::class, 'map_course_to_lecturer'])->name('map_course_to_lecturer');
 Route::get('/assigned_courses', [App\Http\Controllers\CourseController::class, 'assigned_courses'])->name('assigned_courses');
 Route::get('/my_certificate', [App\Http\Controllers\ApplicationController::class, 'my_certificate'])->name('my_certificate');
@@ -117,7 +132,7 @@ Route::post('/save_confirm_bank_transfer', [App\Http\Controllers\FeesController:
 
 Route::get('/apply', [App\Http\Controllers\FrontendController::class, 'apply'])->name('apply');
 Route::post('/sumbit_application', [App\Http\Controllers\FrontendController::class, 'sumbit_application'])->name('sumbit_application');
-Route::get('/application_level_approval/{application_id?}/{action?}', [App\Http\Controllers\ApplicationController::class, 'application_level_approval'])->name('courses_list');
+Route::get('/application_level_approval/{application_id?}/{action?}', [App\Http\Controllers\ApplicationController::class, 'application_level_approval'])->name('application_level_approval');
 
 
 Route::get('/my_application', [App\Http\Controllers\ApplicationController::class, 'my_application'])->name('my_application');

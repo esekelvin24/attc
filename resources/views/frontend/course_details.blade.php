@@ -51,7 +51,7 @@ Course Details
                                 </a>
                             </div>
                         </div>
-                        <img src="{{asset('frontend/assets/img/courses/'.$course_details[0]->disp_img)}}" alt="Thumb">
+                        <img src="{{asset('frontend/assets/img/courses/'.$course_details[0]->disp_img."?".rand(1,9999999))}}" alt="Thumb">
                         <!-- Star Tab Info -->
                         <div class="tab-info">
                             <!-- Tab Nav -->
@@ -175,7 +175,7 @@ Course Details
                             <ul>
                                 <li><i class="flaticon-translation"></i> Language  <span class="pull-right">English</span></li>
                               {{--  <li><i class="flaticon-faculty-shield"></i> Lectures  <span class="pull-right">23</span></li>  --}}
-                                <li><i class="fa fa-calendar"></i> Duration  <span class="pull-right">{{$course_details[0]->course_duration > 1?$course_details[0]->course_duration." Weeks":$course_details[0]->course_duration." Week"}}</span></li>
+                                <li><i class="fa fa-calendar"></i> Duration  <span class="pull-right">{{$course_details[0]->course_duration ." ".$course_details[0]->course_duration_type}}</span></li>
                                {{--  <li><i class="flaticon-levels"></i> Level  <span class="pull-right">beginner</span></li>
                                 <li><i class="flaticon-group-of-students"></i> Enrolled  <span class="pull-right">136</span></li> --}}
                             </ul>                        
@@ -193,7 +193,7 @@ Course Details
                                 <li>
                                     <div class="thumb">
                                         <a href="{{url('/course_details/'.encrypt($val->course_id))}}">
-                                            <img src="{{asset('frontend/assets/img/courses/'.$val->disp_img)}}" alt="Thumb">
+                                            <img src="{{asset('frontend/assets/img/courses/'.$val->disp_img."?".rand(1,9999999))}}" alt="Thumb">
                                         </a>
                                     </div>
                                     <div class="info">

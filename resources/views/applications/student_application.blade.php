@@ -129,7 +129,7 @@
                 var the_route="{{route('application_level_approval')}}";
                 if(action==1) {
                     vex.dialog.confirm({
-                        unsafeMessage: `Irreversible process detected! <br/>Are you want to ${action == 1 ? 'APPROVE' : 'REJECT'} this application?`,
+                        unsafeMessage: `Irreversible process detected! <br/>Do you want to ${action == 1 ? 'APPROVE' : 'REJECT'} this application?`,
                         callback: function (value) {
                             if (value) {
                                 $.ajax(

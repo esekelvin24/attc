@@ -46,7 +46,7 @@ Our Programmes
                     <div class="col-md-4 col-sm-6 equal-height">
                         <div class="item">
                             <div class="thumb">
-                                <img src="{{asset('frontend/assets/img/programmes/thumbnails/'.$val->disp_img)}}" alt="Thumb">
+                                <img src="{{asset('frontend/assets/img/programmes/{{--thumbnails/--}}'.$val->disp_img."?".rand(1,9999999))}}" alt="Thumb">
                                 <div class="overlay">
                                     
                                 </div>
