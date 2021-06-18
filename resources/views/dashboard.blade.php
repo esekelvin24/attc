@@ -187,7 +187,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
                             <div class="card grading2">
                                 <div class="header">
                                             <div class="icon">
-                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-book-open"></i></a>
+                                                <a href="dashboard" style="font-size: 60px;"><i class="fa fa-book"></i></a>
                                             </div>
                                        
                                             <div class="count">

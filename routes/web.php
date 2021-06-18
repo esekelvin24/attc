@@ -75,6 +75,7 @@ Route::get('/courses_list', [App\Http\Controllers\CourseController::class, 'cour
 Route::get('/map_course_to_lecturer', [App\Http\Controllers\HomeController::class, 'map_course_to_lecturer'])->name('map_course_to_lecturer');
 Route::get('/assigned_courses', [App\Http\Controllers\CourseController::class, 'assigned_courses'])->name('assigned_courses');
 Route::get('/my_certificate', [App\Http\Controllers\ApplicationController::class, 'my_certificate'])->name('my_certificate');
+Route::get('/my_pdf_certificate/{application_id}', [App\Http\Controllers\ApplicationController::class, 'my_pdf_certificate'])->name('my_pdf_certificate');
 Route::get('/my_time_table', [App\Http\Controllers\ApplicationController::class, 'my_time_table'])->name('my_time_table');
 
 Route::get('/take_ca', [App\Http\Controllers\assessment\AssessmentController::class, 'take_ca'])->name('take_ca');
@@ -118,6 +119,8 @@ Route::post('/course_map_list', [App\Http\Controllers\CourseController::class, '
 
 
 
+
+Route::get('/payment_report', [App\Http\Controllers\FeesController::class, 'payment_report'])->name('payment_report');
 
  
 Route::get('/pay_tution_fees', [App\Http\Controllers\FeesController::class, 'pay_tution_fees'])->name('pay_tution_fees');

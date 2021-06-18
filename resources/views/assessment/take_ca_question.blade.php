@@ -31,7 +31,7 @@
 
 
 
-              @if(!isset($completed_assessment_collection[$assessment_id]) && substr($assessment_details->start_date,0,10)." ".$assessment_details->start_time < date('Y-m-d H:i:s'))
+              @if(!isset($passed_assessment_collection[$assessment_id]) ||  (!isset($completed_assessment_collection[$assessment_id]) && substr($assessment_details->start_date,0,10)." ".$assessment_details->start_time < date('Y-m-d H:i:s')))
 
                     
 									@if ( date("Y-m-d H:m:s") < substr($assessment_details->expiration_date,0,10)." ".$assessment_details->expiration_time && $authorise_to_take_assessment == true)

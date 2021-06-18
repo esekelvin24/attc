@@ -46,12 +46,18 @@ Course Details
                                 <h3><strong>₦ {{number_format($course_details[0]->course_price,2)}}</strong></h3>
                             </div>
                             <div class="align-right">
+                                @if($course_details[0]->open_registration == 1)
                                 <a class="btn btn-theme effect btn-sm" href="{{url('/apply?course_id='.encrypt($course_details[0]->course_id).'&programme_id='.encrypt($course_details[0]->programme_id))}}}">
                                     <i class="fas fa-chart-bar"></i> Apply Now
                                 </a>
+                                @else
+                                   <div class="alert alert-danger" role="alert">
+                                       <img width="20" height="20" src="{{asset('img/barred.png')}}" > Registration is closed for the course
+                                    </div>
+                                @endif
                             </div>
                         </div>
-                        <img src="{{asset('frontend/assets/img/courses/'.$course_details[0]->disp_img."?".rand(1,9999999))}}" alt="Thumb">
+                        <img src="{{asset('frontend/assets/img/courses/'.$course_details[0]->cover_img."?".rand(1,9999999))}}" alt="Thumb">
                         <!-- Star Tab Info -->
                         <div class="tab-info">
                             <!-- Tab Nav -->

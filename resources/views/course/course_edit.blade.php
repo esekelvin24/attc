@@ -10,7 +10,7 @@
                 <form id="form" action="{{route('save_edited_course')}}" method="post" enctype="multipart/form-data"  role="form">
                @csrf
 
-                 <input required id="course_id" name="course_id" value="{{$course_collection[0]->course_id}}" type="hidden" >
+                 <input required id="course_id" name="course_id" value="{{encrypt($course_collection[0]->course_id)}}" type="hidden" >
                <div>
 
                <div  class="row">
@@ -50,7 +50,7 @@
                             <label for="short_code">
                                 Course Name <span class="symbol required font"></span>
                             </label>
-                            <input value="{{$course_collection[0]->course_name}}" autocomplete="off" class="form-control underline" required id="course_name" placeholder="Enter Course Name" type="text" name="course_name">
+                            <input disabled value="{{$course_collection[0]->course_name}}" autocomplete="off" class="form-control underline" required id="course_name" placeholder="Enter Course Name" type="text" name="course_name">
                             <span class="text-danger error-message here"></span>
                         </div>
                     </div>
@@ -144,9 +144,18 @@
                             </div>
                         </div>
                     </div>
-
-                    
-
+                     <hr>
+                    <div class="row">
+                        <div class="col-md-2">
+                           <input {{$course_collection[0]->course_status == 1?"checked":""}}  data-sub="1" id="c1" name="enable_course" value="1" type="checkbox">
+                           <label for="c1">Enable Course</label>
+                        </div>
+                        <div class="col-md-3">
+                            <input {{$course_collection[0]->open_registration == 1?"checked":""}}  data-sub="1" id="c2" name="open_registration" value="1" type="checkbox">
+                            <label for="c2">Open registration</label>
+                        </div>
+                    </div>
+                    <hr>
 
 
              <div class="row">

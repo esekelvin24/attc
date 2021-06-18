@@ -55,13 +55,23 @@
 		width: 100%;
 		border-collapse: collapse;
 		}
+
+		body{
+			background-image: url("{{asset('img/letterhead.png')}}");
+			/* Full height */
+			height: 100%;
+			/* Center and scale the image nicely */
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
 	</style>
 
 </head>
 <body>
 {{-- <img style="float: right; width:250px" src="{{asset("_img/top_right.png")}}" alt=""> --}}
 <div id="watermark">
-	<img src="{{asset("img/watermark.png")}}" height="100%" width="100%" />
+	{{-- <img src="{{asset("img/watermark.png")}}" height="100%" width="100%" /> --}}
 </div>
 <div class="information">
 	<table width="100%">
@@ -71,15 +81,15 @@
 				<pre>
                     <br />
 <br><br><br/><br/>
-<span style="font-weight: bold; font-size: 16px">African Technical Training Centre</span><br/>
-6, OSENI CLOSE, MAGBON SEGUN BUS STOP, DANGOTE REFINERY NEW GATE, 
-IBEJU LEKKI, LAGOS
+<span style="font-weight: bold; font-size: 16px">{{-- African Technical Training Centre --}}</span><br/>
+{{-- 6, OSENI CLOSE, MAGBON SEGUN BUS STOP, DANGOTE REFINERY NEW GATE, 
+IBEJU LEKKI, LAGOS --}}
 <br />
 Date: {{date("d F, Y")}}
 </pre>
 			</td>
 			<td align="center">
-				<img src="{{asset("frontend/assets/img/logo.png")}}" style="display:block;width:100px;margin-top: 40px;margin-left:auto;margin-right:auto;text-align: center " alt="">
+				{{-- <img src="{{asset("frontend/assets/img/logo.png")}}" style="display:block;width:100px;margin-top: 40px;margin-left:auto;margin-right:auto;text-align: center " alt="">  --}}
 			<br/>
 
 			</td>
@@ -147,7 +157,7 @@ Date: {{date("d F, Y")}}
 	
 		<tr>
 			<td align="left" >
-				&copy; {{ date('Y') }} <img style="width: 13px; height: 13px" alt="" src="{{asset("frontend/assets/img/favicon.png")}}"/> African Technical Training Centre Portal - All rights reserved.
+				{{--  &copy; {{ date('Y') }} <img style="width: 13px; height: 13px" alt="" src="{{asset("frontend/assets/img/favicon.png")}}"/> African Technical Training Centre Portal - All rights reserved.  --}}
 			</td>
 		</tr>
 

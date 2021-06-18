@@ -18,7 +18,7 @@
                                 <label for="department">
                                     Programme Image <span class="symbol required font"></span>
                                 </label>
-                                <br/><img height="120" width="120" id="blah" src="" alt="your image" /><br/>
+                                <br/><img style="display:none;"  height="120" width="120" id="blah" src="" alt="your image" /><br/>
                                
                                 <input  onchange="setRequired()" value="{{old('disp_img')}}" autocomplete="off" class="form-control underline change_img" id="disp_img" placeholder="Enter Event Title" type="file" name="disp_img">
                                 <span class="text-danger error-message here"></span>
@@ -42,7 +42,14 @@
                 </div>
 
                    
-                    
+                  <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                           <input checked  data-sub="1" id="c1" name="enable_programme" value="1" type="checkbox">
+                           <label for="c1">Enable Programme</label>
+                        </div>
+                    </div>
+                <hr>        
 
 
 
@@ -133,7 +140,7 @@ function cancel_chng_img()
     function setRequired()
     {
         
-        
+        $("#blah").show();
 
         document.getElementById("disp_img").required = true;
     }

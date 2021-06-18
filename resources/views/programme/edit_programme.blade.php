@@ -38,14 +38,19 @@
                             <label for="short_code">
                                 Programme Name <span class="symbol required font"></span>
                             </label>
-                            <input value="{{$programme_collections[0]->programme_name}}" autocomplete="off" class="form-control underline" required id="programme_name" placeholder="Enter Programme Name" type="text" name="programme_name">
+                            <input disabled value="{{$programme_collections[0]->programme_name}}" autocomplete="off" class="form-control underline" required id="programme_name" placeholder="Enter Programme Name" type="text" name="programme_name">
                             <span class="text-danger error-message here"></span>
                         </div>
                     </div>
                 </div>
-
-                   
-                    
+                <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                           <input {{$programme_collections[0]->status == 1?"checked":""}}  data-sub="1" id="c1" name="enable_programme" value="1" type="checkbox">
+                           <label for="c1">Enable Programme</label>
+                        </div>
+                    </div>
+                <hr>                 
 
 
 

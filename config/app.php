@@ -231,6 +231,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Paystack' => Unicodeveloper\Paystack\Facades\Paystack::class,
+        'Image' => Intervention\Image\Facades\Image::class
 
     ],
 

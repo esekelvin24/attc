@@ -49,11 +49,21 @@
 		width: 100%;
 		border-collapse: collapse;
 		}
+
+		body{
+			background-image: url("{{asset('img/letterhead.png')}}");
+			/* Full height */
+			height: 100%;
+			/* Center and scale the image nicely */
+			background-position: center;
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
 	</style>
 
 </head>
 <body>
-<img style="float: right; width:100px; margin-top:20px; margin-right:20px" src="{{asset("frontend/assets/img/logo.png")}}" alt="">
+{{--   <img style="float: right; width:100px; margin-top:20px; margin-right:20px" src="{{asset("frontend/assets/img/logo.png")}}" alt=""> --}}
 <div class="information">
 	<table width="100%">
 		<tr>
@@ -62,9 +72,9 @@
 				<pre>
                     <br />
 <br><br><br/><br/>
-<span style="font-weight: bold; font-size: 16px">African Technical Training Centre</span><br/>
-6, OSENI CLOSE, MAGBON SEGUN BUS STOP, DANGOTE REFINERY NEW GATE, 
-IBEJU LEKKI, LAGOS
+<span style="font-weight: bold; font-size: 16px">{{-- African Technical Training Centre --}}</span><br/>
+{{--6, OSENI CLOSE, MAGBON SEGUN BUS STOP, DANGOTE REFINERY NEW GATE, 
+IBEJU LEKKI, LAGOS--}}
 <br />
 Date: {{date("d F, Y")}}
 </pre>
@@ -173,7 +183,7 @@ Date: {{date("d F, Y")}}
 	<table width="100%">
 		<tr>
 			<td align="left" >
-				&copy; {{ date('Y') }} <img style="width: 13px; height: 13px" alt="" src="{{asset("frontend/assets/img/favicon.png")}}"/> African Technical Training Centre - All rights reserved.
+				{{--&copy; {{ date('Y') }} <img style="width: 13px; height: 13px" alt="" src="{{asset("frontend/assets/img/favicon.png")}}"/> African Technical Training Centre - All rights reserved.  --}}
 			</td>
 		</tr>
 

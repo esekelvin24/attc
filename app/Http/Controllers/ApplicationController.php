@@ -417,6 +417,62 @@ class ApplicationController extends Controller
         }
     }
 
+    public function my_pdf_certificate($application_id)
+    {
+
+        $application_id = decrypt($application_id);
+
+        //if application ID is valid
+        $check = DB::table('tbl_applications as a')
+        ->join('users as u','u.id', 'a.user_id')
+        ->join('tbl_programmes as p','a.programme_id','p.programme_id')
+        ->where('application_id', $application_id)
+        ->where('action_1_status',1)
+        ->where('accept_offer',1)
+        ->where('payment_status',1)
+        ->get();
+
+        if(count($check) > 0)
+        {
+           
+            //check how many courses was registered
+            $courses_count = DB::table('tbl_application_courses')->where('application_id', $application_id)->count();
+
+            //check if the user has passed the required assessment for this course
+            $assessement_passed  = DB::table('tbl_assessment_session')
+            ->where('finished_ca',1) //CA is completed
+            ->where('status',1) // 1- Passed, 2 - Failed
+            ->where('user_id',$check[0]->user_id)
+            ->count();
+
+            if($assessement_passed == $courses_count)
+              {
+                    $data1 = [
+                        "student_full_name" => $check[0]->firstname." ".$check[0]->middlename." ".$check[0]->lastname,
+                        "programme_name" => $check[0]->programme_name,
+                        "application_id" => 'ATTC-'.str_pad($check[0]->batch_id, 4, "0", STR_PAD_LEFT).'-'.$application_id
+                    ];
+                    $file_name = "certificate.pdf";
+            
+                    $pdf = PDF::loadView('pdfs.to_whom_it_may_concern', $data1)->setPaper('a4', 'portrait')->save("file_upload/applications/attc/$file_name");
+                    return redirect('/file_upload/applications/attc/'.$file_name); 
+               }else
+               {
+                return '<div align="center">
+                    <img width="100" height="100" src="'.asset('img/barred.png').'" ><br/><br/><br/>
+                    <p>This certification is not available because the student have not passed all required assessment for this programme</p>
+                </div>';
+               }
+        
+        }else
+        {
+            return '<div align="center">
+                        <img width="100" height="100" src="'.asset('img/barred.png').'" ><br/><br/><br/>
+                        <p> Application not found, kindly ensure you have applied for a course</p>
+                    </div>';
+        }
+        
+    }
 
     public function my_certificate()
     {

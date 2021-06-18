@@ -63,7 +63,7 @@
                                             <td>{{$val->programme_name}}</td>
                                           {{--  <td>₦{{number_format($val->programme_total_amt,2)}}</td>  --}}
                                             <td>{{date('d-m-y h:m A',strtotime($val->created_at))}}</td>
-                                            <td><a target="_blank" href="#" class="text-white btn btn-success btn-sm"><i class ="fa fa-file"></i> View Certificate</a></td>
+                                            <td><a target="_blank" href="{{url('/my_pdf_certificate/'.encrypt($val->application_id))}}" class="text-white btn btn-success btn-sm"><i class ="fa fa-file"></i> View Certificate</a></td>
                                         </tr>
                                     @endforeach
                                     </tbody>

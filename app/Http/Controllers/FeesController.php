@@ -30,6 +30,31 @@ class FeesController extends Controller
 
     }
 
+    public function payment_report(Request $request)
+    {
+        $payment_type = "";
+        $payment_method = "";
+
+        $builder = Payments::query();
+        $builder->leftjoin('tbl_applications as a','a.application_id','tbl_payments.application_id');
+
+        if (isset($request->payment_type) && $request->payment_type !="")
+        {
+            $payment_type = $request->payment_type;
+            $builder->where('payment_type',$payment_type);
+        }
+
+        if (isset($request->payment_method) && $request->payment_method !="")
+        {
+            $payment_method = $request->payment_method;
+            $builder->where('payment_method',$payment_method);
+        }
+
+        $payment_collections = $builder->get();
+
+        return view('payments.payment_reports',compact('payment_collections','payment_method','payment_type'));
+    }
+
     public function confirm_bank_transfer()
     {
         $builder = Payments::query();
@@ -458,13 +483,19 @@ class FeesController extends Controller
                 $application_courses = DB::table('tbl_application_courses')
                 ->join('tbl_courses','tbl_courses.course_id','tbl_application_courses.course_id')
                 ->where('application_id',$application_id)->get();
-
-                //change the user role
-                $role = DB::table('users_roles')->where('user_id', $id)->update(["role_id"=> 6]); // 6 -> Student
-        
+                
+                $user_role = DB::table('users_roles')->where('user_id',$id)->get();
+                if ($user_role[0]->role_id != 6 )
+                {
+                    //change the user role
+                    $role = DB::table('users_roles')->where('user_id', $id)->update(["role_id"=> 6]); // 6 -> Student
+                }else
+                {
+                    $role = true;
+                }
 
                    if ($update_app && $payments && $role)
-                     {   
+                    {   
                         DB::commit(); 
                         //generate pdf here
                         $data1 = [
@@ -497,7 +528,7 @@ class FeesController extends Controller
                     }else
                     {
                         DB::rollback();
-                        return "failed";
+                        return "failed-1";
                     }
 
                 
@@ -532,7 +563,7 @@ class FeesController extends Controller
                 }
                 
 
-            return "failed";
+            return "failed-2";
         }
 
     }

@@ -66,7 +66,7 @@
 								<th>Start Time</th>
 								<th>Expiration Date</th>
 								<th>Expiration Time</th>
-								
+								<th></th> 
 								
 							</tr>
 						</thead>
@@ -85,7 +85,7 @@
 								<th>Start Time</th>
 								<th>Expiration Date</th>
 								<th>Expiration Time</th>
-								
+								<th></th>
 							</tr>
 						</tfoot>
 						<tbody>
@@ -121,6 +121,7 @@
 								<td>{{$val->start_time}}</td>
 								<td>{{substr($val->expiration_date,0,10)}}</td>
 								<td>{{$val->expiration_time}}</td>
+								<td><button class="text-white btn-success btn-sm btn"><i class="fa fa-users"></i> Add Students</button></td>
 
 							</tr>
 						@endforeach

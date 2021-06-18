@@ -9,7 +9,7 @@
 	<div class="content-box">
 		<div class="element-wrapper">
 			<h6 class="element-header">
-				All Users List (@if( $staff_collection->isEmpty() ) 0 @else{{$staff_collection->count()}}@endif)
+				All Student List (@if( $staff_collection->isEmpty() ) 0 @else{{$staff_collection->count()}}@endif)
 			</h6>
 			<div class="element-box">
 				<div class="table-responsive">

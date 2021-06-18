@@ -91,7 +91,7 @@
 								  <td>4th assessment</td>
 								@endif
 								
-								@if(date('Y-m-d H:i:s') > substr($val->start_date,0,10)." ".$val->start_time) {{-- Check if the test is opened --}}
+								@if(date('Y-m-d H:i:s') > substr($val->start_date,0,10)." ".$val->start_time) {{--  if the test is opened --}}
 								       
 										
 										  @if(date('Y-m-d H:i:s') < substr($val->expiration_date,0,10)." ".$val->expiration_time)
@@ -111,17 +111,18 @@
 								<td>{{$val->expiration_time}}</td>
 								
 								@if(date('Y-m-d H:i:s') > substr($val->start_date,0,10)." ".$val->start_time) {{-- Check if the test is opened --}}
-										@if(!isset($completed_assessment_collection[$val->assessment_id])) 
-											
-										   @if(date('Y-m-d H:i:s') < substr($val->expiration_date,0,10)." ".$val->expiration_time)
-							                     <td><a href="{{route('take_ca_questions').'?id='.encrypt($val->assessment_id)}}" class="btn btn-info">Take C.A</a></td>
-											@else
-							                    <td></td>
-										    @endif
-										
-										
+										@if(!isset($completed_assessment_collection[$val->assessment_id])) {{--  if has not completed assessment --}}
+											    @if(date('Y-m-d H:i:s') < substr($val->expiration_date,0,10)." ".$val->expiration_time)
+													<td><a href="{{route('take_ca_questions').'?id='.encrypt($val->assessment_id)}}" class="btn btn-info">Take C.A</a></td>
+												@else
+													<td></td>
+												@endif
 										@else
-											<td></td>
+										    @if(!isset($passed_assessment_collection[$val->assessment_id]))	{{--  if the student has completed but failed assessement --}}
+												<td><a href="{{route('take_ca_questions').'?id='.encrypt($val->assessment_id)}}" class="btn btn-warning">Re-take C.A</a></td>
+											@else
+											    <td></td>
+											@endif
 										@endif
 								@else
 									<td></td>	
@@ -131,31 +132,7 @@
 
 							
 						@endforeach
-						{{-- @foreach($pending_assessment_collection as $val)
-							<tr>
-								<td>{{$val->course_title}}</td>
-								<td>{{$val->short_code}}</td>
-								<td>{{$val->session_name}}</td>
-
-								@if($val->assessment_type == 1)
-								  <td>1st assessment</td>
-								@elseif($val->assessment_type == 2)
-								<td>2nd assessment</td>
-								@elseif($val->assessment_type == 3)
-								  <td>3rd assessment</td>
-							    @elseif($val->assessment_type == 4)
-								  <td>4th assessment</td>
-								@else
-								   <td></td>
-								@endif
-
-								<td>{{$val->status=="2"?"Close":"Open"}}</td>
-								<td>{{substr($assessment_exp_date[$val->short_code],0,10)}}</td>
-								<td>{{$assessment_exp_time[$val->short_code]}}</td>
-								<td>{{$val->created_at}}</td>
-								<td><a href="{{route('take_ca_questions').'?id='.base64_encode($val->assessment_id)}}" class="btn btn-success">Continue C.A</a></td>
-							</tr>
-						@endforeach --}}
+						
 						</tbody>
 					</table>
 				</div>

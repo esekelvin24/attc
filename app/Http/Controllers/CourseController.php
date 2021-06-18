@@ -7,6 +7,7 @@ use DB;
 use Auth;
 use App\Models\User;
 use App\Models\Course;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class CourseController extends Controller
 {
@@ -47,7 +48,9 @@ class CourseController extends Controller
             "course_price" => "required",
             "title" => "required",
             "course_description" => "required",
-            "course_outcome" => "required"
+            "course_outcome" => "required",
+            "open_registration" => "sometimes",
+            "enable_course" => "sometimes"
         ];
 
         $this->validate($request, $rules);
@@ -64,7 +67,22 @@ class CourseController extends Controller
         $Course->programme_id = $request->programme;
         $Course->title = $request->title;
 
-       
+        if(isset($request->open_registration))
+        {
+            $Course->open_registration = 1;
+        }else
+        {
+            $Course->open_registration = 2;
+        }
+
+        if(isset($request->enable_course))
+        {
+            $Course->status = 1;
+        }else
+        {
+            $Course->status = 2;
+        }
+
 
         
         if(isset($request->disp_img))
@@ -89,21 +107,24 @@ class CourseController extends Controller
             "course_id" => "required",
             "disp_img" => 'sometimes|mimes:jpeg,jpg,png,gif|max:10000',
             "programme" => "required",
-            "course_name" => "required",
+            "course_name" => "sometimes",
             "short_code" => "required",
             "course_duration" => "required",
             "duration_type" => "required",
             "course_price" => "required",
             "title" => "required",
             "course_description" => "required",
-            "course_outcome" => "required"
+            "course_outcome" => "required",
+            "open_registration" => "sometimes",
+            "enable_course" => "sometimes"
+
         ];
 
         $this->validate($request, $rules);
 
-        $Course = Course::find($request->course_id);
+        $Course = Course::find(decrypt($request->course_id));
 
-        $Course->course_name = $request->course_name;
+        //$Course->course_name = $request->course_name;
         $Course->short_code = $request->short_code;
         $Course->course_duration = $request->course_duration;
         $Course->course_duration_type = $request->duration_type;
@@ -113,15 +134,39 @@ class CourseController extends Controller
         $Course->programme_id = $request->programme;
         $Course->title = $request->title;
 
+        if(isset($request->open_registration))
+        {
+            $Course->open_registration = 1;
+        }else
+        {
+            $Course->open_registration = 2;
+        }
+
+        if(isset($request->enable_course))
+        {
+            $Course->status = 1;
+        }else
+        {
+            $Course->status = 2;
+        }
+
        
 
         
         if(isset($request->disp_img))
         {
-
+            
             $img_ext =  $request->disp_img->getClientOriginalExtension();
-            $Course->disp_img = $request->course_id.".".$img_ext;
-            $request->disp_img->move("frontend/assets/img/courses", $request->course_id.".".$img_ext);
+            $image       = $request->file('disp_img');
+            $filename    = $image->getClientOriginalName();
+        
+            $image_resize = Image::make($image->getRealPath());              
+            $image_resize->resize(800, 600);
+            $image_resize->save(public_path("frontend/assets/img/courses/" .decrypt($request->course_id).".".$img_ext));
+            
+
+            $Course->disp_img = decrypt($request->course_id).".".$img_ext;
+            //$request->disp_img->move("frontend/assets/img/courses", $request->course_id.".".$img_ext);
         }
         $Course->save();
 
@@ -137,7 +182,7 @@ class CourseController extends Controller
 
     public function course_edit(Request $request)
     {
-        $course_collection = Course::where('course_id',decrypt($request->id))->get();
+        $course_collection = Course::selectRaw('*, tbl_courses.status as course_status')->where('course_id',decrypt($request->id))->get();
         
         $selected_programme = $course_collection[0]->programme_id; 
         $programme_collection = DB::table('tbl_programmes')->where('status', 1)->get();       

@@ -227,7 +227,8 @@ class FrontendController extends Controller
         }else{
             $course_builder->where('programme_id',$programme_id);
         }
-
+        $course_builder->where('status',1)->where('tbl_courses.open_registration',1);
+       
         $qualification_collections = DB::table('tbl_qualifications')->get();
         $course_collection = $course_builder->get();
         return view ('frontend.apply',compact('programme_collections','course_collection','course_id','programme_id','price','qualification_collections'));
@@ -418,7 +419,9 @@ class FrontendController extends Controller
     {
         $course_id =  decrypt($course_id); 
         $course_details = DB::table('tbl_courses')
+        ->selectRaw('*,tbl_courses.disp_img as cover_img')
         ->where('course_id',$course_id)
+        ->where('tbl_courses.status',1)
         ->join('tbl_programmes','tbl_programmes.programme_id','tbl_courses.programme_id')->get();
 
         $similar_courses = DB::table('tbl_courses')->where('course_id','!=',$course_id)->where('programme_id',$course_details[0]->programme_id)->get();

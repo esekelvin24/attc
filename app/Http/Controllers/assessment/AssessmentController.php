@@ -81,8 +81,15 @@ class AssessmentController extends Controller
         $current_batch_no = $current_batch->batch_no;
 
       
-
-
+        $passed_assessment_collection = DB::table('tbl_assessment_session')
+        ->leftjoin('tbl_courses','tbl_courses.course_id','tbl_assessment_session.course_id')
+        ->leftjoin('tbl_batch','tbl_batch.batch_no','tbl_assessment_session.batch_id')
+        ->where('tbl_assessment_session.batch_id',$current_batch_no)
+        ->where('finished_ca',1)//CA is completed
+        ->where('tbl_assessment_session.status',1) //student passed
+        ->where('tbl_assessment_session.user_id', $user_id)->pluck("score","assessment_id");
+        
+        
 
         $pending_assessment_collection = DB::table('tbl_assessment_session')
         ->leftjoin('tbl_courses','tbl_courses.course_id','tbl_assessment_session.course_id')
@@ -131,7 +138,7 @@ class AssessmentController extends Controller
        
        
 
-        return view('assessment.take_ca', compact('completed_assessment_collection','eligible_for_ca','assessment_collection','pending_assessment_collection','assessment_exp_time','assessment_exp_date'));
+        return view('assessment.take_ca', compact('passed_assessment_collection','completed_assessment_collection','eligible_for_ca','assessment_collection','pending_assessment_collection','assessment_exp_time','assessment_exp_date'));
     }
 
     public function take_ca_questions(Request $request)
@@ -148,7 +155,7 @@ class AssessmentController extends Controller
         $current_batch_no = $current_batch->batch_no;
         
         $global_assessment_weight = DB::table('tbl_assessment_weights')
-        ->where('status',0)
+        ->where('status',1)
         ->where('batch_id',$current_batch_no)->first();
         
         $check =  DB::table('tbl_applications as a')
@@ -157,6 +164,14 @@ class AssessmentController extends Controller
         ->where('batch_id', $current_batch_no)
         ->where('ac.course_id',$course_id)->count();
 
+        $passed_assessment_collection = DB::table('tbl_assessment_session')
+        ->leftjoin('tbl_courses','tbl_courses.course_id','tbl_assessment_session.course_id')
+        ->leftjoin('tbl_batch','tbl_batch.batch_no','tbl_assessment_session.batch_id')
+        ->where('tbl_assessment_session.batch_id',$current_batch_no)
+        ->where('finished_ca',1)//CA is completed
+        ->where('tbl_assessment_session.status',1) //student passed
+        ->where('tbl_assessment_session.user_id', Auth::user()->id)->pluck("score","assessment_id");
+        
         
 
         $completed_assessment_collection = DB::table('tbl_assessment_session')
@@ -175,7 +190,7 @@ class AssessmentController extends Controller
 
       
 
-       return view('assessment.take_ca_question',compact('completed_assessment_collection','assessment_id','authorise_to_take_assessment','course_details','global_assessment_weight','assessment_details'));
+       return view('assessment.take_ca_question',compact('passed_assessment_collection','completed_assessment_collection','assessment_id','authorise_to_take_assessment','course_details','global_assessment_weight','assessment_details'));
     }
 
     public function prev_question(Request $request)
@@ -362,18 +377,30 @@ class AssessmentController extends Controller
                     if ($check_completed < 1) 
                     {
                             
+                         //update course registration with score
+                         $score = DB::table('tbl_assessment_student_answers')->where('assessment_id',$assessment_id)->where('user_id',$user_id)->where('status',1)->count();
+                        
+                            if ($score >= ($question_limit_ca/2))
+                            {
+                                $status = 1; //student passed
+                            }else
+                            {
+                                $status = 2; //student failed
+                            }
+
                             $update = [
                                 "completed_at" => NOW(),
                                 "finished_ca" => 1,
+                                "score" => $score,
+                                "total_questions" => $question_limit_ca,
+                                "status" => $status,
                             ];
 
                             DB::table('tbl_assessment_session')->where('user_id',$user_id)->where('assessment_id',$assessment_id)->update($update);
                             $request->session()->forget(['assessment_id', 'question_id_array']);
 
 
-                            //update course registration with score
-                            $score = DB::table('tbl_assessment_student_answers')->where('assessment_id',$assessment_id)->where('user_id',$user_id)->where('status',1)->count();
-
+                           
                             //$score = ($score * 100)/$question_limit_ca;
                             $update_course_reg = [
                                 "ca".$request->session()->get('assessment_type') => $score, 
@@ -403,12 +430,18 @@ class AssessmentController extends Controller
 
                 return view('assessment.next_question', compact('questions','assessment_id','user_id','course_details'));
 
-              }else
-              {
+            }else
+            {
                     
                
 
                     $exam_found = DB::table('tbl_assessment_session')->where('user_id',$user_id)->where('assessment_id',$assessment_id)->first();
+
+                    if($exam_found->status ==  2)//the student failed so delete all student answer
+                    {
+                        DB::table('tbl_assessment_student_answers')->where('user_id',$user_id)->where('assessment_id',$assessment_id)->delete();
+                        DB::table('tbl_assessment_session')->where('user_id',$user_id)->where('assessment_id',$assessment_id)->update(["finished_ca" => 0]);
+                    }
                     
                     if(!isset($exam_found->question_json))
                     {
@@ -510,7 +543,7 @@ class AssessmentController extends Controller
                         
                      return view('assessment.next_question',compact('question_count','questions','assessment_id','user_id','course_details'));
 
-                    }
+            }
     }
 
 
