@@ -47,9 +47,16 @@ Course Details
                             </div>
                             <div class="align-right">
                                 @if($course_details[0]->open_registration == 1)
-                                <a class="btn btn-theme effect btn-sm" href="{{url('/apply?course_id='.encrypt($course_details[0]->course_id).'&programme_id='.encrypt($course_details[0]->programme_id))}}}">
-                                    <i class="fas fa-chart-bar"></i> Apply Now
-                                </a>
+                                  @if(isset($already_registered_courses[$course_details[0]->course_id]))
+                                    <div class="alert alert-success" role="alert">
+                                       <img width="20" height="20" src="{{asset('img/success.png')}}" > You have already registered for this course
+                                    </div>
+                                  @else
+                                        <a class="btn btn-theme effect btn-sm" href="{{url('/apply?course_id='.encrypt($course_details[0]->course_id).'&programme_id='.encrypt($course_details[0]->programme_id))}}}">
+                                            <i class="fas fa-chart-bar"></i> Apply Now
+                                        </a>
+                                  @endif
+
                                 @else
                                    <div class="alert alert-danger" role="alert">
                                        <img width="20" height="20" src="{{asset('img/barred.png')}}" > Registration is closed for the course

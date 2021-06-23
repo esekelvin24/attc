@@ -84,7 +84,9 @@ Route::post('/next_question', [App\Http\Controllers\assessment\AssessmentControl
 Route::post('/prev_question', [App\Http\Controllers\assessment\AssessmentController::class, 'prev_question'])->name('prev_question');
 Route::post('/this_log', [App\Http\Controllers\assessment\AssessmentController::class, 'this_log'])->name('this_log');
 
-
+Route::post('/save_question_edit', [App\Http\Controllers\assessment\AssessmentController::class, 'save_question_edit'])->name('save_question_edit');
+Route::post('/edit_question', [App\Http\Controllers\assessment\AssessmentController::class, 'edit_question'])->name('edit_question');
+Route::get('/manage_question', [App\Http\Controllers\assessment\AssessmentController::class, 'manage_question'])->name('manage_question');
 Route::get('/upload_ca_question', [App\Http\Controllers\assessment\AssessmentController::class, 'upload_ca_question'])->name('upload_ca_question');
 Route::post('/save_ca_upload', [App\Http\Controllers\assessment\AssessmentController::class, 'save_ca_upload'])->name('save_ca_upload');
 
@@ -93,6 +95,10 @@ Route::get('/manage_assessment', [App\Http\Controllers\assessment\AssessmentCont
 Route::get('/map_lecturer_to_courses', [App\Http\Controllers\CourseController::class, 'map_lecturer_to_courses'])->name('map_lecturer_to_courses');
 Route::post('/edit_assessment', [App\Http\Controllers\assessment\AssessmentController::class, 'edit_assessment'])->name('edit_assessment');
 Route::post('/save_edit_assessment', [App\Http\Controllers\assessment\AssessmentController::class, 'save_edit_assessment'])->name('save_edit_assessment');
+
+
+Route::post('/get_assessment_student_list', [App\Http\Controllers\assessment\AssessmentController::class, 'get_assessment_student_list'])->name('get_assessment_student_list');
+Route::post('/add_student_to_assessment', [App\Http\Controllers\assessment\AssessmentController::class, 'add_student_to_assessment'])->name('add_student_to_assessment');
 
 
 Route::post('/add_new_assessment', [App\Http\Controllers\assessment\AssessmentController::class, 'add_new_assessment'])->name('add_new_assessment');

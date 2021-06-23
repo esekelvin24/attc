@@ -56,7 +56,7 @@ background-size: cover;">
     <div class="all-wrapper menu-side with-pattern">
         <div class="auth-box-w">
             <div class="logo-w">
-                <img height="75" width="150" alt="" class="center-block animated pulse delay-4s slower" src="{{asset('img/logo.png')}}">
+                <img height="75" width="75" alt="" class="center-block animated pulse delay-4s slower" src="{{asset('img/logo.png')}}">
                 <p class="animated bounceIn" style="font-weight: bold; font-size:25px">{{$company_name}}</p>
             </div>
             <h4 class="auth-header">

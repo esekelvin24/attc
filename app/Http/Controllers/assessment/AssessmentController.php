@@ -39,12 +39,14 @@ class AssessmentController extends Controller
 
         return view('assessment.assessment_weight', compact('assessment_weight_collection'));
     }
+    
 
     public function manage_assessment()
     {
         $user_id = Auth::user()->id;
         
         $queryBuilder = Assessment::query();
+        
         $queryBuilder->join('tbl_courses','tbl_courses.course_id','tbl_assessment_creation.course_id')
         ->leftjoin('tbl_batch','tbl_batch.batch_no','tbl_assessment_creation.batch_id')
         ->where('tbl_assessment_creation.created_by',$user_id);
@@ -55,7 +57,7 @@ class AssessmentController extends Controller
     }
 
     
-    public function  edit_assessment (Request $request)
+    public function  edit_assessment(Request $request)
      {
        
         $assessment_id = decrypt($request->id);
@@ -110,14 +112,20 @@ class AssessmentController extends Controller
 
         
 
-        $registered_courses = DB::table('tbl_applications as a')->join('tbl_application_courses as ac','ac.application_id', 'a.application_id')
+        $registered_courses = DB::table('tbl_applications as a')
+        ->join('tbl_application_courses as ac','ac.application_id', 'a.application_id')
         ->where('user_id',$user_id)
         ->where('batch_id', $current_batch_no)
         ->pluck('ac.course_id');
+
+
         
         $queryBuilder = Assessment::query(); 
+
         $queryBuilder->join('tbl_courses','tbl_courses.course_id','tbl_assessment_creation.course_id')
         ->leftjoin('tbl_batch','tbl_batch.batch_no','tbl_assessment_creation.batch_id')
+        ->join('tbl_assessments_students as sa','sa.assessment_id','tbl_assessment_creation.assessment_id')
+        ->where('sa.user_id',Auth::user()->id)
         ->where('tbl_assessment_creation.batch_id',$current_batch_no)
         ->whereIn('tbl_assessment_creation.course_id',$registered_courses);
        
@@ -546,6 +554,94 @@ class AssessmentController extends Controller
             }
     }
 
+    function get_assessment_student_list(Request $request)
+    {
+       $assessment_id = decrypt($request->id);
+       $selected_student = array();
+       //get assessment info
+       $assessment_collection =  DB::table('tbl_assessment_creation as a')
+       ->join('tbl_courses as c','c.course_id','a.course_id')
+       ->where('assessment_id',$assessment_id)
+       ->get();
+
+       if(count($assessment_collection) > 0) //if the assessment is found
+       {
+                      
+           //get all the student application ID that registered for a course and yet to take Continous Assessment Test
+           $application_id =  DB::table('tbl_application_courses')
+           ->where('course_id',$assessment_collection[0]->course_id)
+           ->where('ca1',NULL)//where student have not taken the ca test for the course
+           ->pluck('application_id');
+
+           //get list of student that has an active application
+           $student_collection = DB::table('tbl_applications as a')
+           ->join('users as u', 'a.user_id', 'u.id')
+           ->whereIn('application_id',  $application_id)
+           ->where('a.status',1)//application status is still active
+           ->where('a.action_1_status',1)//admin has approved the application
+           ->where('a.payment_status',1)//and the student has paid for the application
+           ->get();
+
+           $selected_student = DB::table("tbl_assessments_students")->where('assessment_id', $assessment_id)->pluck("assessment_id","user_id");
+
+
+           return view('assessment.assessment_student_list', compact('student_collection','selected_student','assessment_id'));
+
+       }
+               
+    }
+
+    public function add_student_to_assessment(Request $request)
+    {
+       
+       $rules = [
+           "assessment_id" => "required"
+       ];
+
+       $this->validate($request, $rules);
+
+       if(Auth::user()->can('edit_assessement'))
+       {
+           $assessment_id = decrypt($request->assessment_id);
+
+           $check = DB::table('tbl_assessment_creation')
+           ->where('assessment_id', $assessment_id)->get();
+
+
+           if(count($check) > 0)
+           {
+              $delete_existing_record = DB::table('tbl_assessments_students')->where('assessment_id',$assessment_id)->delete();
+
+              if(isset($request->students))
+              {
+                  $students = $request->students;
+                  foreach($students as $val)
+                  {
+                    $insert[] = [
+                        "assessment_id" => $assessment_id,
+                        "user_id" => $val,
+                        "created_by" => Auth::user()->id,
+                        "created_at" => NOW()
+                    ];
+                  }
+                  $record = DB::table('tbl_assessments_students')->insert($insert);
+                  if($record)
+                  {
+                      return redirect('/manage_assessment')->with('success','The selected student has been added successfully');
+                  }
+              }else
+              {
+                  return redirect('/manage_assessment')->with('success','The selected student has been added successfully');  
+              }
+           }else
+           {
+               return redirect('/manage_assessment')->with('error','No assessment was found with this ID');
+           }
+       }else
+       {
+        return redirect('/manage_assessment')->with('error','You do not have permission to perform this task');
+       }
+    }
 
     function this_log(Request $request)
     {
@@ -556,10 +652,7 @@ class AssessmentController extends Controller
         ];
         $this->validate($request,$rules);
        
-        Cache::forever( $request->session()->get('assessment_id').'_'.Auth::user()->id, $request->val ); //Key and Value, Expiry Minute
-                            
-
-
+        Cache::forever( $request->session()->get('assessment_id').'_'.Auth::user()->id, $request->val ); //Key and Value, Expiry Minute                     
     }
 
     public function save_user_response($question_no, $response, Request $request)
@@ -735,23 +828,6 @@ class AssessmentController extends Controller
     }
 
 
-    public function upload_exam_score_student_list(Request $request)
-    {
-    
-       $session_id = $request->session_id;
-      
-       $student_list = DB::table('tbl_course_registration')
-       ->join('tbl_users','tbl_users.id','tbl_course_registration.user_id')
-       ->where('tbl_users.status',1)
-       ->where("course_short_code",$request->id)
-       ->where("session_id",$session_id)  //filter by current session
-       ->get();
-
-      
-      
-       return view('assessment.exam_score_student_list',compact('student_list'));
-    }
-
     public function save_assessment(Request $request)
     {
         $rules =
@@ -804,6 +880,50 @@ class AssessmentController extends Controller
 
 
         
+    }
+
+    public function save_question_edit(Request $request)//save question edit
+    {
+
+        $rules = 
+        [
+           'options' => 'required|array',
+           'answer' => 'required',
+           'question' => 'required',
+           'id' => 'required'
+        ];
+
+        $this->validate($request, $rules);
+
+        $question_id = base64_decode($request->id);
+
+        
+        $records = [
+            'question' => $request->question,
+            'answer' => $request->answer,
+            'option_1' => $request->options[0],
+            'option_2' => $request->options[1],
+            'option_3' => $request->options[2],
+            'option_4' => $request->options[3],
+
+        ];
+
+        $result = DB::table('tbl_questions')->where('question_id', $question_id)->update($records);
+
+        return redirect('/manage_question')->with('success','record has been created successful');
+    }
+
+    public function edit_question(Request $request)
+    {
+        $question_details =  DB::table('tbl_questions')->where('question_id', $request->id)->first();
+		
+		return view('assessment.question_edit',compact('question_details'));
+    }
+
+    public function manage_question()
+    {
+        $questions = DB::table("tbl_questions")->get();
+        return view('assessment.manage_question',compact('questions'));
     }
 
     public function upload_ca_question()
@@ -934,49 +1054,6 @@ class AssessmentController extends Controller
     }
 
 
-    public function save_upload_exam_result(Request $request)
-    {
-        $rules =
-        [
-            'grades'=>'required|array',
-            'courses'=>'required',
-            'session_id'=>'required|numeric'  
-        ];
-
-        $grades_arr = $request->grades;
-        $result =  false;
-        $update = array();
-
-        //validate exam grade is above the maximum exam set for the session
-
-        $max_exam_grade = DB::table('tbl_assessment_weights')->where('session_id',$request->session_id)->first();
-
-        foreach ($grades_arr  as $k=>$v )
-        {
-           
-                if ($v > $max_exam_grade->exam)
-                {
-                    return redirect()->route('upload_exam_score')->with('upload_error','One of the student exam grade is above the maximum exam session grade');
-                } 
-        }
-
-       
-
-
-       foreach ($grades_arr  as $k=>$v )
-       {
-          
-          $update = [
-              "exam" => $v
-          ];
-         $result =  DB::table('tbl_course_registration')->where('course_reg_id',$k)->where('session_id',$request->session_id)->update($update);
-       }
-       
-          return redirect()->route('upload_exam_score')->with('upload_success','Exam grade Upload was successful');
-       
-
-    }
-
     public function save_assessment_weight(Request $request)
     {
         $rules =
@@ -1086,98 +1163,6 @@ class AssessmentController extends Controller
     }
 
    
-    public function check_other_result($user_id)
-    {
-
-        $user_id = base64_decode($user_id);
-
-       
-        
-        $course_collection =  DB::table('tbl_course_registration')
-        ->leftjoin('tbl_session','tbl_session.session_id','tbl_course_registration.session_id')
-        ->groupBy('tbl_course_registration.course_short_code')
-        ->where('user_id',$user_id)
-        ->orderBy('tbl_course_registration.session_id','desc')
-        ->get();
-
-        $attempt_array = DB::table('tbl_course_registration')
-        ->selectRaw('course_short_code, count(course_short_code) as attempt')
-        ->groupBy('tbl_course_registration.course_short_code')
-        ->where('user_id',$user_id)->pluck('attempt','course_short_code');
-        
-        //dd($attempt_array);
-
-        $application_collection = Applications::where('user_id',$user_id)
-        ->leftjoin('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
-        ->leftjoin('tbl_users','tbl_users.id','tbl_applications.user_id')
-        ->first();
-
-        $eligible_for_ca = DB::table('tbl_course_registration')->where('user_id',$user_id)->get()->count();
-
-       
-
-        
-        return view('assessment.check_result',compact('user_id','eligible_for_ca','course_collection','attempt_array','application_collection'));
-    
-    }
-
-    public function check_result()
-    {
-        
-        $user_id = Auth::user()->id;
-
-        $user_details = DB::table('tbl_users')->where('id',Auth::user()->id)->first();
-
-        if($user_details->rights_id == 5 || $user_details->rights_id == 4) //H.O.D or Dean
-        {
-            return redirect()->route('view_students_result');
-        }
-        
-        
-        $course_collection =  DB::table('tbl_course_registration')
-        ->leftjoin('tbl_session','tbl_session.session_id','tbl_course_registration.session_id')
-        ->groupBy('tbl_course_registration.course_short_code')
-        ->where('user_id',$user_id)
-        ->orderBy('tbl_course_registration.session_id','desc')
-        ->get();
-
-        $attempt_array = DB::table('tbl_course_registration')
-        ->selectRaw('course_short_code, count(course_short_code) as attempt')
-        ->groupBy('tbl_course_registration.course_short_code')
-        ->where('user_id',$user_id)->pluck('attempt','course_short_code');
-        
-        //dd($attempt_array);
-
-        $application_collection = Applications::where('user_id',$user_id)
-        ->leftjoin('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
-        ->leftjoin('tbl_users','tbl_users.id','tbl_applications.user_id')
-        ->first();
-
-        $eligible_for_ca = DB::table('tbl_course_registration')->where('user_id',$user_id)->get()->count();
-
-       
-
-        
-        return view('assessment.check_result',compact('user_id','eligible_for_ca','course_collection','attempt_array','application_collection'));
-    }
-
-    public function release_session_result()
-    {
-        $session_list = Session::get(); 
-        return view('assessment.release_session_result', compact('session_list'));
-    }
-
-    public function save_release_session_result(Request $request)
-    {
-        Session::where("show_result",1)->update(["show_result" => 0]);
-
-        if (isset($request->sess))
-              Session::whereIn("session_id",$request->sess)->update(["show_result" => 1]);
-
-        return redirect()->route('release_session_result')->with('update_success','Successfully updated');
-
-    }
-
 
 
 }

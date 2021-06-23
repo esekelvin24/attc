@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use PDF;
 use App\Models\User;
 use App\Models\Settings;
-use App\Models\Applications;
+use App\Models\Application;
 use App\Models\Title;
 use App\Models\Rights;
 use App\Models\Designation;
@@ -87,15 +87,37 @@ class DashboardController extends Controller
 
         if(Auth::user()->can('dashboard-my-student'))
         {
-            $my_students  = DB::table('tbl_applications as a')
-            ->join('tbl_application_courses as ac', 'ac.application_id', 'a.application_id' )
-            ->join('tbl_courses as c','c.course_id','ac.course_id')
-            ->join('tbl_map_lecturer_to_courses','c.course_id', 'tbl_map_lecturer_to_courses.course_id')
-            ->where('a.action_1_user',"!=",2)
-            ->where('tbl_map_lecturer_to_courses.lecturer_user_id', Auth::user()->id)
-            ->groupBy('a.user_id')
-            ->count();
+           
 
+            $current_batch_details = DB::table('tbl_batch')->where('status',1)->orderBy('created_at','desc')->get();
+
+          //get the list of courses map to lecturer
+          $get_my_courses = DB::table('tbl_map_lecturer_to_courses as ml')
+          ->join('tbl_courses as c','c.course_id','ml.course_id')
+          ->where("lecturer_user_id",Auth::user()->id)
+          ->get();
+
+           $lect_map_history = array();
+           foreach ($get_my_courses as $val)
+           {
+              $lect_map_history[] = $val->course_id;
+           }
+
+            //get the list of student that enroll to the lecturer course
+            $app_builder = Application::query();
+            $app_builder->join('tbl_application_courses as ac','ac.application_id','tbl_applications.application_id');
+            $app_builder->whereIn('ac.course_id',$lect_map_history);
+
+            //check if admin has approved, if the application is still active, if the user has paid, if the user accepted the offer
+            $app_builder->where('action_1_user',1)
+            ->where('status',1)
+            ->where('payment_status',1)
+            ->where('accept_offer',1)
+            ->groupBy('tbl_applications.user_id'); 
+
+
+             $my_students = count($app_builder->get());
+            
       
         }
 

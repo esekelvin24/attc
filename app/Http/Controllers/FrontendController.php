@@ -214,6 +214,7 @@ class FrontendController extends Controller
             $programme_id = decrypt($request->programme_id);
             $price = Course::where('course_id',$course_id)->first()->course_price;
         }
+        
 
         $programme_builder = Programme::query();
         $programme_builder->where('status',1);
@@ -228,9 +229,20 @@ class FrontendController extends Controller
             $course_builder->where('programme_id',$programme_id);
         }
         $course_builder->where('status',1)->where('tbl_courses.open_registration',1);
+
+      
+        $already_registered_courses = DB::table('tbl_applications as a')
+        ->join('tbl_application_courses as ac','ac.application_id', 'a.application_id')
+        ->where('a.status',1)
+        ->where('a.action_1_status','!=', 2)
+        ->where('a.user_id',Auth::user()->id)
+        ->pluck('ac.course_id');
+
        
+        $course_builder->whereNotIn('course_id',$already_registered_courses);
         $qualification_collections = DB::table('tbl_qualifications')->get();
         $course_collection = $course_builder->get();
+
         return view ('frontend.apply',compact('programme_collections','course_collection','course_id','programme_id','price','qualification_collections'));
     }
 
@@ -430,8 +442,15 @@ class FrontendController extends Controller
         ->join('users','users.id','tbl_courses_instructors.user_id')
         ->join('tbl_designation','users.designation_id','tbl_designation.designation_id')
         ->where('course_id', $course_id)->get();
+
+        $already_registered_courses = DB::table('tbl_applications as a')
+        ->join('tbl_application_courses as ac','ac.application_id', 'a.application_id')
+        ->where('a.status',1)
+        ->where('a.action_1_status','!=', 2)
+        ->where('a.user_id',Auth::user()->id)
+        ->pluck('a.user_id','ac.course_id');
         
-        return view('frontend.course_details',compact('course_details','similar_courses','instructor_list'));
+        return view('frontend.course_details',compact('already_registered_courses','course_details','similar_courses','instructor_list'));
     }
 
 }

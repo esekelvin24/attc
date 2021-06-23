@@ -53,7 +53,7 @@
 								<select  autocomplete="off" class="form-control" id="batch_no"  name="batch_no">
 									@if(!$current_batch_details->isEmpty())
 										@foreach($current_batch_details as $val)
-											<option {{$selected_batch==$val->batch_no?"selected":""}} value="{{ encrypt($val->batch_no) }}"> Batch {{ $val->batch_no }}</option>
+											<option {{$selected_batch==$val->batch_no?"selected":""}} value="{{ encrypt($val->batch_no) }}"> {{ $val->batch_name }}</option>
 										@endforeach
 									@endif
 								</select>
@@ -72,6 +72,7 @@
 								<th></th>
                                 @endif
 								<th></th>
+								<th>Student ID</th>
 								<th>Title</th>
 								<th>First Name</th>
 								<th>Last Name</th>
@@ -86,6 +87,7 @@
 								<th></th>
                                 @endif
 								<th></th>
+								<th>Student ID</th>
 								<th>Title</th>
 								<th>First Name</th>
 								<th>Last Name</th>
@@ -101,6 +103,7 @@
 								<td><i title="Edit {{ $val->firstname." ".$val->lastname }}" style="cursor: pointer" data-id="{{ $val->id }}" class="fa fa-edit"></i></td>
                                 @endif
 								<td class="center"><img class="img-rounded" height="30" width="30" src='{{ asset("img/users/".$val->pics) }}'/></td>
+								<td>SID{{str_pad($val->id, 4, "0", STR_PAD_LEFT)}}</td>
 								<td>{{$val->title_name}}</td>
 								<td>{{$val->firstname}}</td>
 								<td>{{$val->lastname}}</td>

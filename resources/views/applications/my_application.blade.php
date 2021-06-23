@@ -60,7 +60,7 @@
                                            
                                             <td>{{$val->programme_name}}</td>
                                             <td>₦{{number_format($val->programme_total_amt,2)}}</td>
-                                            <td>{{date('d-m-y h:m A',strtotime($val->created_at))}}</td>
+                                            <td>{{date('d-m-y h:m A',strtotime($val->application_date))}}</td>
                                         </tr>
                                     @endforeach
                                     </tbody>

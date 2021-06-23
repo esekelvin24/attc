@@ -121,8 +121,11 @@
 								<td>{{$val->start_time}}</td>
 								<td>{{substr($val->expiration_date,0,10)}}</td>
 								<td>{{$val->expiration_time}}</td>
-								<td><button class="text-white btn-success btn-sm btn"><i class="fa fa-users"></i> Add Students</button></td>
-
+								@if(Auth::user()->can('edit_assessement'))
+								<td><button onclick="add_student_to_assessment('{{encrypt($val->assessment_id)}}')" class="text-white btn-success btn-sm btn"><i class="fa fa-users"></i> Add Students</button></td>
+                                @else
+                                <td></td>
+								@endif
 							</tr>
 						@endforeach
 						</tbody>
@@ -188,7 +191,34 @@
 		  @endif
 
 
+    function add_student_to_assessment(assessment_id)
+	{
+		var no = assessment_id;
+		var toks=$("input[name='_token']").val();
 
+         $.ajax(
+						{
+							type:"POST",
+							data:{id:no, _token:toks},
+							url:"{{ route('get_assessment_student_list') }}",
+							beforeSend:function()
+							{
+								$('table').block({ message: null });
+								$('div.modal-body').attr("data-print",no);
+							},
+							success: function(r)
+							{
+								$('table').unblock();
+								$('div.modal-body').html(r);
+								$('.edit_area').modal(
+										{
+											backdrop: 'static',
+											keyboard: false
+										});
+							}
+						}
+				);
+	}
 
 
 
@@ -226,10 +256,8 @@
 											backdrop: 'static',
 											keyboard: false
 										});
-
 							}
 						}
-
 				);
 			});
 
