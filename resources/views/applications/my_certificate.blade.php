@@ -36,7 +36,7 @@
                                        {{-- <th>STATUS</th>  --}}
                                         
                                         <th>PROGRAMME</th>
-                                       {{--   <th>AMOUNT</th>  --}}
+                                        <th class="col-md-5">COURSES</th>  
                                         <th>APPLIED ON</th>
                                         <th>ACTION</th>
                                     </tr>
@@ -47,7 +47,7 @@
                                         {{-- <th>STATUS</th> --}}
                                        
                                         <th>PROGRAMME</th>
-                                      {{--   <th>AMOUNT</th>  --}}
+                                       <th>COURSES</th> 
                                         <th>APPLIED ON</th>
                                          <th>ACTION</th>
                                     </tr>
@@ -61,7 +61,19 @@
                                             </td> --}}
                                            
                                             <td>{{$val->programme_name}}</td>
-                                          {{--  <td>₦{{number_format($val->programme_total_amt,2)}}</td>  --}}
+                                            <td>
+                                              
+                                             
+                                              @if(isset($course_arr[$val->application_id]))
+                                                    @php
+                                                             $arr = $course_arr[$val->application_id];
+                                                    @endphp
+                                                    @foreach($arr as $index => $value)
+                                                            <label style="margin:5px;" class="badge badge-warning">{{$value["course_name"]}}</label>
+                                                    @endforeach
+                                               @endif
+
+                                            </td>
                                             <td>{{date('d-m-y h:m A',strtotime($val->created_at))}}</td>
                                             <td><a target="_blank" href="{{url('/my_pdf_certificate/'.encrypt($val->application_id))}}" class="text-white btn btn-success btn-sm"><i class ="fa fa-file"></i> View Certificate</a></td>
                                         </tr>

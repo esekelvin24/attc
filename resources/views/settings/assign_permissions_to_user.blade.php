@@ -81,7 +81,7 @@ fieldset legend {
                          <th scope="row" bgcolor="#F5F7FA">Permissions Associated with Current Role:</th>
                          <td class="pull-xs-left col-sm-9 col-xs-8" colspan="5">
                           @foreach($role_permission_collection as $val)
-                                            <label class="badge badge-danger">{{$val->name}}</label>
+                                            <label class="badge badge-warning">{{$val->name}}</label>
                           @endforeach
 						  </td>
                   </tr>
@@ -91,7 +91,7 @@ fieldset legend {
                             <th scope="row" bgcolor="#F5F7FA">Special Permissions:</th>
                              <td class="pull-xs-left col-sm-9 col-xs-8" colspan="5">  
 								@foreach($selected_special_permission as $index => $val)                       
-												<label class="badge badge-danger">{{$val}}</label>
+												<label class="badge badge-warning">{{$val}}</label>
 								@endforeach 
 							  </td>		
 				 </tr>

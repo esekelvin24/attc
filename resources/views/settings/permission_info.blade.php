@@ -38,7 +38,7 @@
                                         <th scope="row" bgcolor="#F5F7FA">Roles Associated with this permission::</th>
                                         <td class="pull-xs-left col-sm-9 col-xs-8">
                                         @foreach($role_permission_collection as $val)
-                                            <label class="badge badge-danger">{{$val->name}}</label>
+                                            <label class="badge badge-warning">{{$val->name}}</label>
                                          @endforeach
                                         </td>
                                     </tr>

@@ -11,6 +11,7 @@ use PDF;
 use App\Models\Application;
 use App\Models\Applications_Documents_upload;
 use Mail;
+use File;
 
 class ApplicationController extends Controller
 {
@@ -168,7 +169,7 @@ class ApplicationController extends Controller
                                        <td><a class="badge badge-default-inverted" target="_blank" href="<?php echo asset("file_upload/applications/academic_upload/$doc_val->file_name") ?>"> <?php echo $doc_val->document_name ?></a></td>
                                     <?php }else if($doc_val->document_name == "Working Experience"){ ?>
                                        <td><a class="badge badge-default-inverted" target="_blank" href="<?php echo asset("file_upload/applications/work_experience/$doc_val->file_name") ?>"> <?php echo $doc_val->document_name ?></a></td>
-                                    <?php }else if($doc_val->document_name == "Offer Letter" || $doc_val->document_name == "Acceptance Letter"){ ?>
+                                    <?php }else if($doc_val->document_name == "Offer Letter" || $doc_val->document_name == "Acceptance Letter" || $doc_val->document_name == "To Whom It May Concern"){ ?>
                                         <td><a class="badge badge-default-inverted" target="_blank" href="<?php echo asset("file_upload/applications/attc/$doc_val->file_name") ?>"> <?php echo $doc_val->document_name ?></a></td>
                                     <?php } ?>
                                 </tr>
@@ -452,9 +453,20 @@ class ApplicationController extends Controller
                         "programme_name" => $check[0]->programme_name,
                         "application_id" => 'ATTC-'.str_pad($check[0]->batch_id, 4, "0", STR_PAD_LEFT).'-'.$application_id
                     ];
-                    $file_name = "certificate.pdf";
-            
-                    $pdf = PDF::loadView('pdfs.to_whom_it_may_concern', $data1)->setPaper('a4', 'portrait')->save("file_upload/applications/attc/$file_name");
+                    $file_name = 'ATTC_CERT-'.str_pad($check[0]->batch_id, 4, "0", STR_PAD_LEFT).'-'.$application_id.'.pdf';
+                    
+             
+                    if (!file_exists( public_path()."/file_upload/applications/attc/$file_name"))
+                    {
+                        $Applications_Documents_upload = new Applications_Documents_upload();
+                        $Applications_Documents_upload->application_id = $application_id;
+                        $Applications_Documents_upload->document_id = 6;
+                        $Applications_Documents_upload->file_name =  $file_name;
+                        $Applications_Documents_upload->save();
+                    
+                        $pdf = PDF::loadView('pdfs.to_whom_it_may_concern', $data1)->setPaper('a4', 'portrait')->save("file_upload/applications/attc/$file_name");
+                    }
+
                     return redirect('/file_upload/applications/attc/'.$file_name); 
                }else
                {
@@ -485,26 +497,28 @@ class ApplicationController extends Controller
        // ->orderBy('tbl_applications.created_at','desc')
         ->get();
 
-        return view('applications.my_certificate', compact('all_application_collection'));
-    }
-
-    public function my_time_table()
-    {
-        $current_batch_details = DB::table('tbl_batch')->where('status',1)->orderBy('created_at','desc')->get();
-
-        $all_application_collection = Application::join('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
-        ->join('users','users.id','tbl_applications.user_id')
+        $course_list = Application::join('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
         ->join('tbl_application_courses as ac','ac.application_id','tbl_applications.application_id')
         ->join('tbl_courses as c','c.course_id','ac.course_id')
-        ->where('tbl_applications.user_id',Auth::user()->id)
-        ->where('batch_id', $current_batch_details[0]->batch_no)
-       // ->orderBy('tbl_applications.created_at','desc')
-        ->get();
+        ->where('tbl_applications.user_id',Auth::user()->id)->get();
+
+        $course_arr = array();
+        foreach($course_list as $val)
+        {
+           
+                $course_arr[$val->application_id][] =  [
+                     "course_name" => $val->course_name,
+                ];
+            
+        }
+        
+        
         
 
-        return view('applications.my_time_table', compact('all_application_collection'));
+        return view('applications.my_certificate', compact('all_application_collection','course_arr'));
     }
 
+    
 
 
 

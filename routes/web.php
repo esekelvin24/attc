@@ -61,6 +61,9 @@ Route::post('/create_programme', [App\Http\Controllers\ProgrammeController::clas
 Route::post('/save_edited_programme', [App\Http\Controllers\ProgrammeController::class, 'save_edited_programme'])->name('save_edited_programme');
 Route::post('/save_programme', [App\Http\Controllers\ProgrammeController::class, 'save_programme'])->name('save_programme');
 
+Route::get('/my_time_table', [App\Http\Controllers\CourseController::class, 'my_time_table'])->name('my_time_table');
+Route::get('/course_time_table/{course_id}', [App\Http\Controllers\CourseController::class, 'course_time_table'])->name('course_time_table');
+
 
 
 
@@ -76,7 +79,6 @@ Route::get('/map_course_to_lecturer', [App\Http\Controllers\HomeController::clas
 Route::get('/assigned_courses', [App\Http\Controllers\CourseController::class, 'assigned_courses'])->name('assigned_courses');
 Route::get('/my_certificate', [App\Http\Controllers\ApplicationController::class, 'my_certificate'])->name('my_certificate');
 Route::get('/my_pdf_certificate/{application_id}', [App\Http\Controllers\ApplicationController::class, 'my_pdf_certificate'])->name('my_pdf_certificate');
-Route::get('/my_time_table', [App\Http\Controllers\ApplicationController::class, 'my_time_table'])->name('my_time_table');
 
 Route::get('/take_ca', [App\Http\Controllers\assessment\AssessmentController::class, 'take_ca'])->name('take_ca');
 Route::get('/take_ca_questions', [App\Http\Controllers\assessment\AssessmentController::class, 'take_ca_questions'])->name('take_ca_questions');

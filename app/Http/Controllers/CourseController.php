@@ -7,6 +7,7 @@ use DB;
 use Auth;
 use App\Models\User;
 use App\Models\Course;
+use App\Models\Application;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class CourseController extends Controller
@@ -173,6 +174,65 @@ class CourseController extends Controller
         return redirect()->route('courses_list')->with("success", "course was updated successfully");
 
     }
+
+    public function course_time_table($course_id)
+    {
+         $course_id = decrypt($course_id);
+
+         $user_id = Auth::user()->id;
+         $current_batch = DB::table('tbl_batch')->where('status',1)->orderBy('created_at','desc')->first();
+         $current_batch_no = $current_batch->batch_no;
+
+         $uncompleted_registered_courses = DB::table('tbl_applications as a')
+         ->join('tbl_application_courses as ac','ac.application_id', 'a.application_id')
+         ->where('user_id',$user_id)
+         ->where('batch_id', $current_batch_no)
+         ->where('ac.ca1','=', NULL)
+         ->pluck('ac.course_id');
+ 
+         $monday = strtotime("last monday");
+         $monday = date('w', $monday)==date('w') ? $monday+7*86400 : $monday;
+         $sunday = strtotime(date("Y-m-d",$monday)." +6 days");
+         $this_week_sd = date("Y-m-d",$monday);
+         $this_week_ed = date("Y-m-d",$sunday);
+
+         $time_table_list = DB::table('tbl_timetable as t')->where('course_id','10000')->get();
+
+         if(isset($uncompleted_registered_courses[$course_id])) //if the course is not amoung the uncompleted course dont display anything
+         {
+            $time_table_list = DB::table('tbl_timetable as t')
+            ->join('tbl_courses as c','c.course_id','t.course_id')
+            ->where('t.course_id',$course_id)
+            ->orderBy('day','asc')
+            ->where("week_start",">=",$this_week_sd)
+            ->where("week_end","<=",$this_week_ed)
+            ->get();
+         }
+       
+
+
+
+         return view('course.course_time_table', compact('time_table_list','this_week_sd','this_week_ed'));
+        
+    }
+
+    public function my_time_table()
+    {
+        $current_batch_details = DB::table('tbl_batch')->where('status',1)->orderBy('created_at','desc')->get();
+
+        $all_application_collection = Application::join('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
+        ->join('users','users.id','tbl_applications.user_id')
+        ->join('tbl_application_courses as ac','ac.application_id','tbl_applications.application_id')
+        ->join('tbl_courses as c','c.course_id','ac.course_id')
+        ->where('tbl_applications.user_id',Auth::user()->id)
+        ->where('batch_id', $current_batch_details[0]->batch_no)
+       // ->orderBy('tbl_applications.created_at','desc')
+        ->get();
+        
+
+        return view('course.my_time_table', compact('all_application_collection'));
+    }
+
 
     public function create_course()
     {

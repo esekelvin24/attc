@@ -445,7 +445,7 @@ class AssessmentController extends Controller
 
                     $exam_found = DB::table('tbl_assessment_session')->where('user_id',$user_id)->where('assessment_id',$assessment_id)->first();
 
-                    if($exam_found->status ==  2)//the student failed so delete all student answer
+                    if(!isset($exam_found->status) || $exam_found->status ==  2)//the student failed so delete all student answer
                     {
                         DB::table('tbl_assessment_student_answers')->where('user_id',$user_id)->where('assessment_id',$assessment_id)->delete();
                         DB::table('tbl_assessment_session')->where('user_id',$user_id)->where('assessment_id',$assessment_id)->update(["finished_ca" => 0]);
@@ -905,7 +905,6 @@ class AssessmentController extends Controller
             'option_2' => $request->options[1],
             'option_3' => $request->options[2],
             'option_4' => $request->options[3],
-
         ];
 
         $result = DB::table('tbl_questions')->where('question_id', $question_id)->update($records);
@@ -916,7 +915,6 @@ class AssessmentController extends Controller
     public function edit_question(Request $request)
     {
         $question_details =  DB::table('tbl_questions')->where('question_id', $request->id)->first();
-		
 		return view('assessment.question_edit',compact('question_details'));
     }
 
@@ -932,8 +930,6 @@ class AssessmentController extends Controller
         $builder =  Course::query();
 
         
-        
-        
         if(!Auth::user()->can('view-all-courses-selection-list'))
         {
            $builder->where('lecturer_user_id',$user_id);
@@ -948,7 +944,6 @@ class AssessmentController extends Controller
 
     public function set_assessment_weight()
     {
-
         return view('assessment.new_assessment_weight');
     }
 
