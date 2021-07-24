@@ -45,7 +45,7 @@ Home
                                             <p data-animation="animated slideInLeft">
                                                 You will be trained by tutors, many of whom are themselves professionally trained.
                                             </p>
-                                            <a data-animation="animated slideInUp" class="btn btn-theme effect btn-md" href="#">View Programmes</a>
+                                            <a data-animation="animated slideInUp" class="btn btn-theme effect btn-md" href="{{url('/our_programmes')}}">View Programmes</a>
                                         </div>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@ Home
                     <div class="col-md-6 thumb">
                         <div class="thumb">
                             <img src="{{asset('frontend/assets/img/about/2.jpg')}}" alt="Thumb">
-                            <a href="https://www.youtube.com/watch?v=DKz_EEoJRs4" class="popup-youtube light video-play-button">
+                            <a href="https://www.youtube.com/watch?v=DKz_EEoJRs" class="popup-youtube light video-play-button">
                                 <i class="fa fa-play"></i>
                             </a>
                         </div>

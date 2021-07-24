@@ -77,7 +77,7 @@ class ProgrammeController extends Controller
         
             $image_resize = Image::make($image->getRealPath());              
             $image_resize->resize(370, 300);
-            $image_resize->save(public_path("frontend/assets/img/programmes/" .$rand.".".$img_ext));
+            $image_resize->save(/*public_path*/("frontend/assets/img/programmes/" .$rand.".".$img_ext));
          
         }else
         {
@@ -127,7 +127,7 @@ class ProgrammeController extends Controller
         
             $image_resize = Image::make($image->getRealPath());              
             $image_resize->resize(370, 300);
-            $image_resize->save(public_path("frontend/assets/img/programmes/" .decrypt($request->programme_id).".".$img_ext));
+            $image_resize->save(/*public_path*/("frontend/assets/img/programmes/" .decrypt($request->programme_id).".".$img_ext));
            
         }
         $Programme->save();

@@ -155,7 +155,7 @@ class FeesController extends Controller
                             
                             //send email
                             Mail::send('emails.notify_general_fee', $data1, function($message) use ($data1,$email,$file_name){
-                                $message->from("dangote.gts@gmail.com", 'ATTC Nigeria Portal');
+                                $message->from("noreply@attcnigeria.org", 'ATTC Nigeria Portal');
                                 $message->to($email);
                                 //$message->bcc("isokenodigie@gmail.com");
                                 //$message->bcc("mailaustin37@gmail.com");
@@ -179,7 +179,7 @@ class FeesController extends Controller
                     ];
 
                     Mail::send('emails.bank_confirmation_cancelled', $data1, function($message) use ($data1,$email){
-                        $message->from("dangote.gts@gmail.com", 'ATTC Nigeria Portal');
+                        $message->from("noreply@attcnigeria.org", 'ATTC Nigeria Portal');
                         $message->to($email);
                         //$message->bcc("isokenodigie@gmail.com");
                         //$message->bcc("mailaustin37@gmail.com");
@@ -514,7 +514,7 @@ class FeesController extends Controller
 
                         //send email
                         Mail::send('emails.notify_general_fee', $data1, function($message) use ($data1,$email,$file_name){
-                            $message->from("dangote.gts@gmail.com", 'ATTC Nigeria Portal');
+                            $message->from("noreply@attcnigeria.org", 'ATTC Nigeria Portal');
                             $message->to($email);
                             //$message->bcc("isokenodigie@gmail.com");
                             //$message->bcc("mailaustin37@gmail.com");

@@ -163,7 +163,7 @@ class CourseController extends Controller
         
             $image_resize = Image::make($image->getRealPath());              
             $image_resize->resize(800, 600);
-            $image_resize->save(public_path("frontend/assets/img/courses/" .decrypt($request->course_id).".".$img_ext));
+            $image_resize->save(/*public_path*/("frontend/assets/img/courses/" .decrypt($request->course_id).".".$img_ext));
             
 
             $Course->disp_img = decrypt($request->course_id).".".$img_ext;

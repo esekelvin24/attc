@@ -41,6 +41,8 @@ Our Programmes | Courses
                     }
 
                     </style>
+
+            @if(count($course_collection) > 0)
                 @foreach($course_collection as $val)
                     <!-- Single Item -->
                     <div class="col-md-4 col-sm-6 equal-height">
@@ -78,6 +80,13 @@ Our Programmes | Courses
                     </div>
                     <!-- Single Item -->
                     @endforeach
+                @else
+                                        <div align="center">
+                                            <img width="150" height="150" src="{{asset('img/barred.png')}}" >
+                                            <p> There is no course available for this programme<p>
+                                        </div>
+
+                @endif
                 </div>
             </div>
         </div>

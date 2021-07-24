@@ -959,9 +959,9 @@ INSERT INTO `tbl_settings` VALUES (1, 'company_name', 'African Technical Trainin
 INSERT INTO `tbl_settings` VALUES (2, 'powered_by', 'Ese Kelvin', NULL);
 INSERT INTO `tbl_settings` VALUES (3, 'maintenance_mode', 'false', 'When this is true, site will display maintenance mode');
 INSERT INTO `tbl_settings` VALUES (4, 'google_api_key', 'AIzaSyAx79EFCwbousiM-kcnCsZXCdNYRMMDQhw', NULL);
-INSERT INTO `tbl_settings` VALUES (5, 'company_email', 'dangote.gts@gmail.com', NULL);
+INSERT INTO `tbl_settings` VALUES (5, 'company_email', 'noreply@attcnigeria.org', NULL);
 INSERT INTO `tbl_settings` VALUES (6, 'default_password', '123456', 'default password created for new users');
-INSERT INTO `tbl_settings` VALUES (7, 'Contact Us Email', 'dangote.gts@gmail.com', 'contact us admin email address');
+INSERT INTO `tbl_settings` VALUES (7, 'Contact Us Email', 'noreply@attcnigeria.org', 'contact us admin email address');
 
 -- ----------------------------
 -- Table structure for tbl_states

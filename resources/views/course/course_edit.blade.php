@@ -64,7 +64,7 @@
                                 </label>
                                <select  required autocomplete="off" class="form-control" id="course_duration"  name="course_duration">
                                 <option value="" >--SELECT DURATION--</option>
-                                @for($i = 1; $i < 10; $i++)
+                                @for($i = 1; $i < 13; $i++)
                                    <option {{$course_collection[0]->course_duration == $i?"selected":""}} value="{{$i}}" >{{$i}}</option>
                                 @endfor
                                </select>

@@ -1,6 +1,8 @@
 
 
-
+<script>
+	CKEDITOR.replace('ckeditor1');
+</script>
 
     <div class="content-box">
 		@if(Session::get('event_success'))

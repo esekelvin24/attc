@@ -109,9 +109,7 @@
 
               <tr>
                 <td class="bodycopy">
-                  <br/>
-                  Best Regards,<br/>
-                  Management
+                 
                 </td>
               </tr>
             </table>

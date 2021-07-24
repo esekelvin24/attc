@@ -81,12 +81,21 @@ Contact
                         <div class="heading">
                             <h4>Contact Us</h4>
                         </div>
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <form action="{{url('submit_contact_form')}}" method="POST" >
                          @csrf
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="form-group">
-                                        <input required class="form-control" id="name" name="name" placeholder="Name" type="text">
+                                        <input value="{{old('name')}}" required class="form-control" id="name" name="name" placeholder="Name" type="text">
                                         <span class="alert-error"></span>
                                     </div>
                                 </div>
@@ -94,7 +103,7 @@ Contact
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="form-group">
-                                        <input required class="form-control" id="email" name="email" placeholder="Email*" type="email">
+                                        <input value="{{old('email')}}" required class="form-control" id="email" name="email" placeholder="Email*" type="email">
                                         <span class="alert-error"></span>
                                     </div>
                                 </div>
@@ -102,7 +111,7 @@ Contact
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="form-group">
-                                        <input required class="form-control" id="phone" name="phone" placeholder="Phone" type="text">
+                                        <input value="{{old('phone')}}" required class="form-control" id="phone" name="phone" placeholder="Phone" type="text">
                                         <span class="alert-error"></span>
                                     </div>
                                 </div>
@@ -110,12 +119,23 @@ Contact
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="form-group comments">
-                                        <textarea required class="form-control" id="comments" name="comments" placeholder="Tell Me About Courses *"></textarea>
+                                        <textarea required class="form-control" id="comments" name="comments" placeholder="Tell Me About Courses *">{{old('comments')}}</textarea>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-md-12">
                                 <div class="row">
+                                    @if(config('services.recaptcha.key'))
+                                        <div class="g-recaptcha"
+                                            data-sitekey="{{config('services.recaptcha.key')}}">
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-12">
+                                <div class="row">
+                                     <br/>
                                     <button type="submit" >
                                         Send Message <i class="fa fa-paper-plane"></i>
                                     </button>

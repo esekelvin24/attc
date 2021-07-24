@@ -176,7 +176,7 @@ class FrontendController extends Controller
             DB::commit(); 
             
             Mail::send('emails.account_registration', $data, function($message) use ($data,$email){
-                $message->from("dangote.gts@gmail.com", 'ATTC Nigeria Portal');
+                $message->from("noreply@attcnigeria.org", 'ATTC Nigeria Portal');
                 $message->to($email);
             // $message->bcc("isokenodigie@gmail.com");
             // $message->bcc("mailaustin37@gmail.com");
@@ -365,10 +365,16 @@ class FrontendController extends Controller
             "email"=> "required",
             "name" => "required",
             "phone"=> "required",
-            "comments" => "required"
+            "comments" => "required",
+            'g-recaptcha-response' => 'required|recaptcha'
         ];
 
-        $this->validate($request, $rules);
+        $messages = array(
+            'g-recaptcha-response.recaptcha' => 'Captcha verification failed',
+            'g-recaptcha-response.required' => 'Please complete the captcha'
+        );
+
+        $this->validate($request, $rules, $messages);
 
         $company_details = DB::table('tbl_settings')->get();
         $contact_us_email = $company_details[6]->value;
@@ -379,7 +385,7 @@ class FrontendController extends Controller
       
             
             Mail::send('emails.contact_us', $data, function($message) use ($data,$contact_us_email){
-                $message->from("dangote.gts@gmail.com", 'ATTC Nigeria Portal');
+                $message->from("noreply@attcnigeria.org", 'ATTC Nigeria Portal');
                 $message->to($contact_us_email);
                 $message->subject('ATTC Web Contact Form');
             });
@@ -429,6 +435,12 @@ class FrontendController extends Controller
 
     public function course_details($course_id)
     {
+        $user_id = "239199991";
+        if (isset(Auth::user()->id))
+        {
+            $user_id = Auth::user()->id;
+        }
+
         $course_id =  decrypt($course_id); 
         $course_details = DB::table('tbl_courses')
         ->selectRaw('*,tbl_courses.disp_img as cover_img')
@@ -447,7 +459,7 @@ class FrontendController extends Controller
         ->join('tbl_application_courses as ac','ac.application_id', 'a.application_id')
         ->where('a.status',1)
         ->where('a.action_1_status','!=', 2)
-        ->where('a.user_id',Auth::user()->id)
+        ->where('a.user_id',$user_id)
         ->pluck('a.user_id','ac.course_id');
         
         return view('frontend.course_details',compact('already_registered_courses','course_details','similar_courses','instructor_list'));

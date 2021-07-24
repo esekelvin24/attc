@@ -223,7 +223,7 @@ class UserController extends Controller
             DB::commit(); 
             
             Mail::send('emails.account_creation', $data, function($message) use ($data,$email){
-                $message->from("dangote.gts@gmail.com", 'ATTC Nigeria Portal');
+                $message->from("noreply@attcnigeria.org", 'ATTC Nigeria Portal');
                 $message->to($email);
             // $message->bcc("isokenodigie@gmail.com");
             // $message->bcc("mailaustin37@gmail.com");

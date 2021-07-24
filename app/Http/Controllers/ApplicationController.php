@@ -353,7 +353,7 @@ class ApplicationController extends Controller
                         {
                             DB::commit(); 
                             Mail::send('emails.notify_applicant_success', $data, function($message) use ($data,$email,$file_name,$file_name_acceptance){
-                                $message->from("dangote.gts@gmail.com", 'ATTC Nigeria Portal');
+                                $message->from("noreply@attcnigeria.org", 'ATTC Nigeria Portal');
                                 $message->to($email);
                             // $message->bcc("isokenodigie@gmail.com");
                             // $message->bcc("mailaustin37@gmail.com");
@@ -406,7 +406,7 @@ class ApplicationController extends Controller
     //notify_applicant_failure
     
                     Mail::send('emails.notify_applicant_failure', $data, function($message) use ($data,$email){
-                        $message->from("dangote.gts@gmail.com", 'ATTC Nigeria Portal');
+                        $message->from("noreply@attcnigeria.org", 'ATTC Nigeria Portal');
                         $message->to($email);
                         /*$message->bcc("isokenodigie@gmail.com");*
                         $message->bcc("mailaustin37@gmail.com");*/
@@ -455,8 +455,8 @@ class ApplicationController extends Controller
                     ];
                     $file_name = 'ATTC_CERT-'.str_pad($check[0]->batch_id, 4, "0", STR_PAD_LEFT).'-'.$application_id.'.pdf';
                     
-             
-                    if (!file_exists( public_path()."/file_upload/applications/attc/$file_name"))
+                //check this if it works
+                    if (!file_exists( url("/file_upload/applications/attc/$file_name")))
                     {
                         $Applications_Documents_upload = new Applications_Documents_upload();
                         $Applications_Documents_upload->application_id = $application_id;

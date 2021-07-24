@@ -4,11 +4,12 @@
 
 
 <head>
+<script src='https://www.google.com/recaptcha/api.js'></script>
     <!-- ========== Meta Tags ========== -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Educom - Education & LMS Template">
+    <meta name="description" content="African Technical Training Center">
 
     <!-- ========== Page Title ========== -->
     <title>@yield('title-name')</title>
