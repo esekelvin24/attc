@@ -25,5 +25,10 @@ class AppServiceProvider extends ServiceProvider
     {   
         //
         Validator::extend('recaptcha', 'App\\Validators\\ReCaptcha@validate');
+        Validator::extend('accountDisabled', 'App\\Validators\\CustomLogin@accountDisabled');
+        Validator::extend('accountLocked', 'App\\Validators\\CustomLogin@accountLocked');
+        Validator::extend('accountConfirmationEmail', 'App\\Validators\\CustomLogin@accountConfirmationEmail');
+        Validator::extend('loginCheck', 'App\\Validators\\CustomLogin@loginCheck');
+        
     }
 }          

@@ -316,13 +316,14 @@ class DashboardController extends Controller
                 $roles_collection = Role::where('id','!=','1')->get();
                 
                 $branch = DB::table('tbl_branch')->get();
+                $states_collection = DB::table('tbl_states')->get();
 
                 $designation_collection = Designation::all();
                 $profile_collection=DB::table('users as u')
                     ->leftjoin('titles','titles.title_id','u.title_id')
                     ->leftjoin('tbl_designation','tbl_designation.designation_id','u.designation_id')
                     ->where('id',$id)
-                    ->select('u.user_type','u.branch_id','title_name','u.bank_bincodes','u.branch_id','u.title_id as title_id','u.designation_id as designation_id','rights_id','firstname','middlename','lastname','gender','pics','email','phone','dob','designation','status','created_at')
+                    ->select('u.permanent_state_of_residence','u.current_state_of_residence','u.permanent_residence','u.current_residence','u.state_of_origin','u.dob','u.nationality','u.user_type','u.branch_id','title_name','u.bank_bincodes','u.branch_id','u.title_id as title_id','u.designation_id as designation_id','rights_id','firstname','middlename','lastname','gender','pics','email','phone','dob','designation','status','created_at')
                     ->get();
                 $data=[
                         'title_collection'=>$title_collection,
@@ -331,7 +332,8 @@ class DashboardController extends Controller
                         'designation_collection'=>$designation_collection,
                         'branch' => $branch,
                         'user_id'=>$id,
-                        'bin_codes' => $bin_codes
+                        'bin_codes' => $bin_codes,
+                        'states_collection' => $states_collection
                 ];  
                 if($request->edit_type == "edit_staff")
                 {
@@ -347,7 +349,8 @@ class DashboardController extends Controller
                 $id=$request->user_id;
                 $title_collection=Title::all();
                 $roles_collection = Role::where('id','!=','1')->get();
-                
+                $states_collection = DB::table('tbl_states')->get();
+
 
                 $designation_collection=Designation::all();
                 $profile_collection=DB::table('users as u')
@@ -356,7 +359,7 @@ class DashboardController extends Controller
                     ->leftjoin('roles','roles.id','users_roles.role_id')
                     ->leftjoin('tbl_designation','tbl_designation.designation_id','u.designation_id')
                     ->where('u.id',$id)
-                    ->select('u.user_type','title_name','u.branch_id','u.title_id as title_id','u.designation_id as designation_id','role_id','firstname','middlename','lastname','gender','pics','email','phone','dob','designation','status','u.created_at')
+                    ->select('u.permanent_state_of_residence','u.current_state_of_residence','u.permanent_residence','u.current_residence','u.state_of_origin','u.dob','u.nationality','u.user_type','title_name','u.branch_id','u.title_id as title_id','u.designation_id as designation_id','role_id','firstname','middlename','lastname','gender','pics','email','phone','dob','designation','status','u.created_at')
                     ->get();
                     
                 $data=[
@@ -364,19 +367,20 @@ class DashboardController extends Controller
                         'profile_collection'=>$profile_collection,
                         'roles_collection'=>$roles_collection,
                         'designation_collection'=>$designation_collection,
-                        'user_id'=>$id
+                        'user_id'=>$id,
+                        'states_collection' => $states_collection
                 ];
             
                 return view("user.individual_edit")->with($data);
             }
-
 
         }else{ //profile button clicked
 
 
            
             $branch = DB::table('tbl_branch')->get();
-        
+            $states_collection = DB::table('tbl_states')->get();
+
             $id=Auth::user()->id;
             $title_collection=Title::all();
             $roles_collection = Role::all();
@@ -387,7 +391,7 @@ class DashboardController extends Controller
                 ->leftjoin('roles','roles.id','users_roles.role_id')
                 ->leftjoin('tbl_designation','tbl_designation.designation_id','u.designation_id')
                 ->where('u.id',$id)
-                ->select('u.user_type','u.branch_id','title_name','u.title_id as title_id','u.designation_id as designation_id','role_id','firstname','middlename','lastname','gender','pics','email','phone','dob','designation','status','u.created_at')
+                ->select('u.permanent_state_of_residence','u.current_state_of_residence','u.permanent_residence','u.current_residence','u.state_of_origin','u.dob','u.nationality','u.user_type','title_name','u.branch_id','u.title_id as title_id','u.designation_id as designation_id','role_id','firstname','middlename','lastname','gender','pics','email','phone','dob','designation','status','u.created_at')
                 ->get();
 
             $data=[
@@ -396,17 +400,14 @@ class DashboardController extends Controller
                     'roles_collection'=>$roles_collection,
                     'designation_collection'=>$designation_collection,
                     'user_id'=>$id,
-                    'branch' => $branch
+                    'branch' => $branch,
+                    'states_collection' => $states_collection
                     
             ];
            
             return view("user.profile_edit")->with($data);
             
         }
-
-
-
-
     }
 
     public function view_settings()
@@ -423,18 +424,33 @@ class DashboardController extends Controller
     }
     public function attempt_login(Request $request){
 
-       // dd($request);
-            if(Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-                return redirect()->route('dashboard')/*->with($data)*/;
+        
+        $rules = [
+            "email"=> "required|loginCheck|accountDisabled|accountConfirmationEmail"
+        ];
 
-            }else{
-                $data=[
-                    'login_error'=>$request->email
-                ];
-                return redirect()->route('home')->with($data);
-            }
+        $messages = array(
+            'account_disabled' => 'Your account has been disabled, Kindly contact admin',
+            'account_confirmation_email' => 'You account is not active, clicked on the confirmation link sent to your email',
+            'login_check' => 'These credentials do not match our records.'
+        );
+
+        $this->validate($request, $rules, $messages);
+        $target = redirect()->intended()->getTargetUrl( );
+        $intended_route = explode("?",$target);
 
 
+
+        if($intended_route[0] == url('/'))
+        {
+            return redirect()->route('dashboard')/*->with($data)*/;
+        }else
+        {
+            return redirect($intended_route[0]);
+        }
+        
+
+        
     }
     public function attempt_register(Request $request){
         Session::put('register_error_apply','ok');

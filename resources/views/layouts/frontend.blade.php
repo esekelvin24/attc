@@ -271,7 +271,7 @@
                
            
             <div class="d-flex flex-column text-center">
-            <form action="{{ route('login') }}" method="post">
+            <form action="{{ route('attempt_login') }}" method="post">
                 @csrf
                  <div class="form-group">
                    <input value="{{ old('email') }}" type="email" class="form-control" id="email1" name="email" placeholder="Your email address...">

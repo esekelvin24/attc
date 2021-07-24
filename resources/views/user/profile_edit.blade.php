@@ -52,14 +52,14 @@ $states = DB::table('tbl_states')->get();
 					?>
                        
 				</div>
-				<div class="value-pair">
+				{{--<div class="value-pair">
 					<div class="label">
 						Gender :
 					</div>
 					<div class="value">
 						<?php echo $profile_collection[0]->gender==1?"Male":"Female" ?>
 					</div>
-				</div>
+				</div> --}}
 				<div class="value-pair">
 					<div class="label">
 						Registered Since:
@@ -140,15 +140,77 @@ $states = DB::table('tbl_states')->get();
 						@foreach($branch as $val)
 						  <option value="{{$val->branch_code}}" @if($profile_collection[0]->branch_id == $val->branch_code) selected @endif>{{$val->branch_name}}</option>
 						@endforeach
+					</select>
+				</div>
+			</div>
 
+			<div class="col-sm-3">
+				<div class="form-group">
+					<label for="gender">State of origin</label>
+					<select required disabled class="form-control" id="state_of_origin"  name="state_of_origin">
+						<option value="">Select a State of Origin</option>
+						@foreach($states_collection as $val)
+						  <option value="{{$val->state_id}}" @if($profile_collection[0]->state_of_origin == $val->state_id) selected @endif>{{$val->state}}</option>
+						@endforeach
+					</select>
+				</div>
+			</div>
+           <div class="col-sm-3">
+				<div class="form-group">
+					<label for="">Nationality </label><input disabled name="nationality" value="{{$profile_collection[0]->nationality}}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="form-group">
+					<label for="">Date Of Birth </label><input disabled name="dob" value="{{$profile_collection[0]->dob}}" class="form-control" type="text">
+				</div>
+			</div>
+		</div>
+		<hr>
+		<h5 class="element-header">
+			Contact Address Information
+		</h5>
+		<div class ="row">
+		  <div class="col-sm-6">
+				<div class="form-group">
+					<label for="gender">Permanent Residence State</label>
+					<select required disabled class="form-control" id="permanent_state_of_residence"  name="permanent_state_of_residence">
+						<option value="">Select a State of Residence</option>
+						@foreach($states_collection as $val)
+						  <option value="{{$val->state_id}}" @if($profile_collection[0]->permanent_state_of_residence == $val->state_id) selected @endif>{{$val->state}}</option>
+						@endforeach
+					</select>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="form-group">
+					<label for="gender">Current Residence State</label>
+					<select required disabled class="form-control my-edit" id="current_state_of_residence"  name="current_state_of_residence">
+						<option value="">Select a State of Residence</option>
+						@foreach($states_collection as $val)
+						  <option value="{{$val->state_id}}" @if($profile_collection[0]->current_state_of_residence == $val->state_id) selected @endif>{{$val->state}}</option>
+						@endforeach
 					</select>
 				</div>
 			</div>
 		</div>
-		
-	
 
-			<div style="display:none" class="form-buttons-w edit_btn">
+		<div class="row">
+			<div class="col-sm-6">
+					<div class="form-group">
+						<label for="gender">Permanent Address</label>
+						<textarea name="permanent_residence" disabled row="3" class="form-control">{{$profile_collection[0]->permanent_residence}}</textarea>
+					</div>
+			</div>
+			<div class="col-sm-6">
+					<div class="form-group">
+						<label for="gender">Current Address</label>
+						<textarea disabled  name="current_residence" row="3" class="form-control my-edit">{{$profile_collection[0]->current_residence}}</textarea>
+					</div>
+			</div>
+		</div>
+
+			<div align="center" style="display:none" class="form-buttons-w edit_btn">
 				<button style="cursor: pointer" class="btn btn-lg btn-danger edit_staff" type="submit"> Save Edits</button>
 			</div>
 

@@ -205,7 +205,7 @@ class UserController extends Controller
         $unique_code=Str::random(45);
         $user->status   = 1;
         $user->email = $email;
-       
+        $user->email_verified_at = NOW();
         $user->password = $password;
         $user->remember_token = $unique_code;
         $user->save();
@@ -343,7 +343,15 @@ class UserController extends Controller
         $user->status = $request->status;
         $user->designation_id = $request->designation_id;
         $user->updated_at = now();
-	    $user->save();
+        $user->state_of_origin = $request->state_of_origin;
+        $user->nationality = $request->nationality;
+        $user->dob = $request->dob;
+        $user->permanent_state_of_residence  = $request->permanent_state_of_residence;
+        $user->current_state_of_residence = $request->current_state_of_residence;
+        $user->permanent_residence = $request->permanent_residence;
+        $user->current_residence = $request->current_residence;
+        $user->save();
+        
         $data=[
             'success'=>'Profile edits successfully saved! '
         ];
@@ -405,7 +413,8 @@ class UserController extends Controller
             $user->gender = $request->gender;
         
             $user->branch_id = $request->branch;
-            
+            $user->current_state_of_residence = $request->current_state_of_residence;
+            $user->current_residence = $request->current_residence;
             $user->updated_at = now();
             $user->save();
             $data=[
