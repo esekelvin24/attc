@@ -100,7 +100,7 @@
 <body>
 
     <!-- Preloader Start -->
-    <div class="se-pre-con"></div>
+    <div id="preloader" class="se-pre-con"></div>
     <!-- Preloader Ends -->
 
     <!-- Start Header Top 
@@ -457,7 +457,7 @@
     @endphp
 
     <script>
-    
+    setTimeout(function() {  $('#preloader').hide(); }, 5000);
     
     @if(Session::get('password_recovery'))
          Swal.fire('Success','{{Session::get('password_recovery')}}','success');
