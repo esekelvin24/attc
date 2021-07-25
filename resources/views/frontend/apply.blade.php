@@ -126,15 +126,14 @@ Apply for a programme
 
 
 
-
                     <div class="form-group"> 
                     <label class="col-md-4 control-label">PROGRAMMES</label>
                         <div class="col-md-4 selectContainer">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="fa fa-list"></i></span>
-                                <select required name="programme" id="programme" class="form-control selectpicker">
+                                <select onchange ="get_course_list()" required name="programme" id="programme" class="form-control selectpicker">
                                 @foreach($programme_collections as $val)
-                                    <option value="{{$val->programme_id}}">{{$val->programme_name}}</option>
+                                    <option {{$programme_id == $val->programme_id ?'selected="selected"':"" }} value="{{$val->programme_id}}">{{$val->programme_name}}</option>
                                 @endforeach
                                 </select>
                             </div>
@@ -255,7 +254,7 @@ Apply for a programme
                     <div class="form-group">
                     <label class="col-md-4 control-label"></label>
                     <div  align="center"><br>
-                    <button type="submit" class="btn btn-warning create" >SUBMIT <span class="fa fa-paper-plane"></span></button>
+                    <button  type="submit" class="btn btn-warning create" >SUBMIT <span class="fa fa-paper-plane"></span></button>
                     </div>
                     </div>
 
@@ -283,7 +282,35 @@ Apply for a programme
         maximumFractionDigits: 2
         });
 
-        
+        function get_course_list()
+        {
+             total_checked = 0;
+             $("#price_div").html("Total: ₦"+xx.format(total_checked));    
+             
+             var toks='{{ csrf_token() }}';
+
+             $.ajax(
+					{
+						type:"POST",
+						data:{ _token:toks, id:$("select#programme").val()},
+						url:"{{ route('get_apply_course_list') }}",
+						beforeSend:function()
+						{
+							//$('table').block({ message: null });
+						},
+						success: function(r)
+						{
+							//$('table').unblock();
+							$('div.modal-body').html(r);
+							$('.edit_area').modal({
+										backdrop: 'static',
+										keyboard: false
+							});
+
+						}
+					}
+			);
+        }        
 
         $('form#form').on('click','button.create',(function(e)
 		{

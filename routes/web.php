@@ -47,6 +47,12 @@ Route::post('/sumbit_registration', [App\Http\Controllers\FrontendController::cl
 Route::post('/attempt_login', [App\Http\Controllers\DashboardController::class, 'attempt_login'])->name('attempt_login');
 Route::post('/attempt_register', [App\Http\Controllers\DashboardController::class, 'attempt_register'])->name('attempt_register');
 
+//Forgot password
+Route::post('/password_reset', [App\Http\Controllers\FrontendController::class, 'password_reset'])->name('password_reset');
+Route::get('/reset_account', [App\Http\Controllers\FrontendController::class, 'reset_account'])->name('reset_account');
+Route::post('/save_changed_password', [App\Http\Controllers\FrontendController::class, 'save_changed_password'])->name('save_changed_password');
+
+
 
 Route::group(['middleware'=>['auth']], function(){
 
@@ -140,6 +146,7 @@ Route::get('/confirm_bank_transfer', [App\Http\Controllers\FeesController::class
 Route::post('/save_confirm_bank_transfer', [App\Http\Controllers\FeesController::class, 'save_confirm_bank_transfer'])->name('save_confirm_bank_transfer');
 
 
+Route::post('/get_apply_course_list', [App\Http\Controllers\FrontendController::class, 'get_apply_course_list'])->name('get_apply_course_list');
 
 Route::get('/apply', [App\Http\Controllers\FrontendController::class, 'apply'])->name('apply');
 Route::post('/sumbit_application', [App\Http\Controllers\FrontendController::class, 'sumbit_application'])->name('sumbit_application');
@@ -155,8 +162,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::get('/roles', [App\Http\Controllers\PermissionController::class, 'Permission'])->name('roles');
     
-//Forgot password
-Route::post('/forgot_password', [App\Http\Controllers\DashboardController::class, 'forgot_password'])->name('forgot_password');
 
 //First Time Password Change
 Route::post('/first_changepsw', [App\Http\Controllers\DashboardController::class, 'first_changepsw'])->name('first_changepsw');

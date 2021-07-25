@@ -260,7 +260,9 @@
         </div>
         <div class="modal-body">
             <div class="form-title text-center">
-               <h4>Login</h4>
+               <h4 class="login_form">Login</h4>
+               <h4 style="display:none" class="forgot_pass" >Password Recovery</h4>
+               
             </div>
             
              @error('email')
@@ -271,7 +273,7 @@
                
            
             <div class="d-flex flex-column text-center">
-            <form action="{{ route('attempt_login') }}" method="post">
+            <form class="login_form" action="{{ route('attempt_login') }}" method="post">
                 @csrf
                  <div class="form-group">
                    <input value="{{ old('email') }}" type="email" class="form-control" id="email1" name="email" placeholder="Your email address...">
@@ -286,8 +288,22 @@
                  @enderror
                 <button type="submit" class="btn  btn-block btn-round">Login</button>
             </form>
+
+            <form action="{{ route('password_reset') }}" method="post" style="display:none" class="forgot_pass">
+                @csrf
+                 <div class="form-group">
+                   <input value="{{ old('reset_email') }}" type="email" class="form-control" id="reset_email" name="reset_email" placeholder="Your email address...">
+                </div>
+                 <input onClick="this.form.submit(); this.disabled=true; this.value='Sending…'; " type="submit" class="btn  btn-block btn-round" value="Send Recover Link">
+            </form>
+
             
-            <div class="text-center text-muted delimiter"><a href="#">forgot password?</a></div>
+            
+            <div class="text-center text-muted delimiter">
+            
+                <a class="login_form" href="javascript:display_forgot_pass_form()">forgot password?</a></div>
+                <a style="display:none" class="forgot_pass" href="javascript:display_login()">Login</a></div>
+
                 <div class="modal-footer d-flex justify-content-center">
                     <div class="signup-section">New User? <a href="{{url('/register')}}" class="text-info"> Register</a>.</div>
                 </div>
@@ -411,7 +427,7 @@
     <script src="{{asset('frontend/assets/js/count-to.js')}}"></script>
     <script src="{{asset('frontend/assets/js/YTPlayer.min.js')}}"></script>
     <script src="{{asset('frontend/assets/js/loopcounter.js')}}"></script>
-    <script src="{{asset('frontend/assets/js/jquery.nice-select.min.js')}}"></script>
+
     <script src="{{asset('frontend/assets/js/bootsnav.js')}}"></script>
     <script src="{{asset('frontend/assets/js/main.js')}}"></script>
     <script src="{{asset('frontend/assets/js/drag-and-drop.js')}}"></script>
@@ -442,7 +458,18 @@
 
     <script>
     
+    
+    @if(Session::get('password_recovery'))
+         Swal.fire('Success','{{Session::get('password_recovery')}}','success');
+    @endif
 
+    @if(Session::get('reset_sent'))
+         Swal.fire('Success','{{Session::get('reset_sent')}}','success');
+    @endif
+
+     @if(Session::get('reset_email_not_found'))
+         Swal.fire('Error','{{Session::get('reset_email_not_found')}}','error');
+     @endif
 
     @if($email_verified == true)
        Swal.fire('Success','Your account has been verified','success');
@@ -487,6 +514,20 @@
              }
          @endphp
     @endif
+
+
+    function display_forgot_pass_form()
+            {
+                $(".login_form").hide('fast');
+                $(".forgot_pass").show('fast');
+            }
+
+    function display_login()
+    {
+        $(".login_form").show('fast');
+        $(".forgot_pass").hide('fast');
+    }
+
    
 </script>
 

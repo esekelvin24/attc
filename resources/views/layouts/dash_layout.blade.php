@@ -1274,9 +1274,9 @@ exit();
 
                         <div style="display:none" class="row bank_transfer_interface">
                            <div style="border-color: rgba(201, 76, 76, 0.3); border-style: solid;" align="center" class="col-md-12">
-                             <p><strong>Bank Name</strong>: GT Bank</p>
-                             <p><strong>Account Name</strong>: African Technical Training center</p>
-                             <p><strong>Account No.</strong>: 0000000000</p>
+                             <p><strong>Bank Name</strong>: Sterling Bank</p>
+                             <p><strong>Account Name</strong>: African Technical Training Centre Limited</p>
+                             <p><strong>Account No.</strong>: 0502565792</p>
                            </div>
                            <div>
                            <hr>

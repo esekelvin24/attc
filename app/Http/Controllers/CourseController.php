@@ -256,8 +256,7 @@ class CourseController extends Controller
         $assigned_courses = DB::table('tbl_map_lecturer_to_courses')->where('lecturer_user_id',Auth::user()->id)->pluck('course_id')->toArray();
 
     
-        $course_collection =  Course::
-        whereIn('course_id',$assigned_courses)
+        $course_collection =  Course::whereIn('course_id',$assigned_courses)
         ->leftjoin('tbl_programmes','tbl_programmes.programme_id','tbl_courses.programme_id')
         ->get();
         //dd($cross_course_collection);
@@ -299,16 +298,16 @@ class CourseController extends Controller
            $lecturer_id = $request->lecturer;
 
            $get = DB::table('tbl_map_lecturer_to_courses')
-           ->where("lecturer_user_id",$request->lecturer)
+           ->where("lecturer_user_id", $request->lecturer)
            ->get();
 
            $lect_map_history = array();
            foreach ($get as $val)
            {
-              $lect_map_history[] = $val->course_id;
+              $lect_map_history[$val->course_id] = "";
            }
 
-           $lecturer_details = DB::table('users')->where('id', Auth::user()->id)->first();
+          // $lecturer_details = DB::table('users')->where('id', Auth::user()->id)->first();
 
            $builder = Course::query();
            $builder->where('tbl_courses.programme_id',$id);

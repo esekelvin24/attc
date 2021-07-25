@@ -90,6 +90,8 @@ class FeesController extends Controller
 
             if (count($transfer_details) > 0)
             {
+
+                
                 DB::beginTransaction();
 
                 $Payments = Payments::find($transfer_details[0]->payment_id);
@@ -107,14 +109,24 @@ class FeesController extends Controller
                 $Payments->bank_trans_confirmed_by = Auth::user()->id;
                 $Payments->bank_trans_confirmed_date =  NOW();
                 $Payments->save();
-
-                //change the user role
-                $role = DB::table('users_roles')->where('user_id', $Payments->user_id)->update(["role_id"=> 6]); // 6 -> Student
-        
-
+                
+                $applicant_role =  DB::table('users_roles')->where('user_id', $Payments->user_id)->get();
+                
+                if(count($applicant_role) > 0)
+                {
+                    if($applicant_role[0]->role_id != 6)
+                    {
+                        //change the user role
+                        $role = DB::table('users_roles')->where('user_id', $Payments->user_id)->update(["role_id"=> 6]); // 6 -> Student             
+                    }else{
+                        $role = true;
+                    }
+                }
+               
 
                 if($Payments && $update_application && $role)
                 {
+                   
                     $application_collection = DB::table('tbl_applications')
                             ->join('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
                             ->join('users','users.id','tbl_applications.user_id')

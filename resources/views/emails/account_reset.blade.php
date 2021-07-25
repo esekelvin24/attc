@@ -2,7 +2,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <title>IAUE Portal Password reset request</title>
+  <title>ATTC Portal Password reset request</title>
   <style type="text/css">
     body {margin: 0; padding: 0; min-width: 100%!important;}
     img {height: auto;}
@@ -146,7 +146,7 @@
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
               <tr>
                 <td align="center" class="footercopy">
-                  &reg; Copyright {{date('Y')}} Ignatius Ajuru Distance Learning Portal.
+                  &reg; Copyright {{date('Y')}} African Technical Training Center.
                   All rights reserved<br/>
                 </td>
               </tr>

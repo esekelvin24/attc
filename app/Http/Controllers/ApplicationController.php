@@ -33,14 +33,14 @@ class ApplicationController extends Controller
     public function my_application()
     {
         $all_application_collection = Application::join('tbl_programmes','tbl_programmes.programme_id','tbl_applications.programme_id')
-        ->selectRaw('*,tbl_applications.created_at as application_date, SUM(ac.application_course_price) as programme_total_amt')
+        ->selectRaw('*, tbl_applications.created_at as application_date, SUM(ac.application_course_price) as programme_total_amt')
         ->join('users','users.id','tbl_applications.user_id')
         ->join('tbl_application_courses as ac','ac.application_id','tbl_applications.application_id')
         ->where('tbl_applications.user_id',Auth::user()->id)
         ->groupBy('tbl_applications.application_id')
         ->orderBy('tbl_applications.created_at','desc')
         ->get();
-
+    
         return view('applications.my_application', compact('all_application_collection'));
     }
 

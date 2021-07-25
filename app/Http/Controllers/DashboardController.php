@@ -23,7 +23,7 @@ class DashboardController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth',['except'=> ['attempt_login','attempt_register','forgot_password']]);
+        $this->middleware('auth',['except'=> ['attempt_login','attempt_register']]);
     }
 
 
@@ -503,41 +503,6 @@ class DashboardController extends Controller
         return redirect()->route('apply')->with($data);
 
     }
-    public function forgot_password(Request $request){
-        Session::put('reset_password_error','ok');
-        $rules =
-            ['reset_email'=>'required|email'];
-        //check validation options
-        $this->validate($request,$rules);
-        Session::forget('reset_password_error');
-        Session::save();
-
-        $user_collection= User::select('firstname','lastname','email')->where('email',$request->reset_email)->get();
-
-        if($user_collection->isEmpty()){
-            $data=[
-                'reset_email_not_found'=>'yes'
-            ];
-            return redirect()->route('home')->with($data);
-
-        }else{
-            $unique_code=Str::random(55);
-            User::where('email',$request->reset_email)->update(['email_reset_token'=>$unique_code]);
-            $link = route("reset_account",$unique_code);//verify email link
-            $data = array('full_name'=>$user_collection[0]->firstname." ".$user_collection[0]->lastname,'link'=> $link);
-            Mail::send('emails.account_reset', $data, function($message) use ($data){
-                $message->from("info.iaue.portals@gmail.com", 'IAUE Distance Learning Portal');
-                $message->to(request()->reset_email);
-                $message->subject('Password reset request');
-            });
-
-            $data=[
-                'reset_sent'=>'yes'
-            ];
-            return redirect()->route('home')->with($data);
-
-        }
-
-    }
+   
 
 }

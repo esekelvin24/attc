@@ -38,7 +38,7 @@
 						
 							@foreach($course_collection as $val)
 								<tr>
-								<td><input {{  in_array($val->course_id, $lect_map_history, TRUE)? "checked":""}}   onchange="setVal()" class="theClass" type="checkbox" id="courses" value="{{$val->course_id}}"  name="courses[]" ></td>
+								<td><input {{ isset($lect_map_history[$val->course_id])?"checked":""}}   onchange="setVal()" class="theClass" type="checkbox" id="courses" value="{{$val->course_id}}"  name="courses[]" ></td>
 								<td>{{$val->course_name}}</td>
 									<td>{{$val->short_code}}</td>
 								</tr>

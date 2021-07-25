@@ -18,6 +18,7 @@ use Auth;
 use Mail;
 use App\Models\Applications_Documents_upload;
 use Illuminate\Support\Facades\Hash; 
+use DateTime;
 
 
 
@@ -194,12 +195,173 @@ class FrontendController extends Controller
     public function register()
     {
 
-        
+        if(isset(Auth::user()->id))
+        {
+            return redirect('/dashboard');
+        }
         $title_collections = DB::table('titles')->get();
 
         $states_collection = DB::table('tbl_states')->get();
 
         return view('frontend.register',compact('title_collections','states_collection'));
+    }
+
+    public function save_changed_password(Request $request)
+    {
+        $rules = [
+            'unique_id' => 'required',
+            'new_password'=>'required|min:6',
+            'confirm_password'=>'required|min:6|same:new_password'
+        ];
+
+        $this->validate($request, $rules);
+
+        $unique_id = $request->unique_id;
+
+        $psw_collection= User::select('email','firstname','email_reset_token')->where('email_reset_token',$unique_id)->get();
+        
+        if(!$psw_collection->isEmpty()) 
+        {
+            $d1 = new DateTime($psw_collection[0]->email_reset_time);
+            $d2 = new DateTime(date('Y-m-d H:m:s'));
+            $interval = $d1->diff($d2);
+            $diffInSeconds = $interval->s; //45
+            $diffInMinutes = $interval->i; //23
+            $diffInHours   = $interval->h; //8
+            $diffInDays    = $interval->d; //21
+            $diffInMonths  = $interval->m; //4
+            $diffInYears   = $interval->y; //1
+            
+
+            if ($diffInHours < 1)
+            {
+                $update = User::where('email_reset_token',$unique_id)->update(['email_reset_token'=> "", "password" => Hash::make($request->new_password)]);
+            
+                if($update)
+                {
+                    return redirect('/')->with("password_recovery","Your password has been changed, you can now login with your new password");
+            
+                }
+            }
+        }
+
+        return redirect('/reset_account');
+    
+
+
+    }
+
+    public function reset_account(Request $request)
+    {
+
+        $unique_id = $request->recovery;
+
+        $psw_collection= User::select('email','firstname','email_reset_token','email_reset_time')->where('email_reset_token',$unique_id)->get();
+        
+        if(!$psw_collection->isEmpty()) {
+
+            
+            $d1 = new DateTime($psw_collection[0]->email_reset_time);
+            $d2 = new DateTime(date('Y-m-d H:m:s'));
+            $interval = $d1->diff($d2);
+            $diffInSeconds = $interval->s; //45
+            $diffInMinutes = $interval->i; //23
+            $diffInHours   = $interval->h; //8
+            $diffInDays    = $interval->d; //21
+            $diffInMonths  = $interval->m; //4
+            $diffInYears   = $interval->y; //1
+            
+
+            if ($diffInHours < 1)
+            {
+                $stored_unique_id = $psw_collection[0]->email_reset_token;
+                $firstname = $psw_collection[0]->firstname;
+                $email = $psw_collection[0]->email;
+                
+                return view('frontend.password_change',compact('unique_id'));
+            }
+            
+        }
+
+        return view('frontend.password_change');
+    
+    }
+
+    public function password_reset(Request $request){
+       
+         // Session::put('reset_password_error','ok');
+          $rules =
+              ['reset_email'=>'required|email'];
+          //check validation options
+          $this->validate($request,$rules);
+          //Session::forget('reset_password_error');
+          //Session::save();
+  
+          $user_collection= User::select('firstname','lastname','email')->where('email',$request->reset_email)->get();
+       
+          if($user_collection->isEmpty()){
+              
+              return redirect('/')->with("reset_email_not_found","The email address you entered is not associated with any account");
+          }else{
+              
+              $unique_code=Str::random(55);
+              User::where('email',$request->reset_email)->update(['email_reset_token'=>$unique_code, "email_reset_time"=>NOW()]);
+              $link = route("reset_account","recovery=".$unique_code);//verify email link
+              $data = array('full_name'=>$user_collection[0]->firstname." ".$user_collection[0]->lastname,'link'=> $link);
+              Mail::send('emails.account_reset', $data, function($message) use ($data){
+                  $message->from("noreply@attcnigeria.org", 'ATTC Nigeria Portal');
+                  $message->to(request()->reset_email);
+                  $message->subject('Password reset request'); 
+              });
+  
+              
+              return redirect('/')->with("reset_sent","A password recovery link has been sent to your email");
+  
+          }
+  
+      }
+
+    public function get_apply_course_list(Request $request)
+    {
+        $already_registered_courses = DB::table('tbl_applications as a')
+        ->join('tbl_application_courses as ac','ac.application_id', 'a.application_id')
+        ->where('a.status',1)
+        ->where('a.action_1_status','!=', 2)
+        ->where('a.user_id',Auth::user()->id)
+        ->pluck('ac.course_id');
+
+
+        $course_collection = DB::table('tbl_courses')->whereNotIn('course_id',$already_registered_courses)->where('programme_id', $request->id)->get();
+        $course_list = "";
+
+        foreach($course_collection as $val)
+        {
+            $course_list = $course_list. '<div class="p-2 rounded checkbox-form">
+                                 <div class="form-check checked"> <input data-id="'.$val->course_price.'" id="'.$val->course_price.'"  name="course[]" style="min-height:1px !important;" class="my_price" type="checkbox" value="'.$val->course_id.'" id="flexCheckDefault-1"> <label class=" newsletter form-check-label" for="flexCheckDefault-1"> '.$val->short_code.' '.$val->course_name.' | '.$val->course_duration.' Weeks | ₦'.$val->course_price.'  </label> </div>
+                            </div>';
+        }
+
+ echo ' <script>
+        $(function()
+        {
+            $(\'.my_price\').each(function () {
+                total_checked += this.checked ?parseFloat($(this).data("id")): 0 ;  
+              }); 
+             });
+        
+            $(\'.my_price\').change(function() {
+                
+                total_checked = 0;
+                $(\'.my_price\').each(function () {
+                    total_checked += this.checked ?parseFloat($(this).data("id")): 0 ;  
+                }); 
+                
+                $("#price_div").html("Total: ₦"+xx.format(total_checked));         
+            });
+            </script>
+     ';
+
+        echo $course_list;
     }
 
     public function apply(Request $request)
@@ -242,7 +404,7 @@ class FrontendController extends Controller
         $course_builder->whereNotIn('course_id',$already_registered_courses);
         $qualification_collections = DB::table('tbl_qualifications')->get();
         $course_collection = $course_builder->get();
-
+        
         return view ('frontend.apply',compact('programme_collections','course_collection','course_id','programme_id','price','qualification_collections'));
     }
 
@@ -269,6 +431,8 @@ class FrontendController extends Controller
        ];
        
        $this->validate($request,$rules);
+
+ 
 
        $course_array = $request->course;
        
