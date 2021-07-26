@@ -109,7 +109,7 @@ class DashboardController extends Controller
             $app_builder->whereIn('ac.course_id',$lect_map_history);
 
             //check if admin has approved, if the application is still active, if the user has paid, if the user accepted the offer
-            $app_builder->where('action_1_user',1)
+            $app_builder->where('action_1_status',1)
             ->where('status',1)
             ->where('payment_status',1)
             ->where('accept_offer',1)

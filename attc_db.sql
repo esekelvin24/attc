@@ -11,7 +11,7 @@
  Target Server Version : 100328
  File Encoding         : 65001
 
- Date: 25/07/2021 22:40:07
+ Date: 26/07/2021 09:16:58
 */
 
 SET NAMES utf8mb4;
@@ -366,9 +366,9 @@ CREATE TABLE `tbl_application_courses`  (
 -- ----------------------------
 -- Records of tbl_application_courses
 -- ----------------------------
-INSERT INTO `tbl_application_courses` VALUES (31, 42, 128000.00, 20, '2021-07-24 18:03:58', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `tbl_application_courses` VALUES (32, 32, 198000.00, 19, '2021-07-25 18:55:37', NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `tbl_application_courses` VALUES (33, 42, 128000.00, 19, '2021-07-25 22:22:46', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tbl_application_courses` VALUES (34, 36, 35000.00, 19, '2021-07-26 00:29:33', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tbl_application_courses` VALUES (35, 32, 198000.00, 19, '2021-07-26 00:35:30', NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `tbl_application_courses` VALUES (36, 42, 128000.00, 20, '2021-07-26 06:50:51', NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for tbl_application_documents
@@ -409,15 +409,18 @@ CREATE TABLE `tbl_application_documents_upload`  (
 -- ----------------------------
 -- Records of tbl_application_documents_upload
 -- ----------------------------
-INSERT INTO `tbl_application_documents_upload` VALUES (31, 1, 'officialmichelle12@gmail.com-wm44m65SUu.JPG', '2021-07-24 18:03:58', '2021-07-24 18:03:58');
-INSERT INTO `tbl_application_documents_upload` VALUES (31, 3, 'Offer_Letter_ATTC-0001-31.pdf', '2021-07-24 18:06:10', '2021-07-24 18:06:10');
-INSERT INTO `tbl_application_documents_upload` VALUES (31, 4, 'Acceptance_Letter_ATTC-0001-31.pdf', '2021-07-24 18:06:10', '2021-07-24 18:06:10');
-INSERT INTO `tbl_application_documents_upload` VALUES (31, 5, 'Completed_Offer_ATTC-0001-31.pdf', '2021-07-24 18:12:53', '2021-07-24 18:12:53');
-INSERT INTO `tbl_application_documents_upload` VALUES (32, 1, 'eseboy24@gmail.com-YUKr3jzipg.pdf', '2021-07-25 18:55:37', '2021-07-25 18:55:37');
-INSERT INTO `tbl_application_documents_upload` VALUES (32, 3, 'Offer_Letter_ATTC-0001-32.pdf', '2021-07-25 18:59:25', '2021-07-25 18:59:25');
-INSERT INTO `tbl_application_documents_upload` VALUES (32, 4, 'Acceptance_Letter_ATTC-0001-32.pdf', '2021-07-25 18:59:25', '2021-07-25 18:59:25');
-INSERT INTO `tbl_application_documents_upload` VALUES (32, 5, 'Completed_Offer_ATTC-0001-32.pdf', '2021-07-25 19:02:29', '2021-07-25 19:02:29');
-INSERT INTO `tbl_application_documents_upload` VALUES (33, 1, 'eseboy24@gmail.com-Rw965wgSuU.pdf', '2021-07-25 22:22:46', '2021-07-25 22:22:46');
+INSERT INTO `tbl_application_documents_upload` VALUES (34, 1, 'eseboy24@gmail.com-bfDke5AI3W.pdf', '2021-07-26 00:29:33', '2021-07-26 00:29:33');
+INSERT INTO `tbl_application_documents_upload` VALUES (34, 3, 'Offer_Letter_ATTC-0001-34.pdf', '2021-07-26 00:30:36', '2021-07-26 00:30:36');
+INSERT INTO `tbl_application_documents_upload` VALUES (34, 4, 'Acceptance_Letter_ATTC-0001-34.pdf', '2021-07-26 00:30:36', '2021-07-26 00:30:36');
+INSERT INTO `tbl_application_documents_upload` VALUES (34, 5, 'Completed_Offer_ATTC-0001-34.pdf', '2021-07-26 00:31:02', '2021-07-26 00:31:02');
+INSERT INTO `tbl_application_documents_upload` VALUES (35, 1, 'eseboy24@gmail.com-5RZXcP1CeA.pdf', '2021-07-26 00:35:30', '2021-07-26 00:35:30');
+INSERT INTO `tbl_application_documents_upload` VALUES (35, 3, 'Offer_Letter_ATTC-0001-35.pdf', '2021-07-26 00:43:48', '2021-07-26 00:43:48');
+INSERT INTO `tbl_application_documents_upload` VALUES (35, 4, 'Acceptance_Letter_ATTC-0001-35.pdf', '2021-07-26 00:43:48', '2021-07-26 00:43:48');
+INSERT INTO `tbl_application_documents_upload` VALUES (35, 5, 'Completed_Offer_ATTC-0001-35.pdf', '2021-07-26 00:44:12', '2021-07-26 00:44:12');
+INSERT INTO `tbl_application_documents_upload` VALUES (36, 1, 'officialmichelle12@gmail.com-AbyLeEPxO7.JPG', '2021-07-26 06:50:51', '2021-07-26 06:50:51');
+INSERT INTO `tbl_application_documents_upload` VALUES (36, 3, 'Offer_Letter_ATTC-0001-36.pdf', '2021-07-26 06:52:21', '2021-07-26 06:52:21');
+INSERT INTO `tbl_application_documents_upload` VALUES (36, 4, 'Acceptance_Letter_ATTC-0001-36.pdf', '2021-07-26 06:52:21', '2021-07-26 06:52:21');
+INSERT INTO `tbl_application_documents_upload` VALUES (36, 5, 'Completed_Offer_ATTC-0001-36.pdf', '2021-07-26 06:56:05', '2021-07-26 06:56:05');
 
 -- ----------------------------
 -- Table structure for tbl_applications
@@ -445,14 +448,14 @@ CREATE TABLE `tbl_applications`  (
   INDEX `programme_id_new`(`programme_id`) USING BTREE,
   CONSTRAINT `academic_qualification` FOREIGN KEY (`academic_qualification`) REFERENCES `tbl_qualifications` (`qualification_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `programme_id_new` FOREIGN KEY (`programme_id`) REFERENCES `tbl_programmes` (`programme_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 34 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_applications
 -- ----------------------------
-INSERT INTO `tbl_applications` VALUES (31, 1, 20, 1, 1, 1, '2021-07-24 18:06:08', 15, NULL, NULL, NULL, NULL, '2021-07-24 18:13:08', '2021-07-24 18:03:58', 1, 1);
-INSERT INTO `tbl_applications` VALUES (32, 3, 19, 1, 1, 1, '2021-07-25 18:59:23', 1, NULL, NULL, NULL, NULL, '2021-07-25 19:10:57', '2021-07-25 18:55:37', 1, 1);
-INSERT INTO `tbl_applications` VALUES (33, 1, 19, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, '2021-07-25 22:22:46', '2021-07-25 22:22:46', 0, 0);
+INSERT INTO `tbl_applications` VALUES (34, 5, 19, 1, 1, 1, '2021-07-26 00:30:34', 1, NULL, NULL, NULL, NULL, '2021-07-26 00:31:17', '2021-07-26 00:29:33', 1, 1);
+INSERT INTO `tbl_applications` VALUES (35, 3, 19, 1, 1, 1, '2021-07-26 00:43:46', 1, NULL, NULL, NULL, NULL, '2021-07-26 00:44:21', '2021-07-26 00:35:30', 1, 1);
+INSERT INTO `tbl_applications` VALUES (36, 10, 20, 1, 1, 1, '2021-07-26 06:52:19', 15, NULL, NULL, NULL, NULL, '2021-07-26 06:56:36', '2021-07-26 06:50:51', 1, 1);
 
 -- ----------------------------
 -- Table structure for tbl_assessment_creation
@@ -473,13 +476,12 @@ CREATE TABLE `tbl_assessment_creation`  (
   `start_date` datetime(0) NULL DEFAULT NULL COMMENT 'Date it will be display on student dashboard',
   `start_time` time(0) NULL DEFAULT NULL COMMENT 'Time it will be display on student dashboard',
   PRIMARY KEY (`assessment_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_assessment_creation
 -- ----------------------------
-INSERT INTO `tbl_assessment_creation` VALUES (6, '1', 1, '6', 1, 1, 0, 0, '2021-06-23 00:00:00', '18:00:00', '2021-06-09 16:39:58', '2021-06-09 00:00:00', '16:42:00');
-INSERT INTO `tbl_assessment_creation` VALUES (7, '6', 1, '6', 1, 1, 0, 0, '2021-06-24 00:00:00', '21:00:00', '2021-06-22 19:54:17', '2021-06-22 00:00:00', '19:00:00');
+INSERT INTO `tbl_assessment_creation` VALUES (8, '32', 1, '6', 1, 1, 0, 0, '2021-07-28 00:00:00', '18:00:00', '2021-07-26 00:47:48', '2021-07-26 00:00:00', '00:00:00');
 
 -- ----------------------------
 -- Table structure for tbl_assessment_session
@@ -583,6 +585,11 @@ CREATE TABLE `tbl_assessments_students`  (
   CONSTRAINT `assessment_id` FOREIGN KEY (`assessment_id`) REFERENCES `tbl_assessment_creation` (`assessment_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `user_id_two` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tbl_assessments_students
+-- ----------------------------
+INSERT INTO `tbl_assessments_students` VALUES (8, 19, 6, '2021-07-26 00:49:01');
 
 -- ----------------------------
 -- Table structure for tbl_batch
@@ -807,16 +814,16 @@ CREATE TABLE `tbl_map_lecturer_to_courses`  (
   `created_at` datetime(0) NULL DEFAULT NULL,
   `created_by` varchar(10) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 52 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 54 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_map_lecturer_to_courses
 -- ----------------------------
 INSERT INTO `tbl_map_lecturer_to_courses` VALUES (42, 6, 6, '2021-06-22 19:50:22', '1');
-INSERT INTO `tbl_map_lecturer_to_courses` VALUES (43, 1, 21, '2021-07-24 18:44:48', '15');
-INSERT INTO `tbl_map_lecturer_to_courses` VALUES (45, 42, 21, '2021-07-24 19:22:20', '15');
 INSERT INTO `tbl_map_lecturer_to_courses` VALUES (46, 32, 6, '2021-07-25 19:10:50', '15');
 INSERT INTO `tbl_map_lecturer_to_courses` VALUES (51, 42, 6, '2021-07-25 21:52:08', '1');
+INSERT INTO `tbl_map_lecturer_to_courses` VALUES (52, 36, 6, '2021-07-26 00:33:41', '1');
+INSERT INTO `tbl_map_lecturer_to_courses` VALUES (53, 42, 21, '2021-07-26 06:53:00', '15');
 
 -- ----------------------------
 -- Table structure for tbl_payments
@@ -836,7 +843,7 @@ CREATE TABLE `tbl_payments`  (
   `bank_trans_confirmed_by` int(10) NULL DEFAULT NULL,
   `bank_trans_confirmed_date` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`payment_id`) USING BTREE
-) ENGINE = MyISAM AUTO_INCREMENT = 98 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
+) ENGINE = MyISAM AUTO_INCREMENT = 101 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tbl_payments
@@ -847,6 +854,9 @@ INSERT INTO `tbl_payments` VALUES (92, 14, 154000, 27, 1, '14_20210615_35007', '
 INSERT INTO `tbl_payments` VALUES (95, 16, 154000, 30, 1, '16_20210722_95567', '2021-07-22 16:21:38', 'success', 15400000, 1, NULL, NULL);
 INSERT INTO `tbl_payments` VALUES (96, 20, 128000, 31, 1, NULL, '2021-07-24 18:13:08', 'success', NULL, 2, 15, '2021-07-24 18:16:09');
 INSERT INTO `tbl_payments` VALUES (97, 19, 198000, 32, 1, NULL, '2021-07-25 19:10:57', 'success', NULL, 2, 15, '2021-07-25 19:11:23');
+INSERT INTO `tbl_payments` VALUES (98, 19, 35000, 34, 1, NULL, '2021-07-26 00:31:17', 'success', NULL, 2, 1, '2021-07-26 00:31:44');
+INSERT INTO `tbl_payments` VALUES (99, 19, 198000, 35, 1, NULL, '2021-07-26 00:44:21', 'success', NULL, 2, 1, '2021-07-26 00:44:42');
+INSERT INTO `tbl_payments` VALUES (100, 20, 128000, 36, 1, NULL, '2021-07-26 06:56:36', 'success', NULL, 2, 15, '2021-07-26 06:57:26');
 
 -- ----------------------------
 -- Table structure for tbl_programmes
@@ -1189,10 +1199,10 @@ CREATE TABLE `users`  (
 -- ----------------------------
 INSERT INTO `users` VALUES (1, 'Ese', 'Kelvin', 'Uvbiekpahor', 'esekelvin24@gmail.com', '2021-07-24 21:51:06', '$2y$10$EQfCJPWAztoqoylE63zjIuvyx9uSNPc.wnarqvMkc3F/wdR.hD37.', 'eseuvbiekpahor_7129554.jpg', '080', '0000-00-00', '1', '1', '1', '1', NULL, '2021-05-03 14:02:22', '2021-05-23 23:13:01', 1, 1, NULL, 2, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `users` VALUES (6, 'Lecturer', '', 'One', 'ese.kelvin@dangoteprojects.com', '2021-07-24 21:51:02', '$2y$10$AnTYstsRXUc/S3mEeoR2legmCPy4u/5f87K8.7Guf4QjaI.1Y46D2', 'no_pic.jpg', '08097191027', '0000-00-00', '0', '1', '1', '1', '2NeS4nD0QgUF3ZZNzkCMnax04MXWxfb0dbDXCHA71YIlJT6xY9n1RgikIN8l', '2021-06-07 00:00:00', '2021-06-07 10:02:02', 1, 5, '1', 2, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `users` VALUES (15, 'Michelle', '', 'Obiorah', 'officialmichelle12@yahoo.com', '2021-07-22 13:23:35', '$2y$10$FDCQc6dqYsQg8l2xHMbewO.MSXPfUyXwhLlwLn/jBvk4NO3P.pYYm', 'no_pic.jpg', '08135559646', '0000-00-00', '1', '1', '1', '1', 'cHBpKPF2Z7Ot1byM8GiGxbRg3XjRxuB5p4WUqfhKp7J2OyD8euvkXlfNJbuy', '2021-07-22 00:00:00', '2021-07-22 13:23:35', 1, 1, '1', 2, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `users` VALUES (19, 'Bello', 'Usman', 'Kelvin', 'eseboy24@gmail.com', '2021-07-24 17:52:19', '$2y$10$7qcFIOWvfKVZ9LMxWzp8xuhQBsBof/Ea7XcBA6zU9PMWOMatHMAne', 'no_pic.jpg', '08097191027', '2021-07-22', '0', '1', '1', '1', '93ImUVs9T9RCizSgGUE5CqARDyKtsUDLljK2bzGlckcue0UcU1nOHtCvFmPg', '2021-07-24 00:00:00', '2021-07-25 22:00:40', 1, 4, '1', 1, NULL, NULL, 1, 'Nigeria', 1, 1, 2, 'Hi', 'Hi', 'Islam', '', '2021-07-25 22:00:00');
-INSERT INTO `users` VALUES (20, 'michelle', 'ebuka', 'obiorah', 'officialmichelle12@gmail.com', '2021-07-24 18:01:15', '$2y$10$yYe/ynbFyxGT.w3Y.EUpluy4/IOjQqqDFLMJpx0yDoW2ku78DepnS', 'no_pic.jpg', '+2348135559646', '1991-12-22', '0', '1', '1', '1', 'GkW3lafDM0OiwheQAabeIfoKPy36EOPsaNNQ2BFqMioZuNp1B6Fcg6T0nc8Q', '2021-07-24 00:00:00', '2021-07-25 19:04:26', 1, 4, '1', 1, NULL, NULL, 1, 'nigerian', 19, 19, 19, 'No.96 Chiroma street', 'No.96 Chiroma street', 'Christianity', '', '2021-07-25 19:03:19');
-INSERT INTO `users` VALUES (21, 'sarah', 'oyin', 'segun', 'sarahsegun288@gmail.com', '2021-07-24 18:38:42', '$2y$10$8S1ukpXPeGIDcTdxGAVAO.1Yk616cuVtiJoxYjWyXhi8IwiaO6RzS', 'no_pic.jpg', '08149221214', '0000-00-00', '0', '1', '2', '2', 'FRqn1UqvJctUKt65iRqeg8GSBP1hFTqd1P4w41AejjIMnhjZNq5GoT7lOtyC', '2021-07-24 00:00:00', '2021-07-24 18:38:42', 1, 2, '1', 2, '15', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (15, 'Michelle', '', 'Obiorah', 'officialmichelle12@yahoo.com', '2021-07-22 13:23:35', '$2y$10$FDCQc6dqYsQg8l2xHMbewO.MSXPfUyXwhLlwLn/jBvk4NO3P.pYYm', 'no_pic.jpg', '08135559646', '0000-00-00', '1', '1', '1', '1', 'khHhBPAQBr0fow7ciJOLM6VPO67WNokMTJPb7DHSTnn4lrYDJRoCfZqR2AMP', '2021-07-22 00:00:00', '2021-07-22 13:23:35', 1, 1, '1', 2, '1', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `users` VALUES (19, 'Bello', 'Usman', 'Kelvin', 'eseboy24@gmail.com', '2021-07-24 17:52:19', '$2y$10$7qcFIOWvfKVZ9LMxWzp8xuhQBsBof/Ea7XcBA6zU9PMWOMatHMAne', 'no_pic.jpg', '08097191027', '2021-07-22', '0', '1', '1', '1', 'gTRXBXuEstaqP1dSJbmeTOqwb3OrWY8Rb8CHl7ZqSwNO3W4r1u2zyG2sAlgb', '2021-07-24 00:00:00', '2021-07-25 22:00:40', 1, 4, '1', 1, NULL, NULL, 1, 'Nigeria', 1, 1, 2, 'Hi', 'Hi', 'Islam', '', '2021-07-25 22:00:00');
+INSERT INTO `users` VALUES (20, 'michelle', 'ebuka', 'obiorah', 'officialmichelle12@gmail.com', '2021-07-24 18:01:15', '$2y$10$yYe/ynbFyxGT.w3Y.EUpluy4/IOjQqqDFLMJpx0yDoW2ku78DepnS', 'no_pic.jpg', '+2348135559646', '1991-12-22', '0', '1', '1', '1', 'GFk6P5wXxWsjVwe332iMan9USSXBWppaHj3W0ysjreZ0ZOzFu6mbCTIAbzPf', '2021-07-24 00:00:00', '2021-07-25 19:04:26', 1, 4, '1', 1, NULL, NULL, 1, 'nigerian', 19, 19, 19, 'No.96 Chiroma street', 'No.96 Chiroma street', 'Christianity', '', '2021-07-25 19:03:19');
+INSERT INTO `users` VALUES (21, 'sarah', 'oyin', 'segun', 'sarahsegun288@gmail.com', '2021-07-24 18:38:42', '$2y$10$8S1ukpXPeGIDcTdxGAVAO.1Yk616cuVtiJoxYjWyXhi8IwiaO6RzS', 'no_pic.jpg', '08149221214', '0000-00-00', '0', '1', '2', '2', 'TmGXny41VC81NKYjH1Hz1ZKEKGFDCgjCnPDoVyotNeYwMXetfUrbhyxdSvuK', '2021-07-24 00:00:00', '2021-07-24 18:38:42', 1, 2, '1', 2, '15', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for users_permissions

@@ -494,6 +494,8 @@ class ApplicationController extends Controller
         ->join('tbl_application_courses as ac','ac.application_id','tbl_applications.application_id')
         ->where('tbl_applications.user_id',Auth::user()->id)
         ->groupBy('tbl_applications.application_id')
+        ->where('action_1_status',1)
+        ->where('payment_status',1)
        // ->orderBy('tbl_applications.created_at','desc')
         ->get();
 

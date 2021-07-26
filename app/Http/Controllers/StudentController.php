@@ -29,7 +29,7 @@ class StudentController extends Controller
          $app_builder->join('tbl_application_courses as ac','ac.application_id','tbl_applications.application_id');
 
          //check if admin has approved, if the application is still active, if the user has paid, if the user accepted the offer
-         $app_builder->where('action_1_user',1)
+         $app_builder->where('action_1_status',1)
          ->where('status',1)
          ->where('payment_status',1)
          ->where('accept_offer',1);
@@ -50,6 +50,8 @@ class StudentController extends Controller
              $selected_course = decrypt($request->course_id);
              $app_builder->where('ac.course_id',$selected_course);
          }
+
+         
 
          if(isset($request->course_id) && $request->course_id != "")
          {
@@ -99,22 +101,26 @@ class StudentController extends Controller
           ->where("lecturer_user_id",Auth::user()->id)
           ->get();
 
+          
+
            $lect_map_history = array();
            foreach ($get_my_courses as $val)
            {
               $lect_map_history[] = $val->course_id;
            }
-
+             
             //get the list of student that enroll to the lecturer course
             $app_builder = Application::query();
             $app_builder->join('tbl_application_courses as ac','ac.application_id','tbl_applications.application_id');
             $app_builder->whereIn('ac.course_id',$lect_map_history);
 
             //check if admin has approved, if the application is still active, if the user has paid, if the user accepted the offer
-            $app_builder->where('action_1_user',1)
+            $app_builder->where('action_1_status',1)
             ->where('status',1)
             ->where('payment_status',1)
             ->where('accept_offer',1);
+
+
 
             if (isset($request->batch_no) && $request->batch_no != "")
             {
@@ -132,13 +138,12 @@ class StudentController extends Controller
                 $selected_course = decrypt($request->course_id);
                 $app_builder->where('ac.course_id',$selected_course);
             }
-            
+         
 
 
 
         $all_student_id = $app_builder->pluck('tbl_applications.user_id');
-
-           
+       
 
         $user_collection = DB::table('users as u')
          ->leftjoin('users_roles as z','z.user_id','u.id')
