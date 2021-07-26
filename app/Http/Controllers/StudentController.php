@@ -140,8 +140,6 @@ class StudentController extends Controller
             }
          
 
-
-
         $all_student_id = $app_builder->pluck('tbl_applications.user_id');
        
 
