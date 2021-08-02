@@ -67,6 +67,7 @@
 								<th>Expiration Date</th>
 								<th>Expiration Time</th>
 								<th></th> 
+								<th></th>
 								
 							</tr>
 						</thead>
@@ -85,6 +86,7 @@
 								<th>Start Time</th>
 								<th>Expiration Date</th>
 								<th>Expiration Time</th>
+								<th></th>
 								<th></th>
 							</tr>
 						</tfoot>
@@ -123,7 +125,9 @@
 								<td>{{$val->expiration_time}}</td>
 								@if(Auth::user()->can('edit_assessement'))
 								<td><button onclick="add_student_to_assessment('{{encrypt($val->assessment_id)}}')" class="text-white btn-success btn-sm btn"><i class="fa fa-users"></i> Add Students</button></td>
-                                @else
+								<td><a href="{{url('student_ca_result/'.encrypt($val->assessment_id).'/'.encrypt($val->course_id))}}" class="text-black btn-warning btn-sm btn"><i class="fa fa-eye"></i> Student Result</a></td>
+                                
+							    @else
                                 <td></td>
 								@endif
 							</tr>

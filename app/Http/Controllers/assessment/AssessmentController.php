@@ -236,6 +236,58 @@ class AssessmentController extends Controller
         return view('assessment.next_question', compact('questions','assessment_id','user_id','course_details'));
 
 
+    } 
+
+    public function my_ca_result()
+    {
+        $ca_collection = DB::table('tbl_assessment_session as as')
+        ->select('*','as.status as assessment_status','as.created_at as assessment_created_at')
+        ->join('tbl_courses as c','c.course_id', 'as.course_id')
+        ->join('tbl_batch as b','b.batch_no','as.batch_id')
+        ->where('user_id',Auth::user()->id)
+        ->where('finished_ca',1)//student must have finished the CA
+        ->orderBy('as.created_at','desc')
+        ->get();
+
+        $eligible_for_ca = DB::table('tbl_applications as a')->join('tbl_application_courses as ac', 'ac.application_id','a.application_id')->where('a.user_id',Auth::user()->id)->get()->count();
+        return view('assessment.my_ca_result', compact('ca_collection','eligible_for_ca'));
+    }
+
+    public function student_ca_result($assessment_id,$course_id)
+    {
+        $course_id = decrypt($course_id);
+        $assessment_id = decrypt($assessment_id);
+        
+        $ca_collection = DB::table('tbl_assessment_session as as')
+        ->select('*','as.status as assessment_status','as.created_at as assessment_created_at')
+        ->join('tbl_courses as c','c.course_id', 'as.course_id')
+        ->join('tbl_batch as b','b.batch_no','as.batch_id')
+        ->where('as.assessment_id',$assessment_id)
+        ->orderBy('as.created_at','desc')
+        ->get();
+
+        //get the list of courses map to lecturer
+        $get_my_courses = DB::table('tbl_map_lecturer_to_courses as ml')
+        ->join('tbl_courses as c','c.course_id','ml.course_id')
+        ->where("lecturer_user_id",Auth::user()->id)
+        ->get();
+
+         $lect_map_history = array();
+         foreach ($get_my_courses as $val)
+         {
+            $lect_map_history[$val->course_id] = "";
+         }
+         
+         if(isset($lect_map_history[$course_id]))
+         {
+            $eligible_to_view_ca = true;
+         }else
+         {
+            $eligible_to_view_ca = false; 
+         }
+        
+        
+        return view('assessment.student_ca_result', compact('ca_collection','eligible_to_view_ca'));
     }
 
     public function next_question(Request $request)
@@ -429,7 +481,7 @@ class AssessmentController extends Controller
                     
                     return '<div align="center">
                                 <img width="100" height="100" src="'.asset('img/success.png').'" ><br/><br/><br/>
-                                <p> Your C.A Test has been completed successfully, the result will be available on the check result section soon</p>
+                                <p> Your C.A Test has been completed successfully, Click <a href="'.url('/my_ca_result').'">here</a> to view result</p>
                             </div>';
                 }
 

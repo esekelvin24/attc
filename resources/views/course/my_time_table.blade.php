@@ -63,7 +63,7 @@
                                             <td>{{$val->course_name}}</td>
                                           {{--  <td>₦{{number_format($val->programme_total_amt,2)}}</td>  --}}
                                             <td>{{date('d-m-y h:m A',strtotime($val->created_at))}}</td>
-                                            <td><a target="_blank" href="{{url('/course_time_table/'.encrypt($val->course_id))}}" class="text-white btn btn-success btn-sm"><i class ="fa fa-list"></i> View Time Table</a></td>
+                                            <td><a target="_blank" href="{{url('/course_timetable_details/'.encrypt($val->course_id))}}" class="text-white btn btn-success btn-sm"><i class ="fa fa-list"></i> View Time Table</a></td>
                                         </tr>
                                     @endforeach
                                     </tbody>

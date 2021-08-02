@@ -5,28 +5,22 @@
 @endsection
 
 
-
 @section('content')
+
+
+@if ($eligible_for_ca > 0)
+
 	<div class="content-box">
 		<div class="element-wrapper">
 			<h6 class="element-header">
-				All Assigned Courses List (@if( $course_collection->isEmpty() ) 0 @else{{$course_collection->count()}}@endif)
+				Available Assessment Result List (@if( $ca_collection->isEmpty() ) 0 @else{{$ca_collection->count()}}@endif)
 			</h6>
-			@if(Session::get('course_success'))
+			@if(Session::get('news_success'))
 			<div class="alert alert-success" style="margin-top:3px; margin-bottom:0">
-				News Updated successfully!
+				assessment Updated successfully!
 			</div>
 			<br/>
 			@endif
-
-			@if(Session::get('course_error'))
-			<div class="alert alert-error" style="margin-top:3px; margin-bottom:0">
-				An error occurred when performing updates!
-			</div>
-			<br/>
-			@endif
-
-			
 			<div class="element-box">
 				<div class="table-responsive">
 					<style>
@@ -47,49 +41,92 @@
 					<table id="dataTable1" class="table table-striped" style="width: 100% !important;">
 						<thead>
 							<tr>
-                               
-								<th>S/N</th>
-								<th>Programme</th>
-								<th>Course</th>
-								<th></th>
-								<th></th>
-							
+                               <tr>
+                                <th></th>
+								<th>Course Title</th>
+								<th>Short Code</th>
+								<th>Batch</th>
+								<th>Score</th>
+								<th>Total Question</th>
+								<th>Status</th>
+								<th>Started At</th>
+								<th>Ended At</th>
+								
+								
+							</tr>
+								
 							</tr>
 						</thead>
 						<tfoot>
 							<tr>
-                               
-								<th>S/N</th>
-								<th>Programme</th>
-								<th>Course</th>
-								<th></th>
-								<th></th>
+                                <th></th>
+								<th>Course Title</th>
+								<th>Short Code</th>
+								<th>Batch</th>
+								<th>Score</th>
+								<th>Total Question</th>
+								<th>Status</th>
+								<th>Started At</th>
+								<th>Ended At</th>
+								
 								
 							</tr>
 						</tfoot>
 						<tbody>
-						@php
-							$k = 0;
-						@endphp
-						@foreach($course_collection as $val)
+							@php
+							$counter = 0;
+						    @endphp
+						@foreach($ca_collection as $val)
 							<tr>
-                                
-								<td>
-								  {{$k = $k + 1}}
-								</td>
-								
-								<td>{{$val->programme_name}}</td>
+                                <td>{{$counter=$counter+1}}</td>
 								<td>{{$val->course_name}}</td>
-								<td><a href="{{url('/my_students?course_id='.encrypt($val->course_id))}}" class="btn btn-warning btn-sm"><i class="fa fa-users"></i> View Students</a></td>
-								<td><a target="_blank" href="{{url('/course_timetable_details/'.encrypt($val->course_id))}}" class="btn btn-sm btn-warning text-black"><i class="fa fa-eye"></i> View Timetable</a></td>
-						     </tr>
+								<td>{{$val->short_code}}</td>
+								<td>{{$val->batch_name}}</td>
+
+								@if($val->finished_ca == 1)
+									<td>{{$val->score}}</td>
+									<td>{{$val->total_questions}}</td>
+
+									@if ($val->assessment_status == 1)
+									<td style="color:green">Passed</td>
+									@else
+										<td style="color:red">Failed</td>
+									@endif
+								@else
+                                    <td></td>
+									<td></td>
+									<td></td>
+
+								@endif
+
+								<td>{{$val->assessment_created_at}}</td>
+								<td>{{$val->completed_at}}</td>
+								
+
+							</tr>
+
+							
 						@endforeach
+						
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
 	</div>
+
+
+	@else
+		<div align="center">
+			<img width="150" height="150" src="{{asset('img/barred.png')}}" >
+			<p> assessment is only available to students who has register for a course<p>
+		</div>
+    @endif
+
+
+
+
+
 
 	<!-- Modal -->
 	<div class="modal fade edit_area" role="dialog">
@@ -121,6 +158,7 @@
 	if ($('#dataTable1').length) {
 	$('#dataTable1').DataTable({ buttons: ['copy', 'excel', 'pdf'] });
 	}
+
 
 
 

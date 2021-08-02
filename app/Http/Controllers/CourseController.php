@@ -8,6 +8,7 @@ use Auth;
 use App\Models\User;
 use App\Models\Course;
 use App\Models\Application;
+use App\Models\Timetable;
 use Intervention\Image\ImageManagerStatic as Image;
 
 class CourseController extends Controller
@@ -175,45 +176,291 @@ class CourseController extends Controller
 
     }
 
-    public function course_time_table($course_id)
+    public function timetable_edit(Request $request)
     {
+         $attendance_id = decrypt($request->id);
+
+         $timetable_collection = DB::table('tbl_timetable as t')
+         ->join('tbl_courses as c','c.course_id','t.course_id')
+         ->orderBy('day','asc')
+         ->where("id", $attendance_id)
+         ->get();
+
+         $programme_collection = DB::table('tbl_programmes')->get();
+
+         return view('course.edit_timetable', compact('programme_collection','timetable_collection'));
+    }
+
+    public function course_timetable_details($course_id, Request $request)
+    {
+         
          $course_id = decrypt($course_id);
+
+         $date_range_arr = explode(" - ", $request->date_range);
+
+         if(count($date_range_arr) > 1)
+         {
+             $start = $date_range_arr[0];
+             $end = $date_range_arr[1];
+         }else
+         {
+             $start = date('Y-m-d');
+             $end = date('Y-m-d');
+         }
 
          $user_id = Auth::user()->id;
          $current_batch = DB::table('tbl_batch')->where('status',1)->orderBy('created_at','desc')->first();
          $current_batch_no = $current_batch->batch_no;
 
+         //--------------------- Student check
          $uncompleted_registered_courses = DB::table('tbl_applications as a')
          ->join('tbl_application_courses as ac','ac.application_id', 'a.application_id')
          ->where('user_id',$user_id)
          ->where('batch_id', $current_batch_no)
          ->where('ac.ca1','=', NULL)
-         ->pluck('ac.course_id');
- 
-         $monday = strtotime("last monday");
-         $monday = date('w', $monday)==date('w') ? $monday+7*86400 : $monday;
-         $sunday = strtotime(date("Y-m-d",$monday)." +6 days");
-         $this_week_sd = date("Y-m-d",$monday);
-         $this_week_ed = date("Y-m-d",$sunday);
+         ->pluck('batch_id','ac.course_id');
+         //---------------------- End of student check
 
-         $time_table_list = DB::table('tbl_timetable as t')->where('course_id','10000')->get();
+         //-----------------------Lecturer check
+         $get = DB::table('tbl_map_lecturer_to_courses')
+           ->where("lecturer_user_id", Auth::user()->id)
+           ->get();
 
-         if(isset($uncompleted_registered_courses[$course_id])) //if the course is not amoung the uncompleted course dont display anything
+           $lect_map_history = array();
+           foreach ($get as $val)
+           {
+              $lect_map_history[$val->course_id] = "";
+           }
+          
+         $time_table_list = DB::table('tbl_timetable')->where('course_id',92822)->get();
+
+        
+         if(isset($uncompleted_registered_courses[$course_id]) || isset($lect_map_history[$course_id]) || Auth::user()->can('view-course-timetable-details')) //if the course is not amoung the uncompleted course dont display anything
          {
+            
             $time_table_list = DB::table('tbl_timetable as t')
             ->join('tbl_courses as c','c.course_id','t.course_id')
             ->where('t.course_id',$course_id)
-            ->orderBy('day','asc')
-            ->where("week_start",">=",$this_week_sd)
-            ->where("week_end","<=",$this_week_ed)
+           // ->orderBy('day','asc')
+            ->where("lecture_date",">=",$start)
+            ->where("lecture_date","<=",$end)
+            ->orderBy('lecture_date','asc')
+            ->orderBy('start_time','asc')
             ->get();
          }
+
+         return view('course.course_timetable_details', compact('time_table_list','start','end'));
+    }
+
+    public function get_courses_by_programme_id(Request $request)
+    {
+        $programme_id = decrypt($request->id);
+        
+        $course_collection =  DB::table('tbl_courses')->where('programme_id', $programme_id)->get();
+        
+        $option = '<option value="">Select Course</option>';
+        foreach($course_collection as $val)
+        {
+            $option = $option .'<option value="'.encrypt($val->course_id).'">'.$val->course_name.'</option>';
+        }
+
+        return $option;
+    }
+
+    public function save_timetable(Request $request)
+    {
+        $rules = [
+            "programme" => "required",
+            "course" => "required",
+            "date_range" => "required",
+            "dates" => "required|array|size:1",
+            "start_time" => "required|array|size:1",
+            "end_time" => "required|array|size:1",
+        ];
+
+        $this->validate($request, $rules);
+
+        $date_range_arr = explode(" - ", $request->date_range);
+        $dates =  $request->dates;
+        $start_time =  $request->start_time;
+        $end_time =  $request->end_time;
+
+        $current_batch = DB::table('tbl_batch')->where('status',1)->orderBy('created_at','desc')->first();
+        $current_batch_no = $current_batch->batch_no;
+
+        $insert = array();
+        for($i = 0; $i < count($request->dates); $i++)
+        {
+           $array[] = [
+              "course_id" => decrypt($request->course),
+              "week_start" => $date_range_arr[0],
+              "week_end" => $date_range_arr[1],
+              "lecture_date" => $dates[$i],
+              "start_time" => $start_time[$i],
+              "end_time" => $end_time[$i],
+              "day"      =>  date('N', strtotime($dates[$i])),
+              "created_at" => NOW(),
+              "created_by" => Auth::user()->id,
+              "batch_id"   => $current_batch_no
+           ];
+        }
+
+        $Timetable = Timetable::insert($array);
+
+        if($Timetable)
+        {
+            return redirect('/courses_time_table')->with('success','Timetable has been created successfully');
+        }
+    }
+
+    public function delete_timetable(Request $request)
+    {
+        $id = decrypt($request->timetable_id);
+
+       $delete = Timetable::where('id',$id)->delete();
+
+       if($delete)
+       {
+           return 1;
+       }else
+       {
+           return 2;
+       }
+
+    }
+
+
+    public function save_update_timetable(Request $request)
+    {
+        $rules = [
+            "attendance_id" => "required",
+            "zoom_id" => "sometimes",
+            "zoom_link" => "sometimes",
+            "zoom_password" => "sometimes",
+            "start_time" => "required",
+            "end_time" => "required",
+        ];
+
+        $this->validate($request, $rules);
+        
+        $attendance_id = decrypt($request->attendance_id);
+        $zoom_id = $request->zoom_id;
+        $zoom_link = $request->zoom_link;
+        $zoom_password = $request->zoom_password;
+        $start_time = $request->start_time;
+        $end_time = $request->end_time;
+
+        $array = [
+            "zoom_link" => $zoom_link,
+            "zoom_id" => $zoom_id,
+            "zoom_password" => $zoom_password,
+            "start_time" => $start_time,
+            "end_time" => $end_time
+        ];
+      
+
+        $Timetable = Timetable::where('id',$attendance_id)->update($array);
        
 
-
-
-         return view('course.course_time_table', compact('time_table_list','this_week_sd','this_week_ed'));
+        if($Timetable)
+        {
+            return redirect()->back()->with('success','Attendance has been updated');
+        }else
+        {
+            return redirect()->back()->with('error','An error occurred while trying to update attendance');
+        }
         
+    }
+
+    public function get_timetable_date_range(Request $request)
+    {
+         $date_range_arr = explode(" - ", $request->date_range);
+        
+        $now = strtotime($date_range_arr[0]);
+        $your_date = strtotime($date_range_arr[1]);
+        $datediff = $your_date - $now;
+
+        
+         $diff = round($datediff / (60 * 60 * 24));
+          
+         $date_counter = 0;
+
+         for($i = 0; $i < $diff + 1; $i++)
+         { 
+          
+           if ($i == 0)
+           {
+               $value = $date_range_arr[0];
+           }else
+           {
+            $value = date('Y-m-d', strtotime($date_range_arr[0].' +'.($date_counter).' day'));
+           }
+          
+            
+           
+
+           echo '<div class="row">
+                    <div class="col-md-4">
+                        <label>Date</label>
+                        <input readonly class="form-control my_date" name="dates[]" value="'.$value.'">
+                    </div>
+                    <div class="col-md-4">
+                        <label>Start Time</label>
+                        <input required class="form-control my_time" name="start_time[]" value="">
+                    </div>
+                    <div class="col-md-4">
+                        <label>End Time</label>
+                        <input required class="form-control my_time" name="end_time[]" value="">
+                    </div>
+             </div>
+             <script>
+                    $(".my_time").mdtimepicker(
+                        {
+                            format:"hh:mm",
+                            theme:"blue"
+                        }
+                    ); //Initializes the time picker	
+             </script>
+             
+             ';
+
+             $date_counter = $date_counter + 1;
+         }
+    }
+    
+
+    public function new_timetable()
+    {
+        $programme_collection = DB::table('tbl_programmes')->get();
+
+        return view('course.new_timetable', compact('programme_collection'));
+    }
+
+    public function courses_time_table(Request $request)
+    {
+
+        $selected_programme = "";
+        
+       
+        $builder = Timetable::query();
+
+        $builder->join('tbl_courses as c','c.course_id','tbl_timetable.course_id')
+        ->select('tbl_timetable.course_id','c.course_name','tbl_timetable.created_at')
+        ->groupBy('tbl_timetable.course_id')
+        ->orderBy('tbl_timetable.created_at');
+
+        if(isset($request->programme_id) && $request->programme_id !="")
+        {
+            $selected_programme = decrypt($request->programme_id);
+            $builder->where('c.programme_id',$selected_programme);
+        }
+
+
+        $course_collection = $builder->get();
+        $programme_collection = DB::table('tbl_programmes')->get();
+        
+        
+        return view('course.courses_timetable',compact('course_collection','programme_collection','selected_programme'));
     }
 
     public function my_time_table()

@@ -68,7 +68,21 @@ Route::post('/save_edited_programme', [App\Http\Controllers\ProgrammeController:
 Route::post('/save_programme', [App\Http\Controllers\ProgrammeController::class, 'save_programme'])->name('save_programme');
 
 Route::get('/my_time_table', [App\Http\Controllers\CourseController::class, 'my_time_table'])->name('my_time_table');
-Route::get('/course_time_table/{course_id}', [App\Http\Controllers\CourseController::class, 'course_time_table'])->name('course_time_table');
+Route::get('/course_timetable_details/{course_id}', [App\Http\Controllers\CourseController::class, 'course_timetable_details'])->name('course_timetable_details');
+
+
+Route::post('/timetable_edit', [App\Http\Controllers\CourseController::class, 'timetable_edit'])->name('timetable_edit');
+
+
+Route::get('/courses_time_table', [App\Http\Controllers\CourseController::class, 'courses_time_table'])->name('courses_time_table');
+Route::post('/new_timetable', [App\Http\Controllers\CourseController::class, 'new_timetable'])->name('new_timetable');
+Route::post('/get_courses_by_programme_id', [App\Http\Controllers\CourseController::class, 'get_courses_by_programme_id'])->name('get_courses_by_programme_id');
+
+Route::post('/get_timetable_date_range', [App\Http\Controllers\CourseController::class, 'get_timetable_date_range'])->name('get_timetable_date_range');
+Route::post('/save_timetable', [App\Http\Controllers\CourseController::class, 'save_timetable'])->name('save_timetable');
+Route::post('/save_update_timetable', [App\Http\Controllers\CourseController::class, 'save_update_timetable'])->name('save_update_timetable');
+Route::post('/delete_timetable', [App\Http\Controllers\CourseController::class, 'delete_timetable'])->name('delete_timetable');
+
 
 
 
@@ -113,6 +127,8 @@ Route::post('/add_new_assessment', [App\Http\Controllers\assessment\AssessmentCo
 Route::post('/save_assessement', [App\Http\Controllers\assessment\AssessmentController::class, 'save_assessement'])->name('save_assessement');
 
 
+Route::get('/student_ca_result/{assessment_id}/{course_id}', [App\Http\Controllers\assessment\AssessmentController::class, 'student_ca_result'])->name('student_ca_result');
+Route::get('/my_ca_result', [App\Http\Controllers\assessment\AssessmentController::class, 'my_ca_result'])->name('my_ca_result');
 Route::get('/event_list', [App\Http\Controllers\EventController::class, 'event_list'])->name('event_list');
 Route::post('/edit_event', [App\Http\Controllers\EventController::class, 'edit_event'])->name('edit_event');
 Route::post('/save_edit_event', [App\Http\Controllers\EventController::class, 'save_edit_event'])->name('save_edit_event');
